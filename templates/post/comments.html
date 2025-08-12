@@ -1,8 +1,10 @@
+{% load static %}
+
 <div class="comment {% if comment.parent %}reply{% endif %}">
     <div class="d-flex {% if comment.parent %} pb-3 {% else %} mt-3 {% endif %}">
         
         <img 
-            src="{{ comment.author.profile.profile_picture.url }}" 
+            src="{% if comment.author.profile.profile_picture %} {{ comment.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
             class="rounded-circle border" 
             {% if comment.parent %} 
                 style="height: 30px; width: 30px;" 

@@ -120,7 +120,7 @@
 
                 <div class="d-flex">
                     <img 
-                        src="{{ user.profile.profile_picture.url }}" 
+                        src="{% if user.profile.profile_picture %} {{ user.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
                         class="rounded-circle border"
                         style="height: 40px; width: 40px;">
 

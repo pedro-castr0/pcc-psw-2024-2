@@ -2,12 +2,14 @@
 
 {% block content %}
 
+{% load static %}
+
 <div class="container">
     <div class="row" style="position: relative;">
         <div class="col">
             <div class="card d-flex" style="height: 170px; overflow: hidden; position: relative;">
                 <img 
-                    src="{{ profile.banner.url }}" 
+                    src="{% if profile.banner %}{{ profile.banner.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
                     class="img-fluid rounded">
 
                 <div style="position: absolute; top: 10px; right: 10px;">
@@ -24,7 +26,7 @@
                 <div class="d-flex align-items-end">
                     <img 
                         class="rounded-circle border" 
-                        src="{{ profile.profile_picture.url }}" 
+                        src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
                         style="height: 140px; width: 140px;">
                         
                     <div class="ms-3 ml-3">

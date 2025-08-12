@@ -89,7 +89,7 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <img 
-                                            src="{% if user.profile %} {{ user.profile.profile_picture.url }} {% else %} {% static 'img/gradient-01.jpg' %} {% endif %}" 
+                                            src="{% if user.profile.profile_picture %} {{ user.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
                                             class="rounded-circle border"
                                             style="height: 40px; width: 40px;">
 

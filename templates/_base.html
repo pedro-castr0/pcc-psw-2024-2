@@ -209,7 +209,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.username }}</span>
 
-                                    <img class="img-profile rounded-circle" src="{{ user.profile.profile_picture.url }}">
+                                    <img class="img-profile rounded-circle" src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
                             </a>
                             
 

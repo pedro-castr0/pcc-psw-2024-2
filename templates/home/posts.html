@@ -1,3 +1,5 @@
+{% load static %}
+
 <hr class="sidebar-divider">
 
 <div class="card p-3">
@@ -5,7 +7,7 @@
         <div class="row d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <img 
-                    src="{{ post.author.profile.profile_picture.url }}" 
+                    src="{% if post.author.profile.profile_picture %} {{ post.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
                     class="rounded-circle border"
                     style="height: 40px; width: 40px;">
 
