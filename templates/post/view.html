@@ -59,10 +59,8 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle p-0" style="height: 30px; width: 30px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                            </svg>
+                        <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0" style="height: 30px; width: 30px;">
+                            <i class="fas fa-fw fa-ellipsis-v text-dark" style="font-size: 12px;"></i>
                         </button>
                     </div>
                 </div>
@@ -111,33 +109,29 @@
                         </form>
                     </div>
 
-                    <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mx-2" style="font-size: 12px;">
-                        <i class="text-dark fas fa-fw fa-comment"></i>
-
-                        <p class="mb-0 ml-2">{{ post.get_comments_count }}</p>
-                    </button>
-
-                    <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill" style="font-size: 12px;">
-                        <i class="text-dark fas fa-fw fa-share"></i>
+                    <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill ml-2" style="font-size: 12px;">
+                        <i class="text-dark fas fa-fw fa-link"></i>
 
                         <p class="mb-0 ml-2">Share</p>
                     </button>
                 </div>
 
-                <div class="d-flex my-3">
+                <p class="text-dark font-weight-bold p-0 my-3" style="font-size: 20px;">{{ post.get_comments_count }} Comment(s)</p>
+
+                <div class="d-flex">
                     <img 
                         src="{{ user.profile.profile_picture.url }}" 
-                        class="rounded-circle border mr-2"
+                        class="rounded-circle border"
                         style="height: 40px; width: 40px;">
 
                     <form method="post" action="{% url 'comment' %}" class="w-100"> {% csrf_token %}
-                        <div class="comment-box">
+                        <div class="comment-box ml-3">
                             <textarea 
                                 class="form-control rounded"
                                 name="content" 
                                 rows="2" 
                                 placeholder="Write your comment here..."
-                                style="min-height: 60px; max-height: 200px; font-size: 12px;"
+                                style="min-height: 60px; max-height: 200px; font-size: 14px;"
                                 required></textarea>
 
                             <input type="hidden" name="post" value="{{ post.id }}">
@@ -164,7 +158,7 @@
                     
                 {% for comment in comments %}
 
-                    {% include "post/comments.html" with comment=comment level=0 %}
+                    {% include "post/comments.html" with comment=comment %}
 
                 {% endfor %}
 

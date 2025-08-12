@@ -23,26 +23,29 @@
                     <p class="mb-0 text-muted ml-1" style="font-size: 14px;">
                         ∙ {{comment.posted|date:"M d, Y"}}
                         {% if comment.edited %}
+
                             (edited)
+
                         {% endif %}
                     </p>
                 </div>
 
                 <div>
-                    <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle p-0" style="height: 30px; width: 30px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                        </svg>
+                    <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0" style="height: 30px; width: 30px;">
+                        <i class="fas fa-fw fa-ellipsis-v text-dark" style="font-size: 12px;"></i>
                     </button>
                 </div>
             </div>
 
             <p class="mb-2 text-dark">
-                {% if comment.parent %} 
+                {% if comment.parent.parent %} 
+
                     <a href="/user/profile/{{ comment.parent.author.profile.id }}" class="text-decoration-none text-secondary font-weight-bold">
                         @{{ comment.parent.author.username }}
                     </a> 
+
                 {% endif %} 
+
                 {{ comment.content }}
             </p>
 
@@ -52,16 +55,16 @@
                         style="font-size: 12px; height: 30px"
                         onclick="toggleReplyForm('{{ comment.id }}')">
 
-                    <span>Reply</span>
+                    <i class="fas fa-fw fa-reply"></i><span class="mb-0 ml-1">Reply</span>
                 </button>
 
                 {% if not comment.parent and comment.replies.exists %}
 
-                    <button class="btn btn-light border px-3 py-1 ml-2" 
-                            style="font-size: 12px; height: 30px"
+                    <button class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0 ml-2" 
+                            style="font-size: 12px; height: 30px; width: 30px;"
                             onclick="toggleReplies('{{ comment.id }}', this)">
                             
-                        <span>Show replies</span>
+                        <i class="fas fa-fw fa-plus"></i>
 
                     </button>
 
@@ -78,7 +81,7 @@
                             name="content" 
                             rows="2" 
                             placeholder="Write your reply..."
-                            style="min-height: 60px; max-height: 200px; font-size: 12px;"
+                            style="min-height: 60px; max-height: 200px; font-size: 14px;"
                             required></textarea>
 
                         <input type="hidden" name="post" value="{{ post.id }}">
@@ -105,6 +108,7 @@
     </div>
 
     <div class="gap-3">
+
         {% if not comment.parent %}
 
             <div id="replies-{{ comment.id }}" class="d-none ml-5 mt-3">
@@ -130,6 +134,7 @@
             </div>
 
         {% endif %}
+
     </div>
 </div>
 
@@ -139,10 +144,11 @@
 
         if (container.classList.contains("d-none")) {
             container.classList.remove("d-none");
-            button.textContent = "Hide replies";
+            button.innerHTML = '<i class="fas fa-fw fa-minus"></i>';
+
         } else {
             container.classList.add("d-none");
-            button.textContent = "Show replies";
+            button.innerHTML = '<i class="fas fa-fw fa-plus"></i>';
         }
     }
 
