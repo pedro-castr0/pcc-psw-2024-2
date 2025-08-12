@@ -1,0 +1,52 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>USERNAME</th>
+            <th>EMAIL</th>
+            <th>FOLLOW</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for user in users %}
+
+        <tr>
+            <td>#{{user.id}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.email}}</td>
+            <td>
+                <form method="post" action="{% url 'follow' %}"> {% csrf_token %}
+                    <input type="hidden" name="followed_id" value="{{ user.id }}">
+                    <button type="submit">Follow</button>
+                </form>
+            </td>
+            <td>
+                <a href="/user/edit/{{user.id}}">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <a href="/user/delete/{{user.id}}">
+                    Delete
+                </a>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<a href="/user/create/">
+    Create
+</a>
+
+{% endblock content %}

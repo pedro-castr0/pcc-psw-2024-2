@@ -1,0 +1,33 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>USER</th>
+            <th>COMMENT</th>
+            <th>TYPE</th>
+            <th>DATE TIME</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for feedback in feedbacks %}
+
+        <tr>
+            <td>#{{feedback.id}}</td>
+            <td>{{feedback.get_user}}</td>
+            <td>{{feedback.get_comment}}</td>
+            <td>{% if feedback.feedback == True %}Like{% else %}Dislike{% endif %}</td>
+            <td>{{feedback.date_time}}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock content %}

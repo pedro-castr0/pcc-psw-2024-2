@@ -1,0 +1,58 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>DESCRIPTION</th>
+            <th>TAG</th>
+            <th>CREATED</th>
+            <th>CREATOR</th>
+            <th>JOIN</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for community in communities %}
+
+        <tr>
+            <td>#{{community.id}}</td>
+            <td>{{community.name}}</td>
+            <td>{{community.description}}</td>
+            <td>{{community.tag}}</td>
+            <td>{{community.created}}</td>
+            <td>{{community.get_creator}}</td>
+            <td>
+                <form method="post" action="{% url 'join' %}"> {% csrf_token %}
+                    <input type="hidden" name="community_id" value="{{ community.id }}">
+                    <button type="submit">Join</button>
+                </form>
+            </td>
+            </td>
+            <td>
+                <a href="/community/edit/{{community.id}}">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <a href="/community/delete/{{community.id}}">
+                    Delete
+                </a>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+
+<a href="/community/create/">Create</a>
+
+{% endblock content %}

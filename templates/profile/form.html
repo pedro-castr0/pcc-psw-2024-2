@@ -1,0 +1,24 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+
+    <input type="hidden" name="user" value="{{user.id}}">
+    
+    <label for="display_name">Display name:</label>
+    <input type="text" name="display_name" value="{{user.profile.display_name}}">
+    
+    <label for="bio">Bio:</label>
+    <textarea name="bio">{{user.profile.bio}}</textarea>
+    
+    <label for="profile_picture">Profile picture:</label>
+    <input type="file" name="profile_picture">
+    
+    <label for="banner">Banner:</label>
+    <input type="file" name="banner">
+    
+    <button type="submit">Save</button>
+</form>
+
+{% endblock content %}

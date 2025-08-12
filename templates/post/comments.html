@@ -1,0 +1,157 @@
+<div class="comment {% if comment.parent %}reply{% endif %}">
+    <div class="d-flex {% if comment.parent %} pb-3 {% else %} mt-3 {% endif %}">
+        
+        <img 
+            src="{{ comment.author.profile.profile_picture.url }}" 
+            class="rounded-circle border" 
+            {% if comment.parent %} 
+                style="height: 30px; width: 30px;" 
+            {% else %}
+                style="height: 40px; width: 40px;"
+            {% endif %}>
+            
+
+        <div class="ml-3 flex-grow-1">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <p class="font-weight-bold mb-0" style="font-size: 14px;">
+                        <a href="/user/profile/{{ comment.author.profile.id }}" class="text-decoration-none text-secondary">
+                            @{{ comment.author.username }}
+                        </a>
+                    </p>
+
+                    <p class="mb-0 text-muted ml-1" style="font-size: 14px;">
+                        ∙ {{comment.posted|date:"M d, Y"}}
+                        {% if comment.edited %}
+                            (edited)
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle p-0" style="height: 30px; width: 30px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <p class="mb-2 text-dark">
+                {% if comment.parent %} 
+                    <a href="/user/profile/{{ comment.parent.author.profile.id }}" class="text-decoration-none text-secondary font-weight-bold">
+                        @{{ comment.parent.author.username }}
+                    </a> 
+                {% endif %} 
+                {{ comment.content }}
+            </p>
+
+            <div class="d-flex">
+
+                <button class="btn btn-dark d-flex align-items-center justify-content-center border px-3 py-1" 
+                        style="font-size: 12px; height: 30px"
+                        onclick="toggleReplyForm('{{ comment.id }}')">
+
+                    <span>Reply</span>
+                </button>
+
+                {% if not comment.parent and comment.replies.exists %}
+
+                    <button class="btn btn-light border px-3 py-1 ml-2" 
+                            style="font-size: 12px; height: 30px"
+                            onclick="toggleReplies('{{ comment.id }}', this)">
+                            
+                        <span>Show replies</span>
+
+                    </button>
+
+                {% endif %}
+
+            </div>
+
+
+            <div id="reply-form-{{ comment.id }}" class="mt-2 d-none">
+                <form method="post" class="w-100" action="{% url 'comment' %}"> {% csrf_token %}
+                    <div class="comment-box">
+                        <textarea 
+                            class="form-control rounded"
+                            name="content" 
+                            rows="2" 
+                            placeholder="Write your reply..."
+                            style="min-height: 60px; max-height: 200px; font-size: 12px;"
+                            required></textarea>
+
+                        <input type="hidden" name="post" value="{{ post.id }}">
+                        <input type="hidden" name="parent" value="{{ comment.id }}">
+
+                        <div class="comment-actions">
+                            <button type="button" 
+                                    class="btn btn-dark d-flex align-items-center justify-content-center border" 
+                                    onclick="toggleReplyForm('{{ comment.id }}')"
+                                    style="height: 30px;">
+                                <span style="font-size: 12px;">Cancel</span>
+                            </button>
+
+                            <button type="submit"
+                                    class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0"
+                                    style="height: 30px; width: 30px;">
+                                <i class="fas fa-fw fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="gap-3">
+        {% if not comment.parent %}
+
+            <div id="replies-{{ comment.id }}" class="d-none ml-5 mt-3">
+
+                {% for reply in comment.replies.all %}
+
+                    {% include "post/comments.html" with comment=reply %}
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div>
+
+                {% for reply in comment.replies.all %}
+
+                    {% include "post/comments.html" with comment=reply %}
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function toggleReplies(comment_id, button) {
+        let container = document.getElementById("replies-" + comment_id);
+
+        if (container.classList.contains("d-none")) {
+            container.classList.remove("d-none");
+            button.textContent = "Hide replies";
+        } else {
+            container.classList.add("d-none");
+            button.textContent = "Show replies";
+        }
+    }
+
+    function toggleReplyForm(comment_id) {
+        let form = document.getElementById("reply-form-" + comment_id);
+        if (form.classList.contains("d-none")) {
+            form.classList.remove("d-none");
+        } else {
+            form.classList.add("d-none");
+        }
+    }
+</script>

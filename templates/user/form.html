@@ -1,0 +1,24 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<form method="post"> {% csrf_token %}
+
+    <h1>{% if user.id %}Update{% else %}Create{% endif %} user</h1><br>
+
+    <label for="username">Username:</label>
+    <input type="text" name="username" value="{{user.username}}" required><br>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" value="{{user.email}}" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" value="{{user.password}}" required><br>
+
+    <button type="submit">
+        {% if user.id %}Confirm{% else %}Create{% endif %}
+    </button>
+
+</form>
+
+{% endblock content %}

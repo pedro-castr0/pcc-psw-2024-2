@@ -1,0 +1,30 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<form method="post"> {% csrf_token %}
+
+    <h1>{% if community.id %}Edit{% else %}Create{% endif %} community</h1><br>
+
+    <label for="name">Name:</label>
+    <input type="text" name="name" value="{{community.name}}" required><br>
+
+    <label for="description">Description:</label><br>
+    <textarea name="description" required>{{community.description}}</textarea><br>
+
+    <label for="tag">Tag:</label>
+    <select name="tag">
+        <option value="languages">Languages</option>
+        <option value="math">Math</option>
+        <option value="history">History</option>
+    </select><br>
+
+    <input type="hidden" name="creator" value="{{user.id}}">
+
+    <button type="submit">
+        {% if community.id %}Confirm{% else %}Create{% endif %}
+    </button>
+        
+</form>
+
+{% endblock content %}

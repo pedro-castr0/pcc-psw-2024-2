@@ -1,0 +1,70 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>TITLE</th>
+            <th>CONTENT</th>
+            <th>TAG</th>
+            <th>POSTED</th>
+            <th>EDITED</th>
+            <th>AUTHOR</th>
+            <th>COMMUNITY</th>
+            <th>LIKE</th>
+            <th>DISLIKE</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for post in posts %}
+
+        <tr>
+            <td>#{{post.id}}</td>
+            <td>{{post.title}}</td>
+            <td>{{post.content}}</td>
+            <td>{{post.tag}}</td>
+            <td>{{post.posted}}</td>
+            <td>{{post.edited}}</td>
+            <td>{{post.get_author}}</td>
+            <td>{{post.get_community}}</td>
+            <td>
+                <form method="post" action="/post/feedback/"> {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="hidden" name="feedback" value="like">
+                    <button type="submit">Like</button>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/post/feedback/"> {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="hidden" name="feedback" value="dislike">
+                    <button type="submit">Dislike</button>
+                </form>
+            </td>
+            <td>
+                <a href="/post/edit/{{post.id}}">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <a href="/post/delete/{{post.id}}">
+                    Delete
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<a href="/post/create/">
+    Create
+</a>
+
+{% endblock content %}

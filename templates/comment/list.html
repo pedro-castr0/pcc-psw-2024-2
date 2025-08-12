@@ -1,0 +1,68 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>CONTENT</th>
+            <th>AUTHOR</th>
+            <th>POST</th>
+            <th>POSTED</th>
+            <th>EDITED</th>
+            <th>PARENT</th>
+            <th>LIKE</th>
+            <th>DISLIKE</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for comment in comments %}
+
+        <tr>
+            <td>#{{comment.id}}</td>
+            <td>{{comment.content}}</td>
+            <td>{{comment.get_author}}</td>
+            <td>{{comment.get_title}}</td>
+            <td>{{comment.posted}}</td>
+            <td>{{comment.edited}}</td>
+            <td>{{comment.parent.author.username}}</td>
+            <td>
+                <form method="post" action="/comment/feedback/"> {% csrf_token %}
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <input type="hidden" name="feedback" value="like">
+                    <button type="submit">Like</button>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/comment/feedback/"> {% csrf_token %}
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <input type="hidden" name="feedback" value="dislike">
+                    <button type="submit">Dislike</button>
+                </form>
+            </td>
+            <td>
+                <a href="/comment/edit/{{comment.id}}">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <a href="/comment/delete/{{comment.id}}">
+                    Delete
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<a href="/comment/comment/">
+    Comment
+</a>
+
+{% endblock content %}

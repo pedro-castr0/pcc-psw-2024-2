@@ -1,0 +1,133 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row" style="position: relative;">
+        <div class="col">
+            <div class="card d-flex" style="height: 170px; overflow: hidden; position: relative;">
+                <img 
+                    src="{{ profile.banner.url }}" 
+                    class="img-fluid rounded">
+
+                <div style="position: absolute; top: 10px; right: 10px;">
+                    <a href="#" class="btn btn-light d-flex align-items-center justify-content-center border" 
+                        style="height: 30px; width: 30px; ">
+                        <i class="fas fa-fw fa-pen"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-end justify-content-between" 
+                style="position: absolute; top: 100px; left: 30px; right: 30px;">
+
+                <div class="d-flex align-items-end">
+                    <img 
+                        class="rounded-circle border" 
+                        src="{{ profile.profile_picture.url }}" 
+                        style="height: 140px; width: 140px;">
+                        
+                    <div class="ms-3 ml-3">
+                        <h2 class="font-weight-bold mb-0">{{ profile.display_name }}</h2>
+                        <span class="text-muted">@{{ profile.user.username }}</span>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+
+                    {% if is_following != True %}
+
+                        <form method="post" action="{% url 'follow' %}"> {% csrf_token %} 
+                            <input type="hidden" name="followed_id" value="{{ profile.user.id }}">
+                            <button type="submit" 
+                                    class="btn btn-primary d-flex align-items-center justify-content-center border rounded-pill ml-2 px-3"
+                                    style="height: 40px;">
+
+                                <span class="font-weight-bold">Follow</span>
+                            </button>
+                        </form>
+
+                     {% else %}
+
+                        <form action="{% url 'unfollow' profile.user.id %}" method="post" style="display:inline;"> {% csrf_token %}
+                            <button type="submit" 
+                                    class="btn btn-danger d-flex align-items-center justify-content-center border rounded-pill ml-2 px-3"
+                                    style="height: 40px">
+
+                                <span class="font-weight-bold">Unfollow</span>
+                            </button>
+                        </form>
+
+                     {% endif %}
+
+                    <a href="#" 
+                        class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle ml-2"
+                        style="height: 40px; width: 40px;">
+
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                            </svg>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 100px;">
+                <div class="col-8">
+                    <div class="d-flex">
+                        <a href="#" 
+                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
+                            style="height: 40px;">
+
+                            Posts
+                        </a>
+
+                        <a href="#" 
+                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
+                            style="height: 40px;">
+
+                            Comments
+                        </a>
+
+                        <a href="#" 
+                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
+                            style="height: 40px;">
+
+                            Likes
+                        </a>
+
+                        <a href="#" 
+                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
+                            style="height: 40px;">
+
+                            Dislikes
+                        </a>
+
+                        <a href="#" 
+                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
+                            style="height: 40px;">
+
+                            Saved
+                        </a>
+                    </div>
+                    
+                    <hr class="sidebar-divider">
+
+                    <p class="text-muted" style="text-align: center;">This user hasn't posted yet.</p>
+                </div>
+
+                <div class="col-4">
+                    <div class="card p-3">
+                        <p class="font-weight-bold">{{ profile.display_name }}</p>
+                        <span>{{ profile.bio }}</span>
+
+                        <p class="pt-3" style="font-size: 13px;"><i class="fas fa-fw fa-calendar"></i> Joined {{ profile.user.date_joined|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
