@@ -19,9 +19,14 @@ def follow(request):
     else:
         return HttpResponse("You've got any response.")
 
+<<<<<<< HEAD
 def unfollow(request):
     followed_id = request.POST.get('followed_id')
     follow = Follow.objects.get(followed_id = followed_id, follower_id = request.user.id)
+=======
+def unfollow(request, id):
+    follow = Follow.objects.get(followed_id = id, follower_id = request.user.id)
+>>>>>>> 02e8a9abc387fbd5eb303a72e2516d70fbeeadfb
     follow.delete()
 
     return redirect('/actions/list/')
