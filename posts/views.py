@@ -75,6 +75,10 @@ def view(request, id):
         request.user.joined_communities.values_list('community_id', flat=True)
     )
 
-    return render(request, 'post/view.html', {'post': post, 'comments': comments, 'positive_feedbacks':positive_feedbacks, 'negative_feedbacks':negative_feedbacks, 'community_ids':community_ids})
+    following_ids = set(
+        request.user.following.values_list('followed_id', flat=True)
+    )
+
+    return render(request, 'post/view.html', {'post': post, 'comments': comments, 'positive_feedbacks':positive_feedbacks, 'negative_feedbacks':negative_feedbacks, 'community_ids':community_ids, 'following_ids':following_ids})
 
 

@@ -1,5 +1,13 @@
 {% load static %}
 
+<script>
+    const FOLLOW_URL = "{% url 'follow' %}";
+    const UNFOLLOW_URL = "{% url 'unfollow' %}";
+    const CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+
+<script src="{% static 'js/follow.js' %}"></script>
+
 <div class="card my-2"> 
     <div class="col p-3">
         <div class="d-flex align-items-center justify-content-between">
@@ -26,35 +34,34 @@
                         </a>
                     </p>
 
-                    <p class="text-muted mb-0" style="font-size: 14px;">
-                        {{ person.followers.count }} followers
+                    <p class="text-muted mb-0" style="font-size: 14px">
+                        <span class="followers-count" data-user-id="{{ person.id }}">{{ person.followers.count }}</span> followers
                     </p>
                 </div>
             </div>
 
-            {% if  user.id == person.id %}
+            {% if user.id == person.id %}
 
                 <p class="mb-0" style="font-size: 14px">You</p>
 
-            {% elif person.id not in following_ids %}
-
-                <form method="post" action="{% url 'follow' %}"> {% csrf_token %}
-                    <input type="hidden" name="followed_id" value="{{ person.id }}">
-                    <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border rounded px-3" style="height: 30px; font-size: 12px;">
-                        <span class="font-weight-bold">Follow</span>
-                    </button>
-                </form>
-
             {% else %}
 
-                <form method="post" action="{% url 'unfollow' %}"> {% csrf_token %}
-                    <input type="hidden" name="followed_id" value="{{ person.id }}">
-                    <button type="submit" class="btn btn-danger d-flex align-items-center justify-content-center border rounded px-3" style="height: 30px; font-size: 12px;">
-                        <span class="font-weight-bold">Unfollow</span>
-                    </button>
-                </form>
+                <button type="button" 
+                        class="btn btn-follow d-flex align-items-center justify-content-center border rounded px-3 {% if person.id in following_ids %}btn-danger{% else %}btn-primary{% endif %}"
+                        data-user-id="{{ person.id }}"
+                        data-following="{% if person.id in following_ids %}true{% else %}false{% endif %}"
+                        style="height: 30px; font-size: 12px;">
+
+                    <span class="follow-text font-weight-bold" id="follow-text-{{ person.id }}">
+
+                        {% if person.id in following_ids %}Unfollow{% else %}Follow{% endif %}
+
+                    </span>
+
+                </button>
 
             {% endif %}
+
         </div>
     </div>
 </div>

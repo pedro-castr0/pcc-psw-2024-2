@@ -1,8 +1,10 @@
 {% load static %}
 
+<script src="{% static 'js/join.js' %}"></script>
+
 <div class="card my-2">
     <img class="card-img-top border-bottom" src="{% static 'img/gradient-02.jpg' %}" style="height: 80px;">
-    
+
     <div class="col p-3">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
@@ -24,36 +26,40 @@
                 </div>
             </div>
 
-            {% if community.id not in community_ids %}
+            {% if user.id == community.creator.id %}
 
-                <form method="post" action="{% url 'join' %}"> {% csrf_token %}
-                    <input type="hidden" name="community_id" value="{{ community.id }}">
-                    <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border px-3" style="height: 30px; font-size: 12px;">
-                        <span class="font-weight-bold">Join</span>
-                    </button>
-                </form>
+                <p class="text-muted mb-0" style="font-size: 14px;">Your community</p>
 
             {% else %}
 
-                <form method="post" action="{% url 'unjoin' %}"> {% csrf_token %}
-                    <input type="hidden" name="community_id" value="{{ community.id }}">
-                    <button type="submit" class="btn btn-danger d-flex align-items-center justify-content-center border px-3" style="height: 30px; font-size: 12px;">
-                        <span class="font-weight-bold">Unjoin</span>
-                    </button>
-                </form>
-                
-            {% endif %}
+                <button type="button"
+                        class="btn btn-join d-flex align-items-center justify-content-center border px-3 {% if community.id in community_ids %}btn-danger{% else %}btn-primary{% endif %}"
+                        data-community-id="{{ community.id }}"
+                        data-joined="{% if community.id in community_ids %}true{% else %}false{% endif %}"
+                        data-join-url="{% url 'join' %}"
+                        data-unjoin-url="{% url 'unjoin' %}"
+                        id="join-btn-{{ community.id }}"
+                        style="height: 30px; font-size: 12px;">
 
+                    <span class="font-weight-bold" id="join-text-{{ community.id }}">
+                        {% if community.id in community_ids %}Unjoin{% else %}Join{% endif %}
+                    </span>
+                </button>
+
+            {% endif %}
         </div>
 
         <div class="my-3">
             <p class="text-justify text-dark">{{ community.description }}</p>
         </div>
-        
+
         <hr class="sidebar-divider">
 
         <div class="d-flex align-items-center justify-content-between">
-            <p style="font-size: 14px;" class="mb-0"><i class="fas fa-fw fa-users"></i><span class="ml-1">{{ community.members.count }} members</span></p>
+            <p style="font-size: 14px;" class="mb-0">
+                <i class="fas fa-fw fa-users"></i>
+                <span class="ml-1" id="members-count-{{ community.id }}">{{ community.members.count }}</span> members
+            </p>
 
             <a href="" class="btn btn-dark d-flex align-items-center justify-content-center border rounded px-3" style="font-size: 12px;">
                 <span class="font-weight-bold">{{ community.tag }}</span>

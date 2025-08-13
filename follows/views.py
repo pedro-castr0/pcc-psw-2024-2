@@ -1,6 +1,9 @@
 from django.shortcuts import redirect, render
 from .models import User, Follow
 from django.http import HttpResponse
+from django.http import JsonResponse
+
+from django.http import JsonResponse
 
 def follow(request):
     if request.method == 'POST':
@@ -9,22 +12,25 @@ def follow(request):
         follower = request.user
 
         if followed.id != follower.id:
-            Follow.objects.create(
-                followed=followed,
-                follower=follower,
-            )
-            return redirect('/actions/list/')
-        else:
-            return HttpResponse("You can't follow yourself.")
-    else:
-        return HttpResponse("You've got any response.")
+            Follow.objects.get_or_create(followed=followed, follower=follower)
+
+        return JsonResponse({
+            'status': 'success',
+            'following': True,
+            'followers_count': followed.followers.count()
+        })
 
 def unfollow(request):
-    followed_id = request.POST.get('followed_id')
-    follow = Follow.objects.get(followed_id = followed_id, follower_id = request.user.id)
-    follow.delete()
+    if request.method == 'POST':
+        followed_id = request.POST.get('followed_id')
+        followed = User.objects.get(id=followed_id)
+        Follow.objects.filter(followed=followed, follower=request.user).delete()
 
-    return redirect('/actions/list/')
+        return JsonResponse({
+            'status': 'success',
+            'following': False,
+            'followers_count': followed.followers.count()
+        })
 
 def list(request):
     follows = Follow.objects.all()

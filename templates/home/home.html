@@ -34,44 +34,17 @@
 
         <div class="col-4">
             <div class="mb-3">
-                <p class="font-weight-bold mb-1" style="font-size: 16px;">COMMUNITIES TO JOIN:</p>
+                <p class="font-weight-bold mb-2" style="font-size: 14px;">COMMUNITIES TO JOIN:</p>
 
                 {% for community in communities %}
 
                     {% if community.id not in community_ids %}
 
-                        <div class="card mb-1"> 
-                            <div class="col p-3">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <img 
-                                            src="{% static 'img/gradient-01.jpg' %}" 
-                                            class="rounded-circle border"
-                                            style="height: 40px; width: 40px;">
+                        {% if user.id != community.creator.id %}
 
-                                        <div class="ml-2">
-                                            <p class="font-weight-bold mb-0" style="font-size: 16px;">
-                                                <a href="/community/page/{{ community.id }}" class="text-decoration-none">
-                                                    {{ community.name }}
-                                                </a>
-                                            </p>
+                            {% include 'community/info.html' %}
 
-                                            <p class="text-muted mb-0" style="font-size: 14px;">
-                                                {{ community.members.count }} members
-                                            </p>
-                                        </div>
-                                    </div>
-
-
-                                    <form method="post" action="{% url 'join' %}"> {% csrf_token %}
-                                        <input type="hidden" name="community_id" value="{{ community.id }}">
-                                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border px-3" style="height: 30px; font-size: 12px;">
-                                            <span class="font-weight-bold">Join</span>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        {% endif %}
 
                     {% endif %}
 
@@ -80,66 +53,15 @@
             </div>
 
             <div class="mb-3">
-                <p class="font-weight-bold mb-1" style="font-size: 16px;">PEOPLE TO FOLLOW:</p>
+                <p class="font-weight-bold mb-2" style="font-size: 14px;">USERS TO FOLLOW:</p>
                 
                 {% for person in users %}
 
                     {% if person.id not in following_ids %}
 
-<<<<<<< HEAD
                         {% if user.id != person.id %}
-=======
-                        <div class="card mb-1"> 
-                            <div class="col p-3">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <img 
-                                            src="{% if user.profile.profile_picture %} {{ user.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-                                            class="rounded-circle border"
-                                            style="height: 40px; width: 40px;">
->>>>>>> 02e8a9abc387fbd5eb303a72e2516d70fbeeadfb
 
-                            <div class="card mb-1"> 
-                                <div class="col p-3">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <img 
-                                                src="{% if person.profile.profile_picture %} {{ person.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-                                                class="rounded-circle border"
-                                                style="height: 40px; width: 40px;">
-
-                                            <div class="ml-2">
-                                                <p class="font-weight-bold mb-0" style="font-size: 16px;">
-                                                    <a href="{% if person.profile %} /user/profile/{{ person.profile.id }} {% else %} /user/list/ {% endif %}" class="text-decoration-none">
-                                                        
-                                                        {% if person.profile.display_name %}
-
-                                                            {{ person.profile.display_name }}
-
-                                                        {% else %}
-
-                                                            {{ person.username }}
-
-                                                        {% endif %}
-
-                                                    </a>
-                                                </p>
-
-                                                <p class="text-muted mb-0" style="font-size: 14px;">
-                                                    {{ person.followers.count }} followers
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <form method="post" action="{% url 'follow' %}"> {% csrf_token %}
-                                            <input type="hidden" name="followed_id" value="{{ person.id }}">
-                                            <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border px-3" style="height: 30px; font-size: 12px;">
-                                                <span class="font-weight-bold">Follow</span>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            {% include 'user/profiles.html' %}
 
                         {% endif %}
                         

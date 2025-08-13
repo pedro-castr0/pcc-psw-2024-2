@@ -1,0 +1,9 @@
+{% for post in posts %}
+
+    {% include 'post/posts.html' %}
+
+{% empty %}
+
+    <p class="my-2" style="font-size: 14px;">This user hasn't interacted with any posts.</p>
+
+{% endfor %}

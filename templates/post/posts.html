@@ -1,9 +1,6 @@
 {% load static %}
-<<<<<<< HEAD:templates/post/posts.html
-=======
 
-<hr class="sidebar-divider">
->>>>>>> 02e8a9abc387fbd5eb303a72e2516d70fbeeadfb:templates/home/posts.html
+<script src="{% static 'js/feedback.js' %}"></script>
 
 <div class="card p-3 mb-2">
     <p class="mb-2" style="font-size: 12px;">posted in <a href="/community/page/{{post.community.id}}" class="font-weight-bold text-decoration-none">{{ post.community.name }}</a></p>
@@ -47,47 +44,46 @@
     </div>
 
     <div class="d-flex">
-        <div class="btn-group" role="group">
-            <form method="post" action="{% if post.id not in positive_feedbacks %}{% url 'feedback_post' %}{% else %}{% url 'null_feedback' %}{% endif %}"> {% csrf_token %}
-                <input type="hidden" name="post_id" value="{{ post.id }}">
+        
+        {% csrf_token %}
 
-                {% if post.id not in positive_feedbacks %}
+        <div class="d-flex">
+            <button type="button" 
+                class="btn btn-light d-flex align-items-center justify-content-center border"
+                style="height: 40px; border-radius: 20px 0 0 20px; font-size: 12px;"
+                data-post-id="{{ post.id }}"
+                data-feedback="like"
+                data-positive-feedback="{% if post.id in positive_feedbacks %}true{% else %}false{% endif %}"
+                data-url-feedback="{% url 'feedback_post' %}"
+                data-url-null="{% url 'null_feedback' %}"
+                id="like-btn-{{ post.id }}">
 
-                    <input type="hidden" name="feedback" value="like">
+                <i class="fas fa-fw fa-caret-up {% if post.id in positive_feedbacks %}text-success{% else %}text-dark{% endif %}" style="font-size: 20px;"></i>
+                <p class="mb-0 ml-2" id="like-count-{{ post.id }}">{{ post.get_likes }}</p>
+            </button>
 
-                {% endif %}
+            <button type="button" 
+                class="btn btn-light d-flex align-items-center justify-content-center border"
+                style="height: 40px; border-radius: 0 20px 20px 0; font-size: 12px;"
+                data-post-id="{{ post.id }}"
+                data-feedback="dislike"
+                data-negative-feedback="{% if post.id in negative_feedbacks %}true{% else %}false{% endif %}"
+                data-url-feedback="{% url 'feedback_post' %}"
+                data-url-null="{% url 'null_feedback' %}"
+                id="dislike-btn-{{ post.id }}">
 
-                <button type="submit" class="btn btn-light d-flex align-items-center justify-content-center border" style="height: 40px; border-radius: 20px 0px 0px 20px; font-size: 12px;">
-                    <i class="{% if post.id not in positive_feedbacks %} text-dark {% else %} text-success {% endif %} fas fa-fw fa-caret-up" style="font-size: 20px;"></i>
-                    <p class="mb-0 ml-2">{{ post.get_likes }}</p>
-                </button>
-            </form>
-
-            <form method="post" action="{% if post.id not in negative_feedbacks %}{% url 'feedback_post' %}{% else %}{% url 'null_feedback' %}{% endif %}"> {% csrf_token %}
-                <input type="hidden" name="post_id" value="{{ post.id }}">
-
-                {% if post.id not in negative_feedbacks %}
-
-                    <input type="hidden" name="feedback" value="dislike">
-
-                {% endif %}
-
-                <button type="submit" class="btn btn-light d-flex align-items-center justify-content-center border" style="height: 40px; border-radius: 0px 20px 20px 0px; font-size: 12px;">
-                    <i class="{% if post.id not in negative_feedbacks %} text-dark {% else %} text-danger {% endif %} fas fa-fw fa-caret-down" style="font-size: 20px;"></i>
-                    <p class="mb-0 ml-2">{{ post.get_dislikes }}</p>
-                </button>
-            </form>
+                <i class="fas fa-fw fa-caret-down {% if post.id in negative_feedbacks %}text-danger{% else %}text-dark{% endif %}" style="font-size: 20px;"></i>
+                <p class="mb-0 ml-2" id="dislike-count-{{ post.id }}">{{ post.get_dislikes }}</p>
+            </button>
         </div>
 
         <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill ml-2" style="height: 40px; font-size: 12px;">
             <i class="text-dark fas fa-fw fa-comment"></i>
-
             <p class="mb-0 ml-2">{{ post.get_comments_count }}</p>
         </button>
 
         <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill ml-2" style="height: 40px; font-size: 12px;">
             <i class="text-dark fas fa-fw fa-link"></i>
-
             <p class="mb-0 ml-2">Share</p>
         </button>
 

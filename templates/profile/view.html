@@ -4,6 +4,42 @@
 
 {% load static %}
 
+<script>
+
+    const FOLLOW_URL = "{% url 'follow' %}";
+    const UNFOLLOW_URL = "{% url 'unfollow' %}";
+    const CSRF_TOKEN = "{{ csrf_token }}";
+
+</script>
+
+<script src="{% static 'js/follow.js' %}"></script>
+
+<script src="{% static 'js/feedback.js' %}"></script>
+
+<script>
+
+document.addEventListener('click', function(e) {
+
+if (e.target.closest('.load-content')) {
+    e.preventDefault();
+    let link = e.target.closest('.load-content');
+    let url = link.getAttribute('href');
+    let target = document.querySelector(link.dataset.target);
+
+    fetch(url)
+        .then(res => res.text())
+        .then(html => {
+            target.innerHTML = html;
+        });
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById('postButton').click()
+})
+
+</script>
+
 <div class="container">
     <div class="row" style="position: relative;">
         <div class="col">
@@ -14,10 +50,7 @@
             </div>
 
             <div class="d-flex">
-
-<<<<<<< HEAD
                 <div class="d-flex align-items-center m-3 justify-content-between w-100">
-
                     <div class="d-flex align-items-center ">
                         <img 
                             class="rounded-circle border" 
@@ -26,41 +59,28 @@
                             
                         <div class="ml-3">
                             <p class="font-weight-bold my-0 text-dark" style="font-size: 26px;">{{ profile.display_name }}</p>
-                            <p style="font-size: 14px;"><span class="font-weight-bold">@{{ profile.user.username }}</span> · {{ profile.user.followers.count }} followers · {{ profile.user.posts.count }} posts</p>
+                            <p style="font-size: 14px;"><span class="font-weight-bold">@{{ profile.user.username }}</span> · <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span> followers · {{ profile.user.posts.count }} posts</p>
                         </div>
                     </div>
 
                     <div class="d-flex align-items-center">
 
-                        {% if user.id != profile.user.id %}
+                    {% if user.id != profile.user.id %}
 
-                            {% if is_following != True %}
+                        <button type="button" 
+                                class="btn btn-follow d-flex align-items-center justify-content-center rounded px-3 {% if profile.user.id in following_ids %}btn-danger{% else %}btn-primary{% endif %}"
+                                data-user-id="{{ profile.user.id }}"
+                                data-following="{% if profile.user.id in following_ids %}true{% else %}false{% endif %}"
+                                style="height: 30px; font-size: 12px;">
 
-                                <form method="post" action="{% url 'follow' %}"> {% csrf_token %} 
-                                    <input type="hidden" name="followed_id" value="{{ profile.user.id }}">
-                                    <button type="submit" 
-                                            class="btn btn-primary d-flex align-items-center justify-content-center border rounded ml-2 px-3"
-                                            style="height: 30px; font-size: 14px;">
+                            <span class="follow-text font-weight-bold" id="follow-text-{{ profile.user.id }}">
+                                {% if profile.user.id in following_ids %}Unfollow{% else %}Follow{% endif %}
+                            </span>
 
-                                        <span class="font-weight-bold">Follow</span>
-                                    </button>
-                                </form>
+                        </button>
 
-                            {% else %}
+                    {% endif %}
 
-                                <form action="{% url 'unfollow' %}" method="post" style="display:inline;"> {% csrf_token %}
-                                    <input type="hidden" name="followed_id" value="{{ profile.user.id }}">
-                                    <button type="submit" 
-                                            class="btn btn-danger d-flex align-items-center justify-content-center border rounded ml-2 px-3"
-                                            style="height: 30px; font-size: 12px;">
-
-                                        <span class="font-weight-bold">Unfollow</span>
-                                    </button>
-                                </form>
-
-                            {% endif %}
-
-                        {% endif %}
 
                         <a href="" 
                             class="btn d-flex align-items-center justify-content-center rounded-circle ml-2"
@@ -68,85 +88,61 @@
 
                             <i class="fas fa-fw fa-ellipsis-v text-dark" style="font-size: 12px;"></i>
                         </a>
-=======
-                <div class="d-flex align-items-end">
-                    <img 
-                        class="rounded-circle border" 
-                        src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
-                        style="height: 140px; width: 140px;">
-                        
-                    <div class="ms-3 ml-3">
-                        <h2 class="font-weight-bold mb-0">{{ profile.display_name }}</h2>
-                        <span class="text-muted">@{{ profile.user.username }}</span>
->>>>>>> 02e8a9abc387fbd5eb303a72e2516d70fbeeadfb
                     </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-8">
-                    <div class="d-flex justify-content-between">
-                        <a href="" 
-                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
-                            style="height: 30px; font-size: 14px;">
+                    <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
+                        <li class="nav-item">
+                            <a 
+                                class="load-content nav-link" 
+                                data-toggle="tab" href="{% url 'posts' profile.id %}" 
+                                data-target="#content-area" 
+                                id="postButton">
 
-                            <p class="mb-0">
-                                Posts
-                            </p>
-                        </a>
+                                <p class="font-weight-bold text-decoration-none text-muted my-0" style="font-size: 14px;">Posts</p>
+                            </a>
+                        </li>
 
-                        <a href="" 
-                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
-                            style="height: 30px; font-size: 14px;">
+                        <li class="nav-item">
+                            <a 
+                                class="load-content nav-link" 
+                                data-toggle="tab" 
+                                href="{% url 'comments' profile.id %}" 
+                                data-target="#content-area">
 
-                            <p class="mb-0">
-                                Comments
-                            </p>
-                        </a>
+                                <p class="font-weight-bold text-decoration-none text-muted my-0" style="font-size: 14px;">Comments</p>
+                            </a>
+                        </li>
 
-                        <a href="" 
-                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
-                            style="height: 30px; font-size: 14px;">
+                        <li class="nav-item">
+                            <a 
+                                class="load-content nav-link" 
+                                data-toggle="tab" 
+                                href="{% url 'likes' profile.id %}" 
+                                data-target="#content-area">
 
-                            <p class="mb-0">
-                                Likes
-                            </p>
-                        </a>
+                                <p class="font-weight-bold text-decoration-none text-muted my-0" style="font-size: 14px;">Likes</p>
+                            </a>
+                        </li>
 
-                        <a href="" 
-                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
-                            style="height: 30px; font-size: 14px;">
+                        <li class="nav-item">
+                            <a 
+                                class="load-content nav-link" 
+                                data-toggle="tab" 
+                                href="{% url 'dislikes' profile.id %}" 
+                                data-target="#content-area">
 
-                            <p class="mb-0">
-                                Dislikes
-                            </p>
-                        </a>
+                                <p class="font-weight-bold text-decoration-none text-muted my-0" style="font-size: 14px;">Dislikes</p>
+                            </a>
+                        </li>
+                    </ul>
 
-                        <a href="" 
-                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
-                            style="height: 30px; font-size: 14px;">
+                    <div class="tab-content" id="content-area">
 
-                            <p class="mb-0">
-                                Saved
-                            </p>
-                        </a>
                     </div>
-                    
-                    <hr class="sidebar-divider">
-                    
-                    {% for post in profile.user.posts.all %}
-
-                            {% include 'post/posts.html' %}
-
-                    {% endfor %}
-
-                    <!--
-                    {% for comment in profile.user.comments.all %}
-
-                            {% include 'comment/comments.html' %}
-
-                    {% endfor %}
-                    -->
                 </div>
 
                 <div class="col-4">

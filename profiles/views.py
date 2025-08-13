@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Profile
-from follows.models import Follow
+from profiles.models import Profile
+from comments.models import Comment
+from posts.models import Post
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
 
 def update(request):
@@ -43,15 +45,64 @@ def view(request, id):
         request.user.joined_communities.values_list('community_id', flat=True)
     )
 
-    positive_feedbacks = set(
-        request.user.feedbacks.filter(feedback=True).values_list('post_id', flat=True)
-    )
+    return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following, 'following_ids':following_ids, 'community_ids':community_ids})
 
-    negative_feedbacks = set(
-        request.user.feedbacks.filter(feedback=False).values_list('post_id', flat=True)
-    )
+def likes(request, id):
+    profile = Profile.objects.get(id=id)
 
-    return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following, 'following_ids':following_ids, 'community_ids':community_ids, 'positive_feedbacks':positive_feedbacks, 'negative_feedbacks':negative_feedbacks})
+    posts = Post.objects.filter(feedback_posts__user=profile.user, feedback_posts__feedback=True).distinct()
+
+    feedbacks = request.user.feedbacks.values('post_id', 'feedback')
+
+    positive_feedbacks = {f['post_id'] for f in feedbacks if f['feedback']}
+    negative_feedbacks = {f['post_id'] for f in feedbacks if not f['feedback']}
+
+    return render(request, 'profile/partials/posts.html', {
+        'posts': posts,
+        'positive_feedbacks': positive_feedbacks,
+        'negative_feedbacks': negative_feedbacks
+    })
+
+def dislikes(request, id):
+    profile = Profile.objects.get(id=id)
+
+    posts = Post.objects.filter(feedback_posts__user=profile.user, feedback_posts__feedback=False).distinct()
+
+    feedbacks = request.user.feedbacks.values('post_id', 'feedback')
+
+    positive_feedbacks = {f['post_id'] for f in feedbacks if f['feedback']}
+    negative_feedbacks = {f['post_id'] for f in feedbacks if not f['feedback']}
+
+    return render(request, 'profile/partials/posts.html', {
+        'posts': posts,
+        'positive_feedbacks': positive_feedbacks,
+        'negative_feedbacks': negative_feedbacks
+    })
+
+def posts(request, id):
+    profile = Profile.objects.get(id=id)
+
+    posts = Post.objects.filter(author=profile.user).distinct()
+
+    feedbacks = request.user.feedbacks.values('post_id', 'feedback')
+
+    positive_feedbacks = {f['post_id'] for f in feedbacks if f['feedback']}
+    negative_feedbacks = {f['post_id'] for f in feedbacks if not f['feedback']}
+
+    return render(request, 'profile/partials/posts.html', {
+        'posts': posts,
+        'positive_feedbacks': positive_feedbacks,
+        'negative_feedbacks': negative_feedbacks
+    })
+
+def comments(request, id):
+    profile = Profile.objects.get(id=id)
+
+    comments = Comment.objects.filter(author=profile.user).distinct()
+
+    return render(request, 'profile/partials/comments.html', {
+        'comments': comments
+    })
 
 def list(request):
     profiles = Profile.objects.all()
