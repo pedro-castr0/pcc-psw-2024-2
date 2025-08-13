@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from follows.models import Follow
-from django import template
-
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -13,8 +11,12 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     banner = models.ImageField(upload_to='banners/', blank=True, null=True)
 
-    register = template.Library()
-    
-    @register.simple_tag
-    def is_following(follower, followed):
-        return Follow.objects.filter(follower=follower, followed=followed).exists()
+def create_profile(sender, instance, created, **kwards):
+    if created:
+        profile = Profile.objects.create(
+            user=instance,
+            display_name=instance.username
+            )
+        profile.save()
+
+post_save.connect(create_profile, sender=User)

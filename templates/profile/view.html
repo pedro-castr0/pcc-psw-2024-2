@@ -2,128 +2,199 @@
 
 {% block content %}
 
+{% load static %}
+
 <div class="container">
     <div class="row" style="position: relative;">
         <div class="col">
-            <div class="card d-flex" style="height: 170px; overflow: hidden; position: relative;">
+            <div class="card" style="height: 200px; overflow: hidden; position: relative;">
                 <img 
-                    src="{{ profile.banner.url }}" 
+                    src="{% if profile.banner %}{{ profile.banner.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
                     class="img-fluid rounded">
-
-                <div style="position: absolute; top: 10px; right: 10px;">
-                    <a href="#" class="btn btn-light d-flex align-items-center justify-content-center border" 
-                        style="height: 30px; width: 30px; ">
-                        <i class="fas fa-fw fa-pen"></i>
-                    </a>
-                </div>
             </div>
 
-            <div class="d-flex align-items-end justify-content-between" 
-                style="position: absolute; top: 100px; left: 30px; right: 30px;">
+            <div class="d-flex">
 
-                <div class="d-flex align-items-end">
-                    <img 
-                        class="rounded-circle border" 
-                        src="{{ profile.profile_picture.url }}" 
-                        style="height: 140px; width: 140px;">
-                        
-                    <div class="ms-3 ml-3">
-                        <h2 class="font-weight-bold mb-0">{{ profile.display_name }}</h2>
-                        <span class="text-muted">@{{ profile.user.username }}</span>
+                <div class="d-flex align-items-center m-3 justify-content-between w-100">
+
+                    <div class="d-flex align-items-center ">
+                        <img 
+                            class="rounded-circle border" 
+                            src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
+                            style="height: 120px; width: 120px;">
+                            
+                        <div class="ml-3">
+                            <p class="font-weight-bold my-0 text-dark" style="font-size: 26px;">{{ profile.display_name }}</p>
+                            <p style="font-size: 14px;"><span class="font-weight-bold">@{{ profile.user.username }}</span> · {{ profile.user.followers.count }} followers · {{ profile.user.posts.count }} posts</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+
+                        {% if user.id != profile.user.id %}
+
+                            {% if is_following != True %}
+
+                                <form method="post" action="{% url 'follow' %}"> {% csrf_token %} 
+                                    <input type="hidden" name="followed_id" value="{{ profile.user.id }}">
+                                    <button type="submit" 
+                                            class="btn btn-primary d-flex align-items-center justify-content-center border rounded ml-2 px-3"
+                                            style="height: 30px; font-size: 14px;">
+
+                                        <span class="font-weight-bold">Follow</span>
+                                    </button>
+                                </form>
+
+                            {% else %}
+
+                                <form action="{% url 'unfollow' %}" method="post" style="display:inline;"> {% csrf_token %}
+                                    <input type="hidden" name="followed_id" value="{{ profile.user.id }}">
+                                    <button type="submit" 
+                                            class="btn btn-danger d-flex align-items-center justify-content-center border rounded ml-2 px-3"
+                                            style="height: 30px; font-size: 12px;">
+
+                                        <span class="font-weight-bold">Unfollow</span>
+                                    </button>
+                                </form>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                        <a href="" 
+                            class="btn d-flex align-items-center justify-content-center rounded-circle ml-2"
+                            style="height: 30px; width: 30px;">
+
+                            <i class="fas fa-fw fa-ellipsis-v text-dark" style="font-size: 12px;"></i>
+                        </a>
                     </div>
                 </div>
-
-                <div class="d-flex">
-
-                    {% if is_following != True %}
-
-                        <form method="post" action="{% url 'follow' %}"> {% csrf_token %} 
-                            <input type="hidden" name="followed_id" value="{{ profile.user.id }}">
-                            <button type="submit" 
-                                    class="btn btn-primary d-flex align-items-center justify-content-center border rounded-pill ml-2 px-3"
-                                    style="height: 40px;">
-
-                                <span class="font-weight-bold">Follow</span>
-                            </button>
-                        </form>
-
-                     {% else %}
-
-                        <form action="{% url 'unfollow' profile.user.id %}" method="post" style="display:inline;"> {% csrf_token %}
-                            <button type="submit" 
-                                    class="btn btn-danger d-flex align-items-center justify-content-center border rounded-pill ml-2 px-3"
-                                    style="height: 40px">
-
-                                <span class="font-weight-bold">Unfollow</span>
-                            </button>
-                        </form>
-
-                     {% endif %}
-
-                    <a href="#" 
-                        class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle ml-2"
-                        style="height: 40px; width: 40px;">
-
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
-                            </svg>
-                        </span>
-                    </a>
-                </div>
             </div>
 
-            <div class="row" style="margin-top: 100px;">
+            <div class="row">
                 <div class="col-8">
-                    <div class="d-flex">
-                        <a href="#" 
-                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
-                            style="height: 40px;">
+                    <div class="d-flex justify-content-between">
+                        <a href="" 
+                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
+                            style="height: 30px; font-size: 14px;">
 
-                            Posts
+                            <p class="mb-0">
+                                Posts
+                            </p>
                         </a>
 
-                        <a href="#" 
-                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
-                            style="height: 40px;">
+                        <a href="" 
+                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
+                            style="height: 30px; font-size: 14px;">
 
-                            Comments
+                            <p class="mb-0">
+                                Comments
+                            </p>
                         </a>
 
-                        <a href="#" 
-                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
-                            style="height: 40px;">
+                        <a href="" 
+                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
+                            style="height: 30px; font-size: 14px;">
 
-                            Likes
+                            <p class="mb-0">
+                                Likes
+                            </p>
                         </a>
 
-                        <a href="#" 
-                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
-                            style="height: 40px;">
+                        <a href="" 
+                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
+                            style="height: 30px; font-size: 14px;">
 
-                            Dislikes
+                            <p class="mb-0">
+                                Dislikes
+                            </p>
                         </a>
 
-                        <a href="#" 
-                            class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2"
-                            style="height: 40px;">
+                        <a href="" 
+                            class="btn d-flex align-items-center justify-content-center rounded mr-2"
+                            style="height: 30px; font-size: 14px;">
 
-                            Saved
+                            <p class="mb-0">
+                                Saved
+                            </p>
                         </a>
                     </div>
                     
                     <hr class="sidebar-divider">
+                    
+                    {% for post in profile.user.posts.all %}
 
-                    <p class="text-muted" style="text-align: center;">This user hasn't posted yet.</p>
+                            {% include 'post/posts.html' %}
+
+                    {% endfor %}
+
+                    <!--
+                    {% for comment in profile.user.comments.all %}
+
+                            {% include 'comment/comments.html' %}
+
+                    {% endfor %}
+                    -->
                 </div>
 
                 <div class="col-4">
-                    <div class="card p-3">
-                        <p class="font-weight-bold">{{ profile.display_name }}</p>
-                        <span>{{ profile.bio }}</span>
+                    <p class="font-weight-bold mb-2" style="font-size: 14px;">USER INFO</p>
 
-                        <p class="pt-3" style="font-size: 13px;"><i class="fas fa-fw fa-calendar"></i> Joined {{ profile.user.date_joined|date:"M d, Y" }}</p>
+                    <div class="card p-3 mb-3">
+                        <p class="font-weight-bold text-dark m-0" style="font-size: 16px;">{{ profile.display_name }}</p>
+
+                        {% if profile.bio %}
+
+                            <p class="my-3 text-dark" style="font-size: 14px;">{{ profile.bio }}</p>
+                        
+                        {% else %}
+
+                            <p class="my-3 text-muted" style="font-size: 14px;">This user have no bio yet.</p>
+
+                        {% endif %}
+
+                        <hr class="mt-0">
+
+                        <p class="m-0" style="font-size: 14px;"><i class="fas fa-fw fa-calendar"></i> Joined {{ profile.user.date_joined|date:"M d, Y" }}</p>
                     </div>
+
+
+                    <p class="font-weight-bold my-1" style="font-size: 14px;">OWNED COMMUNITIES</p>
+
+                    {% for community in profile.user.communities.all %}
+
+                        {% include 'community/info.html' %}
+
+                    {% empty %}
+
+                        <p class="my-2" style="font-size: 14px;">This user doesn't have any communities.</p>
+
+                    {% endfor %}
+
+                    <p class="font-weight-bold mb-2 mt-3" style="font-size: 14px;">FOLLOWING</p>
+
+                    {% for follow in profile.user.following.all %}
+
+                        {% include 'user/profiles.html' with person=follow.followed %}
+                    
+                    {% empty %}
+
+                        <p class="my-2" style="font-size: 14px;">This user don't follow anyone.</p>
+
+                    {% endfor %}
+
+                    <p class="font-weight-bold mb-2 mt-3" style="font-size: 14px;">JOINED</p>
+
+                    {% for join in profile.user.joined_communities.all %}
+
+                        {% include 'community/communities.html' with community=join.community %}
+
+                    {% empty %}
+
+                        <p class="my-2" style="font-size: 14px;">This user hasn't joined any community.</p>
+
+                    {% endfor %}
+
                 </div>
             </div>
         </div>

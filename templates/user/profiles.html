@@ -1,0 +1,60 @@
+{% load static %}
+
+<div class="card my-2"> 
+    <div class="col p-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img 
+                    src="{% if person.profile.profile_picture %}{{ person.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
+                    class="rounded-circle border"
+                    style="height: 40px; width: 40px;">
+
+                <div class="ml-2">
+                    <p class="font-weight-bold mb-0" style="font-size: 16px;">
+                        <a href="{% if person.profile %}/user/profile/{{ person.profile.id }}{% else %}/user/list/{% endif %}" class="text-decoration-none">
+
+                            {% if person.profile.display_name %}
+
+                                {{ person.profile.display_name }}
+
+                            {% else %}
+
+                                {{ person.username }}
+
+                            {% endif %}
+
+                        </a>
+                    </p>
+
+                    <p class="text-muted mb-0" style="font-size: 14px;">
+                        {{ person.followers.count }} followers
+                    </p>
+                </div>
+            </div>
+
+            {% if  user.id == person.id %}
+
+                <p class="mb-0" style="font-size: 14px">You</p>
+
+            {% elif person.id not in following_ids %}
+
+                <form method="post" action="{% url 'follow' %}"> {% csrf_token %}
+                    <input type="hidden" name="followed_id" value="{{ person.id }}">
+                    <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border rounded px-3" style="height: 30px; font-size: 12px;">
+                        <span class="font-weight-bold">Follow</span>
+                    </button>
+                </form>
+
+            {% else %}
+
+                <form method="post" action="{% url 'unfollow' %}"> {% csrf_token %}
+                    <input type="hidden" name="followed_id" value="{{ person.id }}">
+                    <button type="submit" class="btn btn-danger d-flex align-items-center justify-content-center border rounded px-3" style="height: 30px; font-size: 12px;">
+                        <span class="font-weight-bold">Unfollow</span>
+                    </button>
+                </form>
+
+            {% endif %}
+        </div>
+    </div>
+</div>

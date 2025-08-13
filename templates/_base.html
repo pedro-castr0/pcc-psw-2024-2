@@ -113,12 +113,14 @@
 
                                     <a class="collapse-item bg-dark d-flex align-items-center p-2" href="{% if followed.followed.profile %} /user/profile/{{followed.followed.profile.id}} {% else %} # {% endif %}">
                                         <img 
-                                            src="{% if followed.followed.profile %} {{ followed.followed.profile.profile_picture.url }} {% else %} {% static 'img/gradient-01.jpg' %} {% endif %}" 
+                                            src="{% if followed.followed.profile.profile_picture %} {{ followed.followed.profile.profile_picture.url }} {% else %} {% static 'img/gradient-01.jpg' %} {% endif %}" 
                                             class="rounded-circle border m-0"
                                             style="height: 30px; width: 30px;">
                                             
                                         <p class="mb-0 ml-2 font-weight-bold text-light">
+
                                             {% if followed.followed.profile %} {{ followed.followed.profile.display_name }} {% else %} {{ followed.followed.username }} {% endif %}
+                                        
                                         </p>
                                     </a>
 
@@ -209,7 +211,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.username }}</span>
 
-                                    <img class="img-profile rounded-circle" src="{{ user.profile.profile_picture.url }}">
+                                    <img class="img-profile rounded-circle" src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
                             </a>
                             
 

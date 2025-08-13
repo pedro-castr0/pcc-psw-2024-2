@@ -24,7 +24,9 @@
 
             {% for post in posts %}
 
-                {% include "home/posts.html" with comment=comment %}
+                <hr>
+
+                {% include "post/posts.html" with comment=comment %}
 
             {% endfor %}
 
@@ -54,8 +56,8 @@
                                                 </a>
                                             </p>
 
-                                            <p class="text-muted mb-0" style="font-size: 12px;">
-                                                {{ community.members.count }} Member(s)
+                                            <p class="text-muted mb-0" style="font-size: 14px;">
+                                                {{ community.members.count }} members
                                             </p>
                                         </div>
                                     </div>
@@ -63,7 +65,7 @@
 
                                     <form method="post" action="{% url 'join' %}"> {% csrf_token %}
                                         <input type="hidden" name="community_id" value="{{ community.id }}">
-                                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border rounded-pill px-3" style="height: 30px; font-size: 12px;">
+                                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border px-3" style="height: 30px; font-size: 12px;">
                                             <span class="font-weight-bold">Join</span>
                                         </button>
                                     </form>
@@ -78,47 +80,57 @@
             </div>
 
             <div class="mb-3">
-                <p class="font-weight-bold mb-1" style="font-size: 16px;">USERS TO FOLLOW:</p>
+                <p class="font-weight-bold mb-1" style="font-size: 16px;">PEOPLE TO FOLLOW:</p>
                 
-                {% for user in users %}
+                {% for person in users %}
 
-                    {% if user.id not in following_ids %}
+                    {% if person.id not in following_ids %}
 
-                        <div class="card mb-1"> 
-                            <div class="col p-3">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <img 
-                                            src="{% if user.profile %} {{ user.profile.profile_picture.url }} {% else %} {% static 'img/gradient-01.jpg' %} {% endif %}" 
-                                            class="rounded-circle border"
-                                            style="height: 40px; width: 40px;">
+                        {% if user.id != person.id %}
 
-                                        <div class="ml-2">
-                                            <p class="font-weight-bold mb-0" style="font-size: 16px;">
-                                                <a href="{% if user.profile %} /user/profile/{{ user.profile.id }} {% else %} /user/list/ {% endif %}" class="text-decoration-none">
-                                                    {% if user.profile.display_name %}
-                                                        {{ user.profile.display_name }}
-                                                    {% else %}
-                                                        {{ user.username }}
-                                                    {% endif %}
-                                                </a>
-                                            </p>
+                            <div class="card mb-1"> 
+                                <div class="col p-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <img 
+                                                src="{% if person.profile.profile_picture %} {{ person.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
+                                                class="rounded-circle border"
+                                                style="height: 40px; width: 40px;">
 
-                                            <p class="text-muted mb-0" style="font-size: 12px;">
-                                                {{ user.followers.count }} Follower(s)
-                                            </p>
+                                            <div class="ml-2">
+                                                <p class="font-weight-bold mb-0" style="font-size: 16px;">
+                                                    <a href="{% if person.profile %} /user/profile/{{ person.profile.id }} {% else %} /user/list/ {% endif %}" class="text-decoration-none">
+                                                        
+                                                        {% if person.profile.display_name %}
+
+                                                            {{ person.profile.display_name }}
+
+                                                        {% else %}
+
+                                                            {{ person.username }}
+
+                                                        {% endif %}
+
+                                                    </a>
+                                                </p>
+
+                                                <p class="text-muted mb-0" style="font-size: 14px;">
+                                                    {{ person.followers.count }} followers
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <form method="post" action="{% url 'follow' %}"> {% csrf_token %}
-                                        <input type="hidden" name="followed_id" value="{{ user.id }}">
-                                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border rounded-pill px-3" style="height: 30px; font-size: 12px;">
-                                            <span class="font-weight-bold">Follow</span>
-                                        </button>
-                                    </form>
+                                        <form method="post" action="{% url 'follow' %}"> {% csrf_token %}
+                                            <input type="hidden" name="followed_id" value="{{ person.id }}">
+                                            <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center border px-3" style="height: 30px; font-size: 12px;">
+                                                <span class="font-weight-bold">Follow</span>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>                        
+
+                        {% endif %}
                         
                     {% endif %}
 

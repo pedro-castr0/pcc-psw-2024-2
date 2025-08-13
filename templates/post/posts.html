@@ -1,11 +1,13 @@
-<hr class="sidebar-divider">
+{% load static %}
 
-<div class="card p-3">
-    <div class="col mb-3">
+<div class="card p-3 mb-2">
+    <p class="mb-2" style="font-size: 12px;">posted in <a href="/community/page/{{post.community.id}}" class="font-weight-bold text-decoration-none">{{ post.community.name }}</a></p>
+
+    <div class="col">
         <div class="row d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <img 
-                    src="{{ post.author.profile.profile_picture.url }}" 
+                    src="{% if post.author.profile.profile_picture %} {{ post.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
                     class="rounded-circle border"
                     style="height: 40px; width: 40px;">
 
@@ -15,8 +17,8 @@
                             {{post.author.profile.display_name}}
                         </a>
                     </p>
-                    <p class="text-muted mb-0" style="font-size: 12px;">
-                        @{{ post.author.username }} ∙ on {{ post.posted|date:"M d, Y" }} {% if post.edited != False %}(edited){% endif %}
+                    <p class="text-muted mb-0" style="font-size: 14px;">
+                        <span class="font-weight-bold">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }}{% if post.edited != post.posted %}<span class="ml-1" style="font-size: 12px;">(edited)</span>{% endif %}
                     </p>
                 </div>
             </div>
@@ -28,17 +30,15 @@
     </div>
 
     <div>
-        <p class="font-weight-bold mb-0 text-dark" style="font-size: 24px;">{{ post.title }}</p>
+        <p class="font-weight-bold my-3 text-dark" style="font-size: 24px;">{{ post.title }}</p>
 
-        <p class="mb-0" style="font-size: 14px;">posted in <a href="/community/page/{{post.community.id}}" class="font-weight-bold text-decoration-none">{{ post.community.name }}</a></p>
-
-        <div class="d-flex align-items-center my-3">
-            <p href="#" class="bg-secondary text-white d-flex align-items-center justify-content-center rounded px-2 mb-0" style="font-size: 12px;">
-                {{ post.tag }}
-            </p>
+        <div class="d-flex align-items-center">
+            <a href="" class="btn btn-secondary d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold" style="font-size: 12px; height: 20px;">
+                <span class="font-weight-bold">{{ post.tag }}</span>
+            </a>
         </div>
-        
-        <p class="text-justify text-dark">{{ post.content }}</p>
+
+        <p class="text-justify text-dark my-3">{{ post.content }}</p>
     </div>
 
     <div class="d-flex">

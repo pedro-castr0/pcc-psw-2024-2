@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
 from .models import Join, Community
+from django.shortcuts import get_object_or_404
+
 
 def join(request):
     if request.method == 'POST':
@@ -16,9 +18,11 @@ def join(request):
 
         return redirect('/associate/list/')
 
-def unjoin(request, id):
-    join = Join.objects.get(id = id)
-    join.delete()
+def unjoin(request):
+    if request.method == "POST":
+        community_id = request.POST.get("community_id")
+        join = get_object_or_404(Join, community_id=community_id, user=request.user)
+        join.delete()
 
     return redirect('/associate/list/')
     

@@ -1,8 +1,10 @@
+{% load static %}
+
 <div class="comment {% if comment.parent %}reply{% endif %}">
     <div class="d-flex {% if comment.parent %} pb-3 {% else %} mt-3 {% endif %}">
         
         <img 
-            src="{{ comment.author.profile.profile_picture.url }}" 
+            src="{% if comment.author.profile.profile_picture %} {{ comment.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
             class="rounded-circle border" 
             {% if comment.parent %} 
                 style="height: 30px; width: 30px;" 
@@ -21,12 +23,7 @@
                     </p>
 
                     <p class="mb-0 text-muted ml-1" style="font-size: 14px;">
-                        ∙ {{comment.posted|date:"M d, Y"}}
-                        {% if comment.edited %}
-
-                            (edited)
-
-                        {% endif %}
+                        ∙ {{ comment.posted|date:"M d, Y" }}{% if comment.edited != comment.posted %}<span class="ml-1" style="font-size: 12px;">(edited)</span>{% endif %}
                     </p>
                 </div>
 
@@ -115,7 +112,7 @@
 
                 {% for reply in comment.replies.all %}
 
-                    {% include "post/comments.html" with comment=reply %}
+                    {% include "post/comment_section.html" with comment=reply %}
 
                 {% endfor %}
 
@@ -127,7 +124,7 @@
 
                 {% for reply in comment.replies.all %}
 
-                    {% include "post/comments.html" with comment=reply %}
+                    {% include "post/comment_section.html" with comment=reply %}
 
                 {% endfor %}
 

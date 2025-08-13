@@ -70,7 +70,11 @@ def view(request, id):
     negative_feedbacks = set(
         request.user.feedbacks.filter(feedback=False).values_list('post_id', flat=True)
     )
-    
-    return render(request, 'post/view.html', {'post': post, 'comments': comments, 'positive_feedbacks':positive_feedbacks, 'negative_feedbacks':negative_feedbacks})
+
+    community_ids = set(
+        request.user.joined_communities.values_list('community_id', flat=True)
+    )
+
+    return render(request, 'post/view.html', {'post': post, 'comments': comments, 'positive_feedbacks':positive_feedbacks, 'negative_feedbacks':negative_feedbacks, 'community_ids':community_ids})
 
 

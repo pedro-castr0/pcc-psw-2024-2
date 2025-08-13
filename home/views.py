@@ -26,8 +26,4 @@ def home(request):
         request.user.feedbacks.filter(feedback=False).values_list('post_id', flat=True)
     )
 
-    return render(request, 'home/home.html', 
-                  {'posts':posts, 'communities':communities, 'users':users,
-                   'following_ids':following_ids, 'community_ids':community_ids,
-                   'positive_feedbacks':positive_feedbacks,
-                    'negative_feedbacks':negative_feedbacks})
+    return render(request, 'home/home.html', {'posts':posts, 'communities':communities, 'users':users, 'following_ids':following_ids, 'community_ids':community_ids, 'positive_feedbacks':positive_feedbacks, 'negative_feedbacks':negative_feedbacks})
