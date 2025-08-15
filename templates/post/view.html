@@ -4,47 +4,7 @@
 
 {% load static %}
 
-<script src="{% static 'js/feedback.js' %}"></script>
-
-<script>
-    const FOLLOW_URL = "{% url 'follow' %}";
-    const UNFOLLOW_URL = "{% url 'unfollow' %}";
-    const CSRF_TOKEN = "{{ csrf_token }}";
-</script>
-
-<script src="{% static 'js/follow.js' %}"></script>
-
-<script>
-    function toggleReplyForm(id) {
-        const form = document.getElementById(`reply-form-${id}`);
-        form.classList.toggle("d-none");
-    }
-
-    function toggleReplies(commentId) {
-        let container = document.getElementById("replies-" + commentId);
-        if (container.classList.contains("d-none")) {
-            container.classList.remove("d-none");
-        } else {
-            container.classList.add("d-none");
-        }
-    }
-</script>
-
-<style>
-    .comment-box {
-        position: relative;
-    }
-
-    .comment-actions {
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
-        display: flex;
-        gap: 5px;
-    }
-</style>
-
-<div class="container" style="position: relative;">
+<div class="container">
     <div class="row">
         <div class="col-8" >
             <div class="card p-3">
@@ -53,176 +13,117 @@
                         <div class="d-flex align-items-center">
                             <img 
                                 src="{% if post.author.profile.profile_picture %} {{ post.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-                                class="rounded-circle border"
-                                style="height: 40px; width: 40px;">
+                                class="rounded-circle border circle-picture">
 
                             <div class="ml-2">
-                                <p class="font-weight-bold mb-0" style="font-size: 16px;">
-                                    <a href="/user/profile/{{post.author.profile.id}}" class="text-decoration-none">
+                                <p class="font-weight-bold mb-0 text-content">
+                                    <a href="/user/profile/{{post.author.profile.id}}" class="text-decoration-none text-subtitle">
                                         {{post.author.profile.display_name}}
                                     </a>
                                 </p>
-                                <p class="text-muted mb-0" style="font-size: 14px;">
-                                    <span class="font-weight-bold">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }} {% if post.edited != post.posted %}<span class="ml-1" style="font-size: 12px;">(edited)</span>{% endif %}
+                                <p class="text-muted mb-0 text-content">
+                                    <span class="font-weight-bold">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }} {% if post.edited != post.posted %}<span class="ml-1 text-tertiary" >(edited)</span>{% endif %}
                                 </p>
                             </div>
                         </div>
 
-                        <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0" style="height: 30px; width: 30px;">
-                            <i class="fas fa-fw fa-ellipsis-v text-dark" style="font-size: 12px;"></i>
+                        <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+                            <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary" ></i>
                         </button>
                     </div>
                 </div>
 
                 <div>
-                    <p class="font-weight-bold my-3 text-dark" style="font-size: 24px;">{{ post.title }}</p>
+                    <p class="font-weight-bold my-3 text-dark text-master">{{ post.title }}</p>
 
                     <div class="d-flex align-items-center">
-                        <a href="" class="btn btn-secondary d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold" style="font-size: 12px; height: 20px;">
-                            <span class="font-weight-bold">{{ post.tag }}</span>
+                        <a href="" class="btn btn-secondary d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold button-post-tag">
+                            <span class="font-weight-bold text-tertiary">{{ post.tag }}</span>
                         </a>
                     </div>
 
-                    <p class="text-justify text-dark my-3">{{ post.content }}</p>
+                    <p class="text-dark my-3"><div class="post-image text-justify">{{ post.content|safe }}</div></p>
                 </div>
 
-                {% csrf_token %}
-
                 <div class="d-flex">
-                    <button type="button" 
-                        class="btn btn-light d-flex align-items-center justify-content-center border"
-                        style="height: 40px; border-radius: 20px 0 0 20px; font-size: 12px;"
-                        data-post-id="{{ post.id }}"
-                        data-feedback="like"
-                        data-positive-feedback="{% if post.id in positive_feedbacks %}true{% else %}false{% endif %}"
-                        data-url-feedback="{% url 'feedback_post' %}"
-                        data-url-null="{% url 'null_feedback' %}"
-                        id="like-btn-{{ post.id }}">
+                    {% include "buttons/feedback.html" %}
 
-                        <i class="fas fa-fw fa-caret-up {% if post.id in positive_feedbacks %}text-success{% else %}text-dark{% endif %}" style="font-size: 20px;"></i>
-                        <p class="mb-0 ml-2" id="like-count-{{ post.id }}">{{ post.get_likes }}</p>
-                    </button>
+                    <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill ml-2 text-tertiary" >
+                        <i class="text-dark fas fa-fw fa-link"></i>
 
-                    <button type="button" 
-                        class="btn btn-light d-flex align-items-center justify-content-center border"
-                        style="height: 40px; border-radius: 0 20px 20px 0; font-size: 12px;"
-                        data-post-id="{{ post.id }}"
-                        data-feedback="dislike"
-                        data-negative-feedback="{% if post.id in negative_feedbacks %}true{% else %}false{% endif %}"
-                        data-url-feedback="{% url 'feedback_post' %}"
-                        data-url-null="{% url 'null_feedback' %}"
-                        id="dislike-btn-{{ post.id }}">
-
-                        <i class="fas fa-fw fa-caret-down {% if post.id in negative_feedbacks %}text-danger{% else %}text-dark{% endif %}" style="font-size: 20px;"></i>
-                        <p class="mb-0 ml-2" id="dislike-count-{{ post.id }}">{{ post.get_dislikes }}</p>
+                        <p class="mb-0 ml-2 text-tertiary">Share</p>
                     </button>
                 </div>
 
-                <p class="text-dark font-weight-bold p-0 my-3" style="font-size: 20px;">{{ post.get_comments_count }} Comment(s)</p>
+                <p class="text-dark font-weight-bold p-0 my-3 text-title">{{ post.get_comments_count }} comments</p>
 
-                <div class="d-flex">
-                    <img 
-                        src="{% if user.profile.profile_picture %} {{ user.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-                        class="rounded-circle border"
-                        style="height: 40px; width: 40px;">
-
-                    <form method="post" action="{% url 'comment' %}" class="w-100"> {% csrf_token %}
-                        <div class="comment-box ml-3">
+                <div class="comment-box mb-3">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-2">
                             <textarea 
-                                class="form-control rounded"
-                                name="content" 
-                                rows="2" 
-                                placeholder="Write your comment here..."
-                                style="min-height: 60px; max-height: 200px; font-size: 14px;"
-                                required></textarea>
+                                name="comment" 
+                                class="form-control" 
+                                rows="1"
+                                placeholder="O que você pensa sobre isso?" 
+                                required
+                            ></textarea>
+                        </div>
 
-                            <input type="hidden" name="post" value="{{ post.id }}">
-
-                            <div class="comment-actions">
-                                <button type="button" 
-                                        class="btn btn-dark d-flex align-items-center justify-content-center border" 
-                                        onclick="this.closest('form').reset()"
-                                        style="height: 30px;">
-                                        
-                                    <span style="font-size: 12px;">Cancel</span>
-                                </button>
-
-                                <button type="submit"
-                                        class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0"
-                                        style="height: 30px; width: 30px;">
-
-                                    <i class="fas fa-fw fa-paper-plane"></i>
-                                </button>
-                            </div>
+                        <div class="comment-actions d-none">
+                            <button type="submit" class="btn btn-primary btn-sm me-2">Comentar</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm btn-cancel">Cancelar</button>
                         </div>
                     </form>
                 </div>
+
+                <div id="comments-area-{{ post.id }}">
                     
-                {% for comment in comments %}
+                    {% for comment in comments %}
 
-                    {% include "post/comment_section.html" with comment=comment %}
+                        {% include "post/comment_section.html" with comment=comment %}
 
-                {% endfor %}
+                    {% endfor %}
 
+                </div>
             </div>
         </div>
 
         <div class="col-4">
             <div class="mb-3">
-                <p class="font-weight-bold mb-2" style="font-size: 14px;">COMMUNITY INFO:</p>
+                <p class="font-weight-bold mb-2 text-content">COMMUNITY INFO:</p>
 
                 {% include 'community/info.html' with community=post.community %}
 
             </div>
 
             <div class="mb-3">
-                <p class="font-weight-bold mb-2" style="font-size: 14px;">AUTHOR INFO:</p>
+                <p class="font-weight-bold mb-2 text-content">AUTHOR INFO:</p>
 
                 <div class="card">
-                    <img class="card-img-top border-bottom" src="{{ post.author.profile.banner.url }}" style="height: 80px;">
+                    <img class="card-img-top border-bottom info-banner" src="{{ post.author.profile.banner.url }}">
                     
                     <div class="col p-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
                                 <img 
                                     src="{{ post.author.profile.profile_picture.url }}" 
-                                    class="rounded-circle border"
-                                    style="height: 40px; width: 40px;">
+                                    class="rounded-circle border circle-picture">
 
                                 <div class="ml-2">
-                                    <p class="font-weight-bold mb-0" style="font-size: 16px;">
+                                    <p class="font-weight-bold mb-0 text-subtitle">
                                         <a href="/user/profile/{{ post.author.profile.id }}" class="text-decoration-none">
                                             {{ post.author.profile.display_name }}
                                         </a>
                                     </p>
 
-                                    <p class="text-muted mb-0" style="font-size: 14px;">
+                                    <p class="text-muted mb-0 text-content" >
                                         @{{ post.author.username }}
                                     </p>
                                 </div>
                             </div>
 
-                            {% if user.id == post.author.id %}
-
-                                <p class="mb-0" style="font-size: 14px">You</p>
-
-                            {% else %}
-
-                                <button type="button" 
-                                        class="btn btn-follow d-flex align-items-center justify-content-center border rounded px-3 {% if post.author.id in following_ids %}btn-danger{% else %}btn-primary{% endif %}"
-                                        data-user-id="{{ post.author.id }}"
-                                        data-following="{% if post.author.id in following_ids %}true{% else %}false{% endif %}"
-                                        style="height: 30px; font-size: 12px;">
-
-                                    <span class="follow-text font-weight-bold" id="follow-text-{{ post.author.id }}">
-
-                                        {% if post.author.id in following_ids %}Unfollow{% else %}Follow{% endif %}
-
-                                    </span>
-
-                                </button>
-
-                            {% endif %}
+                            {% include 'buttons/follow.html' with person=post.author %}
 
                         </div>
 
@@ -233,15 +134,11 @@
                         <hr class="sidebar-divider">
 
                         <div class="d-flex align-items-center justify-content-between">
-                            <p style="font-size: 14px;" class="mb-0">
-                                <i class="fas fa-fw fa-users"></i>
-                                <span class="followers-count ml-1" data-user-id="{{ post.author.id }}">{{ post.author.followers.count }}</span> followers
-                            </p>
+                            <p class="text-content mb-0"><i class="fas fa-fw fa-users"></i><span class="followers-count ml-2" data-user-id="{{ post.author.id }}">{{ post.author.followers.count }} followers</span></p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

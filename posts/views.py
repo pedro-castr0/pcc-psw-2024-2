@@ -8,14 +8,13 @@ from django.contrib.auth.decorators import permission_required
 def create(request):
     if request.method == 'GET':
         communities = Community.objects.all()
-        return render(request, 'post/form.html', {'communities':communities})
+        return render(request, 'post/partials/form.html', {'communities':communities})
     
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
         tag = request.POST.get('tag')
-        author_id = request.POST.get('author')
-        author = User.objects.get(id = author_id)
+        author = User.objects.get(id = request.user.id)
         community_id = request.POST.get('community')
         community = Community.objects.get(id = community_id) 
 

@@ -1,106 +1,82 @@
 {% load static %}
 
 <div class="comment {% if comment.parent %}reply{% endif %}">
-    <div class="d-flex {% if comment.parent %} pb-3 {% else %} mt-3 {% endif %}">
-        
-        <img 
-            src="{% if comment.author.profile.profile_picture %} {{ comment.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-            class="rounded-circle border" 
-            {% if comment.parent %} 
-                style="height: 30px; width: 30px;" 
-            {% else %}
-                style="height: 40px; width: 40px;"
-            {% endif %}>
-            
+    <div class="comment">
+        <div class="d-flex mt-3">
+            <img 
+                src="{% if comment.author.profile.profile_picture %} {{ comment.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
+                class="rounded-circle border circle-picture">
 
-        <div class="ml-3 flex-grow-1">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <p class="font-weight-bold mb-0" style="font-size: 14px;">
-                        <a href="/user/profile/{{ comment.author.profile.id }}" class="text-decoration-none text-secondary">
-                            @{{ comment.author.username }}
-                        </a>
-                    </p>
-
-                    <p class="mb-0 text-muted ml-1" style="font-size: 14px;">
-                        ∙ {{ comment.posted|date:"M d, Y" }}{% if comment.edited != comment.posted %}<span class="ml-1" style="font-size: 12px;">(edited)</span>{% endif %}
-                    </p>
-                </div>
-
-                <div>
-                    <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0" style="height: 30px; width: 30px;">
-                        <i class="fas fa-fw fa-ellipsis-v text-dark" style="font-size: 12px;"></i>
-                    </button>
-                </div>
-            </div>
-
-            <p class="mb-2 text-dark">
-                {% if comment.parent.parent %} 
-
-                    <a href="/user/profile/{{ comment.parent.author.profile.id }}" class="text-decoration-none text-secondary font-weight-bold">
-                        @{{ comment.parent.author.username }}
-                    </a> 
-
-                {% endif %} 
-
-                {{ comment.content }}
-            </p>
-
-            <div class="d-flex">
-
-                <button class="btn btn-dark d-flex align-items-center justify-content-center border px-3 py-1" 
-                        style="font-size: 12px; height: 30px"
-                        onclick="toggleReplyForm('{{ comment.id }}')">
-
-                    <i class="fas fa-fw fa-reply"></i><span class="mb-0 ml-1">Reply</span>
-                </button>
-
-                {% if not comment.parent and comment.replies.exists %}
-
-                    <button class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0 ml-2" 
-                            style="font-size: 12px; height: 30px; width: 30px;"
-                            onclick="toggleReplies('{{ comment.id }}', this)">
-                            
-                        <i class="fas fa-fw fa-plus"></i>
-
-                    </button>
-
-                {% endif %}
-
-            </div>
-
-
-            <div id="reply-form-{{ comment.id }}" class="mt-2 d-none">
-                <form method="post" class="w-100" action="{% url 'comment' %}"> {% csrf_token %}
-                    <div class="comment-box">
-                        <textarea 
-                            class="form-control rounded"
-                            name="content" 
-                            rows="2" 
-                            placeholder="Write your reply..."
-                            style="min-height: 60px; max-height: 200px; font-size: 14px;"
-                            required></textarea>
-
-                        <input type="hidden" name="post" value="{{ post.id }}">
-                        <input type="hidden" name="parent" value="{{ comment.id }}">
-
-                        <div class="comment-actions">
-                            <button type="button" 
-                                    class="btn btn-dark d-flex align-items-center justify-content-center border" 
-                                    onclick="toggleReplyForm('{{ comment.id }}')"
-                                    style="height: 30px;">
-                                <span style="font-size: 12px;">Cancel</span>
-                            </button>
-
-                            <button type="submit"
-                                    class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0"
-                                    style="height: 30px; width: 30px;">
-                                <i class="fas fa-fw fa-paper-plane"></i>
-                            </button>
-                        </div>
+            <div class="ml-3 flex-grow-1">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <p class="font-weight-bold mb-0 text-content">
+                            <a href="/user/profile/{{ comment.author.profile.id }}" class="text-decoration-none text-secondary">
+                                @{{ comment.author.username }}
+                            </a>
+                        </p>
+                        <p class="mb-0 text-muted ml-1 text-content">
+                            ∙ {{ comment.posted|date:"M d, Y" }}
+                        </p>
                     </div>
-                </form>
+
+                    <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+                        <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary"></i>
+                    </button>
+                </div>
+
+                <p class="mb-2 text-dark">{{ comment.content }}</p>
+
+                <div class="d-flex">
+                    <button class="btn btn-dark d-flex align-items-center justify-content-center border px-3 py-1 button-small-square"
+                            onclick="toggleReplyForm('{{ comment.id }}')">
+                        <i class="fas fa-fw fa-reply"></i>
+                        <span class="mb-0 ml-1 text-tertiary font-weight-bold">Reply</span>
+                    </button>
+                </div>
+
+                <div id="reply-form-{{ comment.id }}" class="mt-2 d-none">
+                    <form method="post" action="{% url 'comment' %}" 
+                        class="w-100 reply-form"
+                        data-post-id="{{ comment.post.id }}" 
+                        data-comment-id="{{ comment.id }}">
+
+                        {% csrf_token %}
+
+                        <div class="comment-box">
+                            <textarea 
+                                class="form-control rounded comment-form text-tertiary"
+                                name="content" 
+                                rows="2" 
+                                placeholder="Write your reply..."
+                                required
+                                style="font-size: 14px;"></textarea>
+
+                            <input type="hidden" name="post" value="{{ comment.post.id }}">
+                            <input type="hidden" name="parent" value="{{ comment.id }}">
+
+                            <div class="comment-actions">
+                                <button type="button" 
+                                        class="btn btn-dark d-flex align-items-center justify-content-center border button-small-square" 
+                                        onclick="toggleReplyForm('{{ comment.id }}')">
+                                    <span class="text-tertiary">Cancel</span>
+                                </button>
+
+                                <button type="submit"
+                                        class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+                                    <i class="fas fa-fw fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
+        </div>
+
+        <div id="replies-{{ comment.id }}" class="ml-5 mt-3">
+            {% for reply in comment.replies.all %}
+                {% include "post/comment_section.html" with comment=reply %}
+            {% endfor %}
         </div>
     </div>
 

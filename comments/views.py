@@ -1,28 +1,40 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment, Post
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
+from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
 
 def comment(request):
     if request.method == 'POST':
         content = request.POST.get('content')
-        author = User.objects.get(id = request.user.id)
         post_id = request.POST.get('post')
-        post = Post.objects.get(id = post_id)
         parent_id = request.POST.get('parent')
-        parent = Comment.objects.filter(id=parent_id).first()
+        
+        post = get_object_or_404(Post, id=post_id)
+        author = request.user
+        
+        parent = Comment.objects.filter(id=parent_id).first() if parent_id else None
 
-        comment = Comment(
-            content = content,
-            author = author,
-            post = post,
-            parent = parent
+        comment = Comment.objects.create(
+            content=content,
+            author=author,
+            post=post,
+            parent=parent
         )
 
-        comment.save()
+        comment_html = render_to_string("post/comment_section.html", {"comment": comment})
+        comments_count = post.comments.count()
 
-    return redirect('/comment/list/')
+        return JsonResponse({
+            "status": "success", 
+            "comment_html": comment_html, 
+            "comments_count": comments_count,
+            "parent_id": parent_id if parent else None  # Se for resposta, retorna o parent_id
+        })
+    
+    return JsonResponse({"status": "error", "message": "Método não permitido."})
 
 def list(request):
     comments = Comment.objects.all()
