@@ -100,44 +100,7 @@
             <div class="mb-3">
                 <p class="font-weight-bold mb-2 text-content">AUTHOR INFO:</p>
 
-                <div class="card">
-                    <img class="card-img-top border-bottom info-banner" src="{{ post.author.profile.banner.url }}">
-                    
-                    <div class="col p-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <img 
-                                    src="{{ post.author.profile.profile_picture.url }}" 
-                                    class="rounded-circle border circle-picture">
-
-                                <div class="ml-2">
-                                    <p class="font-weight-bold mb-0 text-subtitle">
-                                        <a href="/user/profile/{{ post.author.profile.id }}" class="text-decoration-none">
-                                            {{ post.author.profile.display_name }}
-                                        </a>
-                                    </p>
-
-                                    <p class="text-muted mb-0 text-content" >
-                                        @{{ post.author.username }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {% include 'buttons/follow.html' with person=post.author %}
-
-                        </div>
-
-                        <div class="my-3">
-                            <p class="text-justify text-dark">{{ post.author.profile.bio }}</p>
-                        </div>
-                        
-                        <hr class="sidebar-divider">
-
-                        <div class="d-flex align-items-center justify-content-between">
-                            <p class="text-content mb-0"><i class="fas fa-fw fa-users"></i><span class="followers-count ml-2" data-user-id="{{ post.author.id }}">{{ post.author.followers.count }} followers</span></p>
-                        </div>
-                    </div>
-                </div>
+                {% include 'user/partials/info.html' with person=post.author %}
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@
     <div class="comment">
         <div class="d-flex mt-3">
             <img 
-                src="{% if comment.author.profile.profile_picture %} {{ comment.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
+                src="{% if comment.author.profile.profile_picture %}{{ comment.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
                 class="rounded-circle border circle-picture">
 
             <div class="ml-3 flex-grow-1">
@@ -74,10 +74,15 @@
         </div>
 
         <div id="replies-{{ comment.id }}" class="ml-5 mt-3">
+
             {% for reply in comment.replies.all %}
+
                 {% include "post/comment_section.html" with comment=reply %}
+
             {% endfor %}
+
         </div>
+        
     </div>
 
     <div class="gap-3">

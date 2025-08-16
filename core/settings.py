@@ -41,11 +41,11 @@ INSTALLED_APPS = [
     'comments',
     'communities',
     'posts',
-    'feedback_comments',
-    'feedback_posts',
+    'feedback',
     'follows',
     'joins',
     'profiles',
+    'tags'
 ]
 
 MIDDLEWARE = [
@@ -69,9 +69,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'follows.views.following',
-                'joins.views.joined',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },

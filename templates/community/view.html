@@ -1,0 +1,130 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card profile-banner">
+                <img 
+                    src="{% if community.community_banner %}{{ community.community_banner.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
+                    class="img-fluid rounded">
+            </div>
+
+            <div class="d-flex">
+                <div class="d-flex align-items-center m-3 justify-content-between w-100">
+                    <div class="d-flex align-items-center ">
+                        <img 
+                            class="rounded border profile-picture" 
+                            src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
+                            
+                        <div class="ml-3">
+                            <p class="font-weight-bold my-0 text-dark text-master">{% if community.display_name %}{{ community.display_name }}{% else %}{{ community.name }}{% endif %}</p>
+                            <p class="text-content">
+                                <span class="font-weight-bold">@{{ community.name }}</span> · 
+                                <span id="members-count-{{ community.id }}">{{ community.members.count }}</span> members · {{ community.posts.count }} posts</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center">
+
+                        {% include 'buttons/join.html' %}
+
+                        <a href="" 
+                            class="btn d-flex align-items-center justify-content-center rounded-circle ml-2 button-small-circle">
+
+                            <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8">
+                    <ul class="nav nav-tabs mb-3" id="communityTabs" role="tablist">
+                        <li class="nav-item">
+                            <a 
+                                class="load-content nav-link border-bottom" 
+                                data-toggle="tab" href="/community/{{ community.id }}/home/" 
+                                data-target="#content-area" 
+                                id="homeButton">
+
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Home</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a 
+                                class="load-content nav-link border-bottom" 
+                                data-toggle="tab" 
+                                href="/community/{{ community.id }}/context/" 
+                                data-target="#content-area">
+
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Context</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a 
+                                class="load-content nav-link border-bottom" 
+                                data-toggle="tab" 
+                                href="/community/{{ community.id }}/post/"
+                                data-target="#content-area">
+
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Post</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="content-area"></div>
+                    
+                </div>
+
+                <div class="col-4">
+                    <p class="font-weight-bold mb-2 text-content">COMMUNITY INFO</p>
+
+                    <div class="card p-3 mb-3">
+                        <p class="font-weight-bold text-dark m-0 text-subtitle">
+
+                            {% if community.display_name %}
+
+                                {{ community.display_name }}
+
+                            {% else %}
+                                
+                                {{ community.name }}
+
+                            {% endif %}
+                            
+                        </p>
+
+                        {% if community.context %}
+
+                            <p class="my-3 text-content"><div class="text-justify text-dark">{{ community.context|safe }}</div></p>
+                        
+                        {% else %}
+
+                            <p class="my-3 text-content text-justify">This community doesn't have context.</p>
+
+                        {% endif %}
+
+                        <hr class="mt-0">
+
+                        <p class="m-0 text-content"><i class="fas fa-fw fa-star"></i> Created by <a class="text-decoration-none font-weight-bold" href="/user/profile/{{ community.creator.id }}">@{{ community.creator.username }}</a></p>
+                    </div>
+
+                    <p class="font-weight-bold mb-2 text-content">CREATOR INFO</p>
+
+                    {% include 'user/partials/info.html' with person=community.creator %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+

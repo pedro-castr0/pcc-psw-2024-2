@@ -4,8 +4,10 @@ from comments.models import Comment
 from posts.models import Post
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def update(request):
     if request.method == 'GET':
         return render(request, 'profile/form.html')
@@ -16,14 +18,14 @@ def update(request):
         display_name = request.POST.get('display_name')
         bio = request.POST.get('bio')
         profile_picture = request.FILES.get('profile_picture')
-        banner = request.FILES.get('banner')
+        profile_banner = request.FILES.get('profile_banner')
 
         profile = Profile(
             user = user,
             display_name = display_name,
             bio = bio,
             profile_picture = profile_picture,
-            banner = banner
+            profile_banner = profile_banner
         )
 
         profile.save()
@@ -32,6 +34,7 @@ def update(request):
         
     return render(request, 'profile/form.html')
 
+@login_required
 def view(request, id):
     profile = Profile.objects.get(id = id)
 
@@ -47,6 +50,7 @@ def view(request, id):
 
     return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following, 'following_ids':following_ids, 'community_ids':community_ids})
 
+@login_required
 def likes(request, id):
     profile = Profile.objects.get(id=id)
 
@@ -63,6 +67,7 @@ def likes(request, id):
         'negative_feedbacks': negative_feedbacks
     })
 
+@login_required
 def dislikes(request, id):
     profile = Profile.objects.get(id=id)
 
@@ -79,6 +84,7 @@ def dislikes(request, id):
         'negative_feedbacks': negative_feedbacks
     })
 
+@login_required
 def posts(request, id):
     profile = Profile.objects.get(id=id)
 
@@ -95,6 +101,7 @@ def posts(request, id):
         'negative_feedbacks': negative_feedbacks
     })
 
+@login_required
 def comments(request, id):
     profile = Profile.objects.get(id=id)
 
@@ -104,10 +111,12 @@ def comments(request, id):
         'comments': comments
     })
 
+@login_required
 def list(request):
     profiles = Profile.objects.all()
     return render(request, 'profile/list.html', {'profiles':profiles})
 
+@login_required
 def delete(request, id):
     profile = Profile.objects.get(id = id)
     profile.delete()

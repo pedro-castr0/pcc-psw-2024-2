@@ -1,45 +1,57 @@
 from django.shortcuts import render, redirect
-from .models import Community
+from communities.models import Community
+from posts.models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 
+@login_required
 def create(request):
     if request.method == 'GET':
         return render(request, 'community/form.html')
     
     elif request.method == 'POST':
         name = request.POST.get('name')
-        description = request.POST.get('description')
-        tag = request.POST.get('tag')
-        created = request.POST.get('created')
-        creator_id = request.POST.get('creator')
-        creator = User.objects.get(id = creator_id) 
+        display_name = request.POST.get('display_name')
+        context = request.POST.get('context')
+        community_tag = request.POST.get('community_tag')
+        creator = request.user
+        community_picture = request.FILES.get('community_picture')
+        community_banner = request.FILES.get('community_banner')
 
 
         community = Community(
+
             name = name,
-            description = description,
-            tag = tag,
-            created = created,
-            creator = creator
+            display_name = display_name,
+            context = context,
+            community_tag = community_tag,
+            creator = creator,
+            community_picture = community_picture,
+            community_banner = community_banner
+
         )
 
         community.save()
 
     return redirect('/community/list/')
 
+@login_required
 def list(request):
     communities = Community.objects.all()
     return render(request, 'community/list.html', {'communities':communities})
 
+@login_required
 def edit(request, id):
     community = Community.objects.get(id = id)
 
     if request.method == 'POST':
         community.name = request.POST.get('name')
-        community.description = request.POST.get('description')
-        community.tag = request.POST.get('tag')
+        community.display_name = request.POST.get('display_name')
+        community.context = request.POST.get('context')
+        community.community_tag = request.POST.get('community_tag')
+        community.community_picture = request.FILES.get('community_picture')
+        community.community_banner = request.FILES.get('community_banner')
 
         community.save()
 
@@ -48,14 +60,49 @@ def edit(request, id):
     return render(request, 'community/form.html', {'community':community})
 
 
+@login_required
 def delete(request, id):
     community = Community.objects.get(id = id)
     community.delete()
 
     return redirect('/community/list/')
 
-def page(request, id):
+@login_required
+def view(request, id):
     community = Community.objects.get(id = id)
-    return render(request, 'community/page.html', {'community':community})
+
+    following_ids = set(
+        request.user.following.values_list('followed_id', flat=True)
+    )
+
+    community_ids = set(
+        request.user.joined_communities.values_list('community_id', flat=True)
+    )
+
+    return render(request, 'community/view.html', {'community':community, 'following_ids':following_ids, 'community_ids':community_ids})
+
+@login_required
+def home(request, id):
+    posts = Post.objects.filter(community_id=id).distinct()
+
+    return render(request, 'community/partials/home.html', {
+        'posts': posts
+    })
+
+@login_required
+def context(request, id):
+    community = Community.objects.get(id=id)
+
+    return render(request, 'community/partials/context.html', {
+        'community': community
+    })
+
+@login_required
+def post(request, id):
+    community = Community.objects.get(id=id)
+
+    return render(request, 'post/partials/form.html', {
+        'community': community
+    })
 
 

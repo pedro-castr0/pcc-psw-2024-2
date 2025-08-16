@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 
+@login_required
 def create(request):
     if request.method == 'GET':
         communities = Community.objects.all()
@@ -13,7 +14,7 @@ def create(request):
     elif request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        tag = request.POST.get('tag')
+        post_tag = request.POST.get('post_tag')
         author = User.objects.get(id = request.user.id)
         community_id = request.POST.get('community')
         community = Community.objects.get(id = community_id) 
@@ -21,7 +22,7 @@ def create(request):
         post = Post(
             title = title,
             content = content,
-            tag = tag,
+            post_tag = post_tag,
             author = author,
             community = community
         )
@@ -30,10 +31,12 @@ def create(request):
 
     return redirect('/post/list/')
 
+@login_required
 def list(request):
     posts = Post.objects.all()
     return render(request, 'post/list.html', {'posts':posts})
 
+@login_required
 def edit(request, id):
     communities = Community.objects.all()
     post = Post.objects.get(id = id)
@@ -41,7 +44,7 @@ def edit(request, id):
     if request.method == 'POST':
         post.title = request.POST.get('title')
         post.content = request.POST.get('content')
-        post.tag = request.POST.get('tag')
+        post.post_tag = request.POST.get('post_tag')
         community_id = request.POST.get('community')
         post.community = Community.objects.get(id = community_id)
 
@@ -51,13 +54,14 @@ def edit(request, id):
     
     return render(request, 'post/form.html', {'communities':communities, 'post':post})
 
-
+@login_required
 def delete(request, id):
     post = Post.objects.get(id = id)
     post.delete()
 
     return redirect('/post/list/')
 
+@login_required
 def view(request, id):
     post = Post.objects.get(id = id)
     comments = post.comments.filter(parent__isnull=True)

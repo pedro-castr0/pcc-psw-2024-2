@@ -27,9 +27,9 @@ urlpatterns = [
     path('associate/', include('joins.urls')),
     path('community/', include('communities.urls')),
     path('post/', include('posts.urls')),
-    path('post/feedback/', include('feedback_posts.urls')),
+    path('post/feedback/', include('feedback.urls')),
+    path('tags/', include('tags.urls')),
     path('comment/', include('comments.urls')),
-    path('comment/feedback/', include('feedback_comments.urls')),
     path('', include('home.urls'))
 
 ]

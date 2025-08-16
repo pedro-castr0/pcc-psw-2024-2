@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const btn = this;
             const communityId = btn.dataset.communityId;
             const isJoined = btn.dataset.joined === "true";
-            const url = isJoined ? btn.dataset.unjoinUrl : btn.dataset.joinUrl;
+            const url = isJoined ? btn.dataset.leaveUrl : btn.dataset.joinUrl;
 
             const formData = new FormData();
             formData.append('community_id', communityId);
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const countElem = document.getElementById(`members-count-${communityId}`);
                     if (countElem) countElem.innerText = data.members_count;
                 } else {
-                    console.error('Error join/unjoin');
+                    console.error('Error join/leave');
                 }
             })
             .catch(error => console.error('Error:', error));

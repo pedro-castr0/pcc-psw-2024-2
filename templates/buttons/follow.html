@@ -1,7 +1,7 @@
 {% if user.id != person.id %}
 
     <button type="button" 
-            class="btn btn-follow d-flex align-items-center justify-content-center border rounded px-3 button-small-square {% if person.id in following_ids %}btn-danger{% else %}btn-primary{% endif %}"
+            class="btn btn-follow d-flex align-items-center justify-content-center rounded px-3 button-small-square {% if person.id in following_ids %}btn-danger{% else %}btn-primary{% endif %}"
             data-user-id="{{ person.id }}"
             data-following="{% if person.id in following_ids %}true{% else %}false{% endif %}">
 

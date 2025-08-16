@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from .models import User, Follow
 from django.http import HttpResponse
 from django.http import JsonResponse
 
 from django.http import JsonResponse
 
+@login_required
 def follow(request):
     if request.method == 'POST':
         followed_id = request.POST.get('followed_id')
@@ -20,6 +22,7 @@ def follow(request):
             'followers_count': followed.followers.count()
         })
 
+@login_required
 def unfollow(request):
     if request.method == 'POST':
         followed_id = request.POST.get('followed_id')
@@ -32,10 +35,12 @@ def unfollow(request):
             'followers_count': followed.followers.count()
         })
 
+@login_required
 def list(request):
     follows = Follow.objects.all()
     return render(request, 'follow/list.html', {'follows':follows})
 
+@login_required
 def following(request):
     if request.user.is_authenticated:
         following = Follow.objects.filter(follower=request.user).select_related('followed')

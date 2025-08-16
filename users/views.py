@@ -64,7 +64,6 @@ def edit(request, id):
     
     return render(request, 'user/form.html', {'user':user})
 
-
 def delete(request, id):
     user = User.objects.get(id = id)
     user.delete()

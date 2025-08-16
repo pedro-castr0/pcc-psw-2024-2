@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 
+@login_required
 def comment(request):
     if request.method == 'POST':
         content = request.POST.get('content')
@@ -36,10 +37,12 @@ def comment(request):
     
     return JsonResponse({"status": "error", "message": "Método não permitido."})
 
+@login_required
 def list(request):
     comments = Comment.objects.all()
     return render(request, 'comment/list.html', {'comments':comments})
 
+@login_required
 def edit(request, id):
     posts = Post.objects.all()
     comments = Comment.objects.all()
@@ -61,6 +64,7 @@ def edit(request, id):
     return render(request, 'comment/form.html', {'comment':comment, 'comments':comments, 'posts':posts})
 
 
+@login_required
 def delete(request, id):
     comment = Comment.objects.get(id = id)
     comment.delete()

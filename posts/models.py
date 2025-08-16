@@ -5,11 +5,12 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Post(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=300)
     content = models.TextField()
+    file = models.FileField(upload_to="media/post/files", blank=True, null=True)
     posted = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
-    tag = models.CharField(max_length=100)
+    edited = models.DateTimeField(auto_now=True, blank=True, null=True)
+    post_tag = models.CharField(max_length=100)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='posts')
 
@@ -23,12 +24,12 @@ class Post(models.Model):
         return self.title
     
     def get_likes(self):
-        from feedback_posts.models import FeedbackPost
-        return FeedbackPost.objects.filter(post=self, feedback=True).count()
+        from feedback.models import Feedback
+        return Feedback.objects.filter(post=self, feedback=True).count()
     
     def get_dislikes(self):
-        from feedback_posts.models import FeedbackPost
-        return FeedbackPost.objects.filter(post=self, feedback=False).count()
+        from feedback.models import Feedback
+        return Feedback.objects.filter(post=self, feedback=False).count()
 
     def get_comments_count(self):
         from comments.models import Comment

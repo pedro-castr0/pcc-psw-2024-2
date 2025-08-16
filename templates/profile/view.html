@@ -9,7 +9,7 @@
         <div class="col">
             <div class="card profile-banner">
                 <img 
-                    src="{% if profile.banner %}{{ profile.banner.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
+                    src="{% if profile.profile_banner %}{{ profile.profile_banner.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
                     class="img-fluid rounded">
             </div>
 
@@ -46,45 +46,45 @@
                     <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link" 
-                                data-toggle="tab" href="{% url 'posts' profile.id %}" 
+                                class="load-content nav-link border-bottom" 
+                                data-toggle="tab" href="/user/profile/{{ profile.user.id }}/posts/" 
                                 data-target="#content-area" 
                                 id="postButton">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content">Posts</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Posts</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link" 
+                                class="load-content nav-link border-bottom" 
                                 data-toggle="tab" 
-                                href="{% url 'comments' profile.id %}" 
+                                href="/user/profile/{{ profile.user.id }}/comments/" 
                                 data-target="#content-area">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content">Comments</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Comments</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link" 
+                                class="load-content nav-link border-bottom" 
                                 data-toggle="tab" 
-                                href="{% url 'likes' profile.id %}" 
+                                href="/user/profile/{{ profile.user.id }}/likes/" 
                                 data-target="#content-area">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content">Likes</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Likes</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link" 
+                                class="load-content nav-link border-bottom" 
                                 data-toggle="tab" 
-                                href="{% url 'dislikes' profile.id %}" 
+                                href="/user/profile/{{ profile.user.id }}/dislikes/" 
                                 data-target="#content-area">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content">Dislikes</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Dislikes</p>
                             </a>
                         </li>
                     </ul>
@@ -131,7 +131,7 @@
 
                     {% for follow in profile.user.following.all %}
 
-                        {% include 'user/profiles.html' with person=follow.followed %}
+                        {% include 'user/partials/profiles.html' with person=follow.followed %}
                     
                     {% empty %}
 

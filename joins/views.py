@@ -1,7 +1,9 @@
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from .models import Community, Join
 
+@login_required
 def join(request):
     if request.method == 'POST':
         community_id = request.POST.get('community_id')
@@ -16,7 +18,8 @@ def join(request):
         members_count = community.members.count()
         return JsonResponse({'status': 'success', 'joined': True, 'members_count': members_count})
 
-def unjoin(request):
+@login_required
+def leave(request):
     if request.method == 'POST':
         community_id = request.POST.get('community_id')
         join = get_object_or_404(Join, community_id=community_id, user=request.user)
@@ -26,10 +29,12 @@ def unjoin(request):
         members_count = community.members.count()
         return JsonResponse({'status': 'success', 'joined': False, 'members_count': members_count})
     
+@login_required
 def list(request):
     joins = Join.objects.all()
     return render(request, 'join/list.html', {'joins':joins})
 
+@login_required
 def joined(request):
     if request.user.is_authenticated:
         joined_communities = Join.objects.filter(user=request.user).select_related('community')
