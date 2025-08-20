@@ -1,0 +1,24 @@
+<form method="post" class="ajax-denuncia" action="{{ url }}">
+
+    {% csrf_token %}
+
+    <p class="fw-bold mb-2">Report this content:</p>
+
+    <div class="btn-group-vertical w-100" role="group" aria-label="Motivo da denúncia">
+
+        {% for choice_value, choice_label in form.fields.motivo.choices %}
+
+            <div class="d-flex col col-flex align-items-center">
+                <input type="radio" class="btn-check" name="motivo" id="motivo_{{ forloop.counter }}" value="{{ choice_value }}" autocomplete="off" required>
+                <label class="btn btn-light text-start w-100 mb-2 rounded" for="motivo_{{ forloop.counter }}">
+                    <p class="mb-0 text-content">{{ choice_label }}</p>
+                </label>
+            </div>
+
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-danger w-100 mt-3">
+        <p class="text-tertiary font-weight-bold mb-0">Report</p>
+    </button>
+</form>

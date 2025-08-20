@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Community, Post
+from .models import Community, Post, Tag
 from comments.models import Comment
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -7,29 +7,28 @@ from django.contrib.auth.decorators import permission_required
 
 @login_required
 def create(request):
-    if request.method == 'GET':
-        communities = Community.objects.all()
-        return render(request, 'post/partials/form.html', {'communities':communities})
-    
-    elif request.method == 'POST':
+    if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        post_tag = request.POST.get('post_tag')
-        author = User.objects.get(id = request.user.id)
-        community_id = request.POST.get('community')
-        community = Community.objects.get(id = community_id) 
+        community_id = request.POST.get('community_id')
+        community = get_object_or_404(Community, id=community_id)
 
-        post = Post(
-            title = title,
-            content = content,
-            post_tag = post_tag,
-            author = author,
-            community = community
+        post = Post.objects.create(
+            title=title,
+            content=content,
+            author=request.user,
+            community=community
         )
 
-        post.save()
+        tag_ids = request.POST.getlist('post_tag')
 
-    return redirect('/post/list/')
+        if tag_ids:
+            tags = Tag.objects.filter(id__in=tag_ids)
+            post.post_tag.set(tags)
+
+        return redirect('/')
+
+    return render(request, 'post/partials/form.html')
 
 @login_required
 def list(request):
@@ -38,32 +37,40 @@ def list(request):
 
 @login_required
 def edit(request, id):
-    communities = Community.objects.all()
-    post = Post.objects.get(id = id)
+    post = get_object_or_404(Post, id=id)
+    tags = Tag.objects.all()
+
+    if post.author != request.user:
+        return redirect('/')
 
     if request.method == 'POST':
-        post.title = request.POST.get('title')
-        post.content = request.POST.get('content')
-        post.post_tag = request.POST.get('post_tag')
-        community_id = request.POST.get('community')
-        post.community = Community.objects.get(id = community_id)
+        post.title = request.POST.get('title', post.title)
+        post.content = request.POST.get('content', post.content)
 
         post.save()
 
-        return redirect('/post/list/')
-    
-    return render(request, 'post/form.html', {'communities':communities, 'post':post})
+        tag_ids = request.POST.getlist('post_tag')
+
+        if tag_ids:
+            tags = Tag.objects.filter(id__in=tag_ids)
+            post.post_tag.set(tags)
+
+        return redirect('/')
+
+    return render(request, 'post/partials/form.html', {'post': post, 'tags':tags})
 
 @login_required
 def delete(request, id):
-    post = Post.objects.get(id = id)
-    post.delete()
+    post = get_object_or_404(Post, id=id)
 
-    return redirect('/post/list/')
+    if post.author == request.user:
+        post.delete()
+
+    return redirect('/')
 
 @login_required
 def view(request, id):
-    post = Post.objects.get(id = id)
+    post = get_object_or_404(Post, id=id)
     comments = post.comments.filter(parent__isnull=True)
 
     positive_feedbacks = set(

@@ -1,0 +1,105 @@
+{% load static %}
+
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    <form action="{% url 'search_tags' %}" method="get" class="navbar-search position-relative" data-autocomplete-url="{% url 'tag-autocomplete' %}">
+
+        <div class="input-group position-relative" id="searchDropdown">
+            <input id="tag-input" name="q" type="text" class="form-control bg-light border-0 small" placeholder="Search for..." autocomplete="off">
+
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+
+            <ul id="autocomplete-dropdown"
+                class="dropdown-menu shadow-sm w-100"
+                style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; max-height: 250px; overflow-y: auto;">
+            </ul>
+
+            <template id="tag-suggestions">
+                <li class="dropdown-item"></li>
+            </template>
+        </div>
+    </form>
+
+    <ul class="navbar-nav ml-auto"><li class="nav-item s-nav dropdown notification">
+        <a href="#" class="nav-link nav-links rm-drop-mobile drop-w-tooltip" data-bs-toggle="dropdown"
+            data-placement="bottom" data-title="Notifications" role="button" aria-haspopup="true"
+            aria-expanded="false" id="notification-bell" data-url="{% url 'get_notifications' %}">
+            <i class="fa fa-bell"></i>
+            <span id="notification-count" class="badge badge-pill badge-primary">0</span>
+        </a>
+
+
+        <ul class="dropdown-menu notify-drop dropdown-menu-end shadow-sm" style="width: 300px;">
+            <li class="notify-drop-title px-2 py-1 d-flex justify-content-between align-items-center">
+                <span>Notifications <span id="notification-count-title" class="badge bg-primary ms-2">0</span></span>
+                <a href="#" id="mark-all-read" class="small text-muted">Mark All as Read</a>
+            </li>
+
+            <div class="drop-content px-2 py-1" id="notification-list"></div>
+
+            <template id="notification-template">
+                <li class="d-flex align-items-start mb-2">
+                    <div class="row w-100">
+                        <div class="col-4">
+                            <img src="" alt="user image" style="width: 50px; border-radius: 50%;">
+                        </div>
+                        <div class="col-8">
+                            <a href="#" class="notification-user fw-bold text-dark"></a>
+                            <div class="notification-type text-muted"></div>
+                            <div class="text-end small">
+                                <span class="badge bg-primary"><i class=""></i></span>
+                                <span class="notification-time"></span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </template>
+
+            <li class="notify-drop-footer text-center py-2">
+                <a href="#">See More</a>
+            </li>
+        </ul>
+    </ul>
+
+
+    {% if user.is_authenticated %}
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                
+                <div class="d-flex flex-column text-right mr-2">
+                    <p class="text-subtitle font-weight-bold mb-0 text-secondary">{{ user.profile.display_name }}</p>
+                    <p class="text-tertiary mb-0 text-secondary">@{{ user.username }}</p>
+                </div>
+
+                <img class="img-profile rounded-circle border circle-picture"
+                    src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right border-0 rounded-lg animated--grow-in" aria-labelledby="userDropdown">
+                <form action="/user/logout/" method="post">
+
+                    {% csrf_token %}
+                    
+                    <button type="submit" class="dropdown-item d-flex align-items-center">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-dark"></i>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </li>
+    </ul>
+
+    {% endif %}
+
+</nav>

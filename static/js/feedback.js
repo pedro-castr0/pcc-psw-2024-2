@@ -31,10 +31,13 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: { 'X-CSRFToken': csrfToken, 'Cache-Control': 'no-store' },
             body: formData
         })
+
         .then(response => response.json())
+
         .then(data => {
             const likeCountElem = document.getElementById(`like-count-${postId}`);
             const dislikeCountElem = document.getElementById(`dislike-count-${postId}`);
+            
             if (likeCountElem) likeCountElem.innerText = data.likes_count;
             if (dislikeCountElem) dislikeCountElem.innerText = data.dislikes_count;
 
@@ -51,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     dislikeBtn.querySelector('i').classList.add('text-dark');
                     dislikeBtn.dataset.negativeFeedback = "false";
                 }
+                
             } else if (feedback === 'dislike') {
                 dislikeBtn.querySelector('i').classList.toggle('text-danger', data.disliked);
                 dislikeBtn.querySelector('i').classList.toggle('text-dark', !data.disliked);
@@ -63,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         })
+        
         .catch(error => console.error('Erro ao enviar feedback:', error));
     });
 });

@@ -19,6 +19,7 @@
             <th>DISLIKE</th>
             <th>EDIT</th>
             <th>DELETE</th>
+            <th>DENUNCIA</th>
         </tr>
     </thead>
     <tbody>
@@ -58,6 +59,24 @@
                     Delete
                 </a>
             </td>
+            <td>
+    <div class="dropdown position-relative">
+        <!-- Botão/ícone -->
+        <a href="#" class="abrir-denuncia nav-link"
+           data-url="{% url 'denuncia:criar_denuncia' app_label='posts' model_name='post' object_id=post.id %}"
+           data-object-id="{{ post.id }}">
+            <i class="fas fa-flag"></i>
+        </a>
+
+        <!-- Dropdown (conteúdo será injetado via AJAX) -->
+        <div class="dropdown-menu dropdown-menu-end shadow-sm form-denuncia p-3"
+             id="form-denuncia-{{ post.id }}"
+             style="min-width: 300px; min-height: auto; display: none;">
+            <div class="text-center text-muted">Carregando...</div>
+        </div>
+    </div>
+</td>
+
         </tr>
 
         {% endfor %}

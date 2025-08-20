@@ -32,11 +32,13 @@
 
                         {% include 'buttons/join.html' %}
 
-                        <a href="" 
-                            class="btn d-flex align-items-center justify-content-center rounded-circle ml-2 button-small-circle">
+                        {% include 'community/partials/report.html' %}
 
-                            <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary"></i>
-                        </a>
+                        {% if community.creator.id == user.id %}
+
+                            {% include 'community/partials/options.html' %}
+
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -49,7 +51,7 @@
                                 class="load-content nav-link border-bottom" 
                                 data-toggle="tab" href="/community/{{ community.id }}/home/" 
                                 data-target="#content-area" 
-                                id="homeButton">
+                                id="selectedButton">
 
                                 <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Home</p>
                             </a>
@@ -65,17 +67,6 @@
                                 <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Context</p>
                             </a>
                         </li>
-
-                        <li class="nav-item">
-                            <a 
-                                class="load-content nav-link border-bottom" 
-                                data-toggle="tab" 
-                                href="/community/{{ community.id }}/post/"
-                                data-target="#content-area">
-
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Post</p>
-                            </a>
-                        </li>
                     </ul>
 
                     <div class="tab-content" id="content-area"></div>
@@ -83,38 +74,6 @@
                 </div>
 
                 <div class="col-4">
-                    <p class="font-weight-bold mb-2 text-content">COMMUNITY INFO</p>
-
-                    <div class="card p-3 mb-3">
-                        <p class="font-weight-bold text-dark m-0 text-subtitle">
-
-                            {% if community.display_name %}
-
-                                {{ community.display_name }}
-
-                            {% else %}
-                                
-                                {{ community.name }}
-
-                            {% endif %}
-                            
-                        </p>
-
-                        {% if community.context %}
-
-                            <p class="my-3 text-content"><div class="text-justify text-dark">{{ community.context|safe }}</div></p>
-                        
-                        {% else %}
-
-                            <p class="my-3 text-content text-justify">This community doesn't have context.</p>
-
-                        {% endif %}
-
-                        <hr class="mt-0">
-
-                        <p class="m-0 text-content"><i class="fas fa-fw fa-star"></i> Created by <a class="text-decoration-none font-weight-bold" href="/user/profile/{{ community.creator.id }}">@{{ community.creator.username }}</a></p>
-                    </div>
-
                     <p class="font-weight-bold mb-2 text-content">CREATOR INFO</p>
 
                     {% include 'user/partials/info.html' with person=community.creator %}

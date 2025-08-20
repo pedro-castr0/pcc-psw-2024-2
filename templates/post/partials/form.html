@@ -1,28 +1,47 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
 {% load static %}
 
 <h1>{% if post.id %}Edit{% else %}Create{% endif %} your post!</h1>
 
-<form method="POST" enctype="multipart/form-data" id="rich-text-form"> {% csrf_token %}
-  <input name="community" type="hidden" value="{{ community.id }}">
+<form method="POST" enctype="multipart/form-data" id="rich-text-form" {% if not post.id %} action="/post/create/" {% endif %}> {% csrf_token %}
+  <h3>In {{ community.name }}</h3>
+  <input name="community_id" type="hidden" value="{{ community.id }}">
 
-  <label for="title">Tittle:</label>
+  <label for="title">Title:</label>
   <input name="title" type="text" value="{{ post.title }}" required><br>
 
   <label>Content:</label>
   <div id="rich-text-loader">{{ post.content|safe }}</div>
   <input id="container" name="content" type="hidden"><br>
 
-  <label for="post-tag">Post tag:</label>
-  <select name="post-tag">
-    <option value="doubt"     {% if post.tag == 'doubt' %} selected {% endif %}>Doubt</option>
-    <option value="sugestion" {% if post.tag == 'sugestion' %} selected {% endif %}>Suggestion</option>
-    <option value="strategy"  {% if post.tag == 'strategy' %} selected {% endif %}>Strategy</option>
-  </select><br>
+  <label for="post_tag">Post tag:</label>
+
+  <div>
+
+    {% for tag in tags %}
+
+      <div>
+
+        <input type="checkbox" name="post_tag" id="tag_{{ tag.id }}" value="{{ tag.id }}" {% if post and tag in post.post_tag.all %} checked {% endif %}>
+        <label for="tag_{{ tag.id }}">{{ tag.name }}</label>
+
+      </div>
+
+    {% endfor %}
+
+  </div>
 
   <label for="file">File(s):</label>
   <input id="file" name="file" type="file" multiple><br>
 
   <button type="submit">
+
     {% if post.id %}Save{% else %}Post{% endif %}
+    
   </button>
 </form>
+
+{% endblock content %}

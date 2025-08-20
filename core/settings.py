@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'follows',
     'joins',
     'profiles',
-    'tags'
+    'tags',
+    'denuncia',
+    'notification'
 ]
 
 MIDDLEWARE = [

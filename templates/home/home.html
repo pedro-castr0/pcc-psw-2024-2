@@ -6,21 +6,8 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-8" >
-            <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill mr-2">
-                    <i class="fas fa-fw fa-sort-amount-up"></i>
-                        
-                    <p class="mb-0 ml-2 text-content">Filter</p>
-                </button>
-
-                <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded-pill">
-                    <i class="fas fa-fw fa-plus-circle"></i>
-                        
-                    <p class="mb-0 ml-2 text-content">Add post</p>
-                </button>
-            </div>
-
+        <div class="col-8">
+            
             {% for post in posts %}
 
                 {% include "post/posts.html" %}

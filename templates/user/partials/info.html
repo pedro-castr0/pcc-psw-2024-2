@@ -28,11 +28,15 @@
         </div>
 
         <div class="my-3">
-            <p class="text-justify text-dark">
+            <p class="text-justify">
 
                 {% if person.profile.bio %}
 
-                    {{ person.profile.bio }}
+                    <span class="text-dark">
+
+                        {{ person.profile.bio }}
+
+                    </span>
                     
                 {% else %}
 

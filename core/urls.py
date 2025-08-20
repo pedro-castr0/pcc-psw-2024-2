@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from users.views import log_in
 
 urlpatterns = [
+    
     path('admin/', admin.site.urls),
     path('user/', include('users.urls')),
     path('user/profile/', include('profiles.urls')),
@@ -30,6 +32,8 @@ urlpatterns = [
     path('post/feedback/', include('feedback.urls')),
     path('tags/', include('tags.urls')),
     path('comment/', include('comments.urls')),
+    path('denuncia/', include('denuncia.urls')),
+    path('notification/', include('notification.urls')),
     path('', include('home.urls'))
 
 ]

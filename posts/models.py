@@ -1,18 +1,19 @@
 from django.db import models
 from communities.models import Community
 from django.contrib.auth.models import User
-
-# Create your models here.
-
+from tags.models import Tag
 class Post(models.Model):
     title = models.CharField(max_length=300)
     content = models.TextField()
     file = models.FileField(upload_to="media/post/files", blank=True, null=True)
     posted = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, blank=True, null=True)
-    post_tag = models.CharField(max_length=100)
+    post_tag = models.ManyToManyField(Tag, related_name='posts')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='posts')
+
+    def __str__(self):
+        return self.__class__.__name__
 
     def get_author(self):
         return self.author.get_username()

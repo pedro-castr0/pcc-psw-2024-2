@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Follow
 from django.http import HttpResponse
 from django.http import JsonResponse
-
+from notification.models import Notification
 from django.http import JsonResponse
 
 @login_required
@@ -14,7 +14,21 @@ def follow(request):
         follower = request.user
 
         if followed.id != follower.id:
-            Follow.objects.get_or_create(followed=followed, follower=follower)
+            # Cria o relacionamento de follow
+            follow_obj, created = Follow.objects.get_or_create(
+                followed=followed,
+                follower=follower
+            )
+
+            if created:
+                # Cria notificação usando sender
+                Notification.objects.create(
+                    user=followed,       # quem vai receber a notificação
+                    sender=follower,     # quem está seguindo
+                    message=f"começou a seguir você.",
+                    type_icon="bx bxs-user-plus",  # opcional: ícone específico
+                    link=f"/perfil/{follower.id}/"  # opcional: link para o perfil
+                )
 
         return JsonResponse({
             'status': 'success',

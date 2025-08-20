@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import permission_required
 
 def create(request):
     if request.method == 'GET':
-        return render(request, 'user/form.html')
+        return render(request, 'user/sign_up.html')
     
     elif request.method == 'POST':
         username = request.POST.get('username')
@@ -22,7 +22,7 @@ def create(request):
 
         user.save()
 
-        return redirect('/user/list/')
+        return redirect('/')
 
 def log_in(request):
     if request.method == 'GET':
@@ -37,7 +37,7 @@ def log_in(request):
         if user:
             login(request, user)
 
-            return redirect('/user/list/')
+            return redirect('home')
         
         else:
             return redirect('/user/login/')

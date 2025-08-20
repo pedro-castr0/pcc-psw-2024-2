@@ -1,11 +1,12 @@
-// JS
 document.addEventListener('DOMContentLoaded', function() {
     const bell = document.getElementById('notification-bell');
     if (!bell) return;
 
-    const url = bell.dataset.url; // pega a URL correta
+    const url = bell.dataset.url;
     const countEl = document.getElementById('notification-count');
+    const countTitleEl = document.getElementById('notification-count-title');
     const listEl = document.getElementById('notification-list');
+    const template = document.getElementById('notification-template');
 
     bell.addEventListener('click', function(e) {
         e.preventDefault();
@@ -13,34 +14,30 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url)
             .then(res => res.json())
             .then(data => {
-                // Atualiza contagem
                 countEl.textContent = data.count;
+                countTitleEl.textContent = data.count;
 
-                // Monta notificações
-                let html = '';
+                // Limpa lista
+                listEl.innerHTML = '';
+
+                if (data.notifications.length === 0) {
+                    listEl.innerHTML = '<li class="text-center text-muted">Nenhuma notificação</li>';
+                    return;
+                }
+
                 data.notifications.forEach(n => {
-                    html += `
-                        <li class="d-flex align-items-start mb-2">
-                            <div class="col-md-2 col-sm-2 col-xs-2">
-                                <div class="notify-img">
-                                    <img src="${n.user_image}" alt="notification user image" class="rounded-circle" width="40">
-                                </div>
-                            </div>
-                            <div class="col-md-10 col-sm-10 col-xs-10 flex-grow-1">
-                                <a href="${n.link}" class="notification-user fw-bold text-dark">${n.user_name}</a>
-                                <span class="notification-type text-muted">${n.message}</span>
-                                <a href="${n.link}" class="notify-right-icon">
-                                    <i class='bx bx-radio-circle-marked'></i>
-                                </a>
-                                <p class="time text-end">
-                                    <span class="badge badge-pill badge-primary"><i class='${n.type_icon}'></i></span> ${n.time}
-                                </p>
-                            </div>
-                        </li>
-                    `;
-                });
+                    // Clona o template
+                    const clone = template.content.cloneNode(true);
+                    clone.querySelector('img').src = n.user_image;
+                    clone.querySelector('img').alt = `${n.user_name} image`;
+                    clone.querySelector('.notification-user').href = n.link;
+                    clone.querySelector('.notification-user').textContent = n.user_name;
+                    clone.querySelector('.notification-type').textContent = n.message;
+                    clone.querySelector('i').className = n.type_icon;
+                    clone.querySelector('.notification-time').textContent = n.time;
 
-                listEl.innerHTML = html;
+                    listEl.appendChild(clone);
+                });
             })
             .catch(err => console.error('Erro ao carregar notificações:', err));
     });

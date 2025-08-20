@@ -7,7 +7,7 @@ from django.http import JsonResponse
 def feedback(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
-        feedback_type = request.POST.get('feedback')  # 'like' ou 'dislike'
+        feedback_type = request.POST.get('feedback')
         user = request.user
 
         post = get_object_or_404(Post, id=post_id)
@@ -20,12 +20,12 @@ def feedback(request):
             defaults={'feedback': is_like}
         )
 
-        post.likes_count = post.feedbacks.filter(feedback=True).count()
-        post.dislikes_count = post.feedbacks.filter(feedback=False).count()
+        post.likes_count = post.feedback_posts.filter(feedback=True).count()
+        post.dislikes_count = post.feedback_posts.filter(feedback=False).count()
         post.save()
 
-        liked = post.feedbacks.filter(user=user, feedback=True).exists()
-        disliked = post.feedbacks.filter(user=user, feedback=False).exists()
+        liked = post.feedback_posts.filter(user=user, feedback=True).exists()
+        disliked = post.feedback_posts.filter(user=user, feedback=False).exists()
 
         return JsonResponse({'status': 'success', 'created': created, 'likes_count': post.likes_count, 'dislikes_count': post.dislikes_count, 'liked': liked, 'disliked': disliked})
     
@@ -39,8 +39,8 @@ def null_feedback(request):
 
     post = get_object_or_404(Post, id=post_id)
 
-    post.likes_count = post.feedbacks.filter(feedback=True).count()
-    post.dislikes_count = post.feedbacks.filter(feedback=False).count()
+    post.likes_count = post.feedback_posts.filter(feedback=True).count()
+    post.dislikes_count = post.feedback_posts.filter(feedback=False).count()
     
     post.save()
 

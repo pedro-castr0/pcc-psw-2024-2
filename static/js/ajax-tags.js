@@ -1,57 +1,60 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const input = document.querySelector('.navbar-search input');
-    const dropdown = document.createElement('div');
-    dropdown.classList.add('tag-dropdown');
-    dropdown.style.position = 'absolute';
-    dropdown.style.background = 'white';
-    dropdown.style.border = '1px solid #ccc';
-    dropdown.style.zIndex = '1000';
-    dropdown.style.maxHeight = '200px';
-    dropdown.style.overflowY = 'auto';
-    input.parentNode.appendChild(dropdown);
+    const input = document.getElementById('tag-input');
+    const dropdown = document.getElementById('autocomplete-dropdown');
+    const template = document.getElementById('tag-suggestions');
+    const autocompleteUrl = input.closest('form').dataset.autocompleteUrl;
 
-    let currentFocus = -1; // Para navegação com setas
+    let currentFocus = -1;
 
     input.addEventListener('input', function() {
-        const query = input.value;
+        const query = input.value.trim();
+        dropdown.innerHTML = '';
+        currentFocus = -1;
+
         if (!query) {
-            dropdown.innerHTML = '';
+            dropdown.style.display = 'none';
             return;
         }
 
-        fetch(`/tags/autocomplete/?q=${query}`)
-            .then(response => response.json())
+        fetch(`${autocompleteUrl}?q=${encodeURIComponent(query)}`)
+            .then(res => res.json())
             .then(data => {
-                dropdown.innerHTML = '';
-                currentFocus = -1;
+                if (!data || data.length === 0) {
+                    const li = document.createElement('li');
+                    li.className = 'dropdown-item text-muted';
+                    li.textContent = 'Nenhuma tag encontrada';
+                    dropdown.appendChild(li);
+                } else {
+                    data.forEach(tag => {
+                        const clone = template.content.cloneNode(true);
+                        const li = clone.querySelector('.dropdown-item');
 
-                data.forEach(tag => {
-                    const div = document.createElement('div');
-                    // Destacar a parte que bate com a pesquisa
-                    const startIdx = tag.toLowerCase().indexOf(query.toLowerCase());
-                    if (startIdx !== -1) {
-                        div.innerHTML = tag.substring(0, startIdx) 
-                                        + "<strong>" + tag.substring(startIdx, startIdx + query.length) + "</strong>" 
-                                        + tag.substring(startIdx + query.length);
-                    } else {
-                        div.textContent = tag;
-                    }
-                    div.style.padding = '5px';
-                    div.style.cursor = 'pointer';
+                        const startIdx = tag.toLowerCase().indexOf(query.toLowerCase());
+                        if (startIdx !== -1) {
+                            li.innerHTML = tag.substring(0, startIdx) +
+                                           '<strong>' + tag.substring(startIdx, startIdx + query.length) + '</strong>' +
+                                           tag.substring(startIdx + query.length);
+                        } else {
+                            li.textContent = tag;
+                        }
 
-                    div.addEventListener('click', () => {
-                        input.value = tag; // completa o texto
-                        dropdown.innerHTML = '';
+                        li.addEventListener('click', () => {
+                            input.value = tag;
+                            dropdown.style.display = 'none';
+                        });
+
+                        dropdown.appendChild(clone);
                     });
+                }
 
-                    dropdown.appendChild(div);
-                });
-            });
+                dropdown.style.display = 'block';
+            })
+            .catch(err => console.error('Erro ao carregar tags:', err));
     });
 
-    // Navegação com setas e Enter
-    input.addEventListener("keydown", function(e) {
-        let items = dropdown.getElementsByTagName("div");
+    // Navegação com teclado
+    input.addEventListener('keydown', function(e) {
+        const items = dropdown.querySelectorAll('.dropdown-item');
         if (!items) return;
 
         if (e.key === "ArrowDown") {
@@ -62,30 +65,27 @@ document.addEventListener('DOMContentLoaded', function() {
             addActive(items);
         } else if (e.key === "Enter") {
             e.preventDefault();
-            if (currentFocus > -1) {
-                if (items[currentFocus]) items[currentFocus].click();
+            if (currentFocus > -1 && items[currentFocus]) {
+                items[currentFocus].click();
             }
         }
     });
 
     function addActive(items) {
-        if (!items) return false;
         removeActive(items);
         if (currentFocus >= items.length) currentFocus = 0;
         if (currentFocus < 0) currentFocus = items.length - 1;
-        items[currentFocus].classList.add("autocomplete-active");
+        items[currentFocus].classList.add('active');
     }
 
     function removeActive(items) {
-        for (let i = 0; i < items.length; i++) {
-            items[i].classList.remove("autocomplete-active");
-        }
+        items.forEach(item => item.classList.remove('active'));
     }
 
-    // Fecha dropdown ao clicar fora
+    // Fecha ao clicar fora
     document.addEventListener('click', function(e) {
         if (!input.contains(e.target)) {
-            dropdown.innerHTML = '';
+            dropdown.style.display = 'none';
         }
     });
 });

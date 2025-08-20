@@ -15,5 +15,5 @@ if (e.target.closest('.load-content')) {
 });
 
 document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById('postButton').click()
+    document.getElementById('selectedButton').click()
 })
