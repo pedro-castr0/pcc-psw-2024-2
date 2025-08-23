@@ -4,39 +4,68 @@
 
 {% block content %}
 
-<h1>
-    
-    {% if community.id %}
+<div class="container my-5 col-8">
+    <div class="card p-3">
+        <p class="mb-3 font-weight-bold text-title text-dark">
+            {% if community.id %}Edit{% else %}Create{% endif %} your community
+        </p>
 
-        Edit
+        <form method="POST" enctype="multipart/form-data" id="rich-text-form"> {% csrf_token %}
+            <div class="mb-3">
+                <label for="community_banner" class="form-label text-dark font-weight-bold text-content">
+                    {% if not community.id %}Community banner:{% else %}Previous community banner:{% endif %}
+                </label>
 
-    {% else %}
+                {% if community.community_banner %}
+                
+                    <div class="mb-2 profile-banner">
+                        <img src="{{ community.community_banner.url }}" class="img-fluid rounded">
+                    </div>
 
-        Create
+                {% endif %}
 
-    {% endif %} your community!
+                <input type="file" class="file-input" id="community_banner" name="community_banner">
+            </div>
 
-</h1>
+            <div class="mb-3">
+                <label for="community_picture" class="text-dark font-weight-bold text-content">
+                    {% if not community.id %}Community picture:{% else %}Previous community picture:{% endif %}
+                </label>
 
-<form method="POST" enctype="multipart/form-data" id="rich-text-form"> {% csrf_token %}
-    <label for="name">Community name:</label>
-    <input type="text" name="name" value="{{ community.name }}"><br>
-        
-    <label for="display_name">Display name:</label>
-    <input type="text" name="display_name" value="{{ community.display_name }}"><br>
+                {% if community.community_picture %}
 
-    <label>Context:</label>
-    <div id="rich-text-loader">{{ community.context|safe }}</div>
-    <input id="container" name="context" type="hidden"><br>
-    
-    <label for="community_picture">Community picture:</label>
-    <input type="file" name="community_picture"><br>
-    
-    <label for="community_banner">Community banner:</label>
-    <input type="file" name="community_banner"><br>
-    
-    <button type="submit">{% if community.id %}Update{% else %}Create{% endif %}</button>
+                    <div class="mb-2">
+                        <img src="{{ community.community_picture.url }}" class="rounded profile-picture">
+                    </div>
 
-</form>
+                {% endif %}
 
-{% endblock content %}
+                <input type="file" class="file-input" id="community_picture" name="community_picture">
+            </div>
+
+            <div class="mb-3">
+                <label for="name" class="form-label text-dark font-weight-bold text-content text-content">Community name:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ community.name }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="display_name" class="form-label text-dark font-weight-bold text-content">Display name:</label>
+                <input type="text" class="form-control" id="display_name" name="display_name" value="{{ community.display_name }}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-dark font-weight-bold text-content">Context:</label>
+                <div id="rich-text-loader" class="border rounded p-2 mb-2" style="min-height: 150px;">{{ community.context|safe }}</div>
+                <input id="container" name="context" type="hidden">
+            </div>
+
+            <button type="submit" class="btn btn-success button-small-square">
+                <p class="text-tertiary mb-0 font-weight-bold text-tertiary text-white">
+                    {% if community.id %}Update{% else %}Create{% endif %}
+                </p>
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

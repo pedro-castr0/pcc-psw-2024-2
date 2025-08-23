@@ -1,0 +1,17 @@
+{% load static %}
+
+<div class="dropdown ml-2">
+    <a 
+        href="#" 
+        class="btn btn-light d-flex align-items-center justify-content-center border rounded button-medium abrir-denuncia" 
+        data-url="{% url 'denuncia:criar_denuncia' app_label='posts' model_name='post' object_id=post.id %}" 
+        data-object-id="{{ post.id }}">
+        
+        <i class="fas fa-flag fa-sm fa-fw text-dark"></i>
+        <p class="text-tertiary mb-0 ml-2">Report</p>
+    </a>
+
+    <div class="dropdown-menu form-denuncia p-3 animated--grow-in" id="form-denuncia-{{ post.id }}" style="min-width: 300px; display: none;">
+        <div class="text-center text-muted">Loading...</div>
+    </div>
+</div>

@@ -31,7 +31,11 @@
                 </div>
             </div>
 
-            {% include "buttons/follow.html" %}
+            {% if user.id != person.id %}
+
+                {% include "buttons/follow.html" %}
+
+            {% endif %}
 
         </div>
     </div>

@@ -30,15 +30,16 @@
 
                     <div class="d-flex align-items-center">
 
-                        {% include 'buttons/join.html' %}
-
-                        {% include 'community/partials/report.html' %}
-
                         {% if community.creator.id == user.id %}
 
-                            {% include 'community/partials/options.html' %}
+                            {% include 'community/actions/options.html' %}
+
+                        {% else %}
+
+                            {% include 'buttons/join.html' %}
 
                         {% endif %}
+
                     </div>
                 </div>
             </div>
@@ -70,13 +71,20 @@
                     </ul>
 
                     <div class="tab-content" id="content-area"></div>
-                    
                 </div>
 
                 <div class="col-4">
                     <p class="font-weight-bold mb-2 text-content">CREATOR INFO</p>
 
                     {% include 'user/partials/info.html' with person=community.creator %}
+
+                    {% if community.creator.id != user.id %}
+
+                        <p class="font-weight-bold mb-2 text-content mt-3">REPORT</p>
+
+                        {% include 'community/actions/report.html' %}
+
+                    {% endif %}
                 </div>
             </div>
         </div>

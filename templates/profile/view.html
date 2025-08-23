@@ -30,13 +30,17 @@
 
                     <div class="d-flex align-items-center">
 
-                        {% include 'buttons/follow.html' with person=profile.user %}
+                        {% if profile.user.id != user.id %}
 
-                        <a href="" 
-                            class="btn d-flex align-items-center justify-content-center rounded-circle ml-2 button-small-circle">
+                            {% include 'buttons/follow.html' with person=profile.user %}
 
-                            <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary"></i>
-                        </a>
+                        {% else %}
+
+                            <a href="/user/profile/edit/" class="btn btn-primary d-flex align-items-center justify-content-center rounded button-small-square">
+                                <p class="mb-0 text-tertiary font-weight-bold">Edit your profile</p>
+                            </a>
+
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -119,7 +123,7 @@
 
                     {% for community in profile.user.communities.all %}
 
-                        {% include 'community/info.html' %}
+                        {% include 'community/partials/info.html' %}
 
                     {% empty %}
 
@@ -143,7 +147,7 @@
 
                     {% for join in profile.user.joined_communities.all %}
 
-                        {% include 'community/info.html' with community=join.community %}
+                        {% include 'community/partials/info.html' with community=join.community %}
 
                     {% empty %}
 
@@ -151,6 +155,13 @@
 
                     {% endfor %}
 
+                    {% if profile.user.id != user.id %}
+
+                        <p class="font-weight-bold mb-2 text-content mt-3">REPORT</p>
+
+                        {% include 'profile/actions/report.html' with person=profile.user %}
+
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -19,7 +19,6 @@ def create(request):
         community_picture = request.FILES.get('community_picture')
         community_banner = request.FILES.get('community_banner')
 
-
         community = Community(
 
             name = name,
@@ -56,7 +55,6 @@ def edit(request, id):
         return redirect('/')
     
     return render(request, 'community/form.html', {'community':community})
-
 
 @login_required
 def delete(request, id):
@@ -101,7 +99,7 @@ def post(request, id):
     community = Community.objects.get(id=id)
     tags = Tag.objects.all()
 
-    return render(request, 'post/partials/form.html', {
+    return render(request, 'post/form.html', {
         'community': community, 'tags':tags
     })
 

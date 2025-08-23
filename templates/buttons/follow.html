@@ -1,15 +1,11 @@
-{% if user.id != person.id %}
+<button type="button" 
+        class="btn btn-follow d-flex align-items-center justify-content-center rounded px-3 button-small-square {% if person.id in following_ids %}btn-danger{% else %}btn-primary{% endif %}"
+        data-user-id="{{ person.id }}"
+        data-following="{% if person.id in following_ids %}true{% else %}false{% endif %}">
 
-    <button type="button" 
-            class="btn btn-follow d-flex align-items-center justify-content-center rounded px-3 button-small-square {% if person.id in following_ids %}btn-danger{% else %}btn-primary{% endif %}"
-            data-user-id="{{ person.id }}"
-            data-following="{% if person.id in following_ids %}true{% else %}false{% endif %}">
+    <span class="follow-text font-weight-bold text-tertiary" id="follow-text-{{ person.id }}">
 
-        <span class="follow-text font-weight-bold text-tertiary" id="follow-text-{{ person.id }}">
+        {% if person.id in following_ids %}Unfollow{% else %}Follow{% endif %}
 
-            {% if person.id in following_ids %}Unfollow{% else %}Follow{% endif %}
-
-        </span>
-    </button>
-
-{% endif %}
+    </span>
+</button>

@@ -9,7 +9,19 @@
 
     <div class="card p-3 flex-grow-1 ml-1">
         <p class="mb-2 text-tertiary">
-            posted in <a href="/community/{{post.community.id}}" class="font-weight-bold text-decoration-none">{{ post.community.name }}</a>
+            posted in <a href="/community/{{post.community.id}}" class="font-weight-bold text-decoration-none">
+
+                {% if post.community.display_name %}
+
+                  {{ post.community.display_name }}
+
+                {% else %}
+
+                  {{ post.community.name }}
+
+                {% endif %}
+
+            </a>
         </p>
 
         <div class="d-flex justify-content-between align-items-center my-2">
@@ -21,7 +33,17 @@
                 <div class="ml-2">
                     <p class="font-weight-bold mb-0 text-subtitle">
                         <a href="/user/profile/{{post.author.profile.id}}" class="text-decoration-none">
+
+                        {% if post.author.profile.display_name %}
+
                             {{ post.author.profile.display_name }}
+
+                        {% else %}
+
+                            {{ post.author.username }}
+
+                        {% endif %}
+
                         </a>
                     </p>
                     <p class="text-muted mb-0 text-content">
@@ -30,25 +52,16 @@
                 </div>
             </div>
             
-            {% if user.is_authenticated %}
+            <div class="d-flex">
 
-                <div class="d-flex">
-                    <div class="dropdown mr-2">
-                        <a href="#" class="btn d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle abrir-denuncia" data-url="{% url 'denuncia:criar_denuncia' app_label='posts' model_name='post' object_id=post.id %}" data-object-id="{{ post.id }}">
-                            <i class="fas fa-flag fa-sm fa-fw text-dark"></i>
-                        </a>
+                {% if post.author.id == user.id %}
 
-                        <div class="dropdown-menu form-denuncia p-3 animated--grow-in" id="form-denuncia-{{ post.id }}" style="min-width: 300px; display: none;">
-                            <div class="text-center text-muted">Loading...</div>
-                        </div>
-                    </div>
+                    {% include 'post/actions/options.html' %}
 
-                        {% include 'post/partials/options.html' %}
+                {% endif %}
 
-                    </div>
-                </div>
-
-            {% endif %}
+            </div>
+        </div>
 
         <p class="font-weight-bold my-2 text-dark text-title">{{ post.title }}</p>
 
@@ -90,13 +103,19 @@
                 <p class="mb-0 ml-2 text-tertiary">{{ post.get_comments_count }}</p>
             </a>
 
-            <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded mx-2 button-medium">
+            <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded ml-2 button-medium">
                 <i class="text-dark fas fa-fw fa-link"></i>
                 <p class="mb-0 ml-2 text-tertiary">Share</p>
             </button>
 
-            <a href="/post/{{ post.id }}" class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle p-0 button-medium-circle ">
-                <i class="fas fa-fw fa-eye"></i>
+            {% if post.author.id != user.id %}
+
+                {% include 'post/actions/report.html' %}
+
+            {% endif %}
+
+            <a href="/post/{{ post.id }}" class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle p-0 button-medium-circle ml-2">
+                <i class="fas fa-fw fa-eye text-dark"></i>
             </a>
         </div>
     </div>

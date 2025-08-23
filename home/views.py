@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 
+@login_required
 def home(request):
     posts = Post.objects.all()
     communities = Community.objects.all()

@@ -8,31 +8,23 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def update(request):
-    if request.method == 'GET':
-        return render(request, 'profile/form.html')
-    
-    elif request.method == 'POST':
-        user_id = request.POST.get('user')
-        user = User.objects.get(id = user_id) 
-        display_name = request.POST.get('display_name')
-        bio = request.POST.get('bio')
-        profile_picture = request.FILES.get('profile_picture')
-        profile_banner = request.FILES.get('profile_banner')
+def edit(request):
+    user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
 
-        profile = Profile(
-            user = user,
-            display_name = display_name,
-            bio = bio,
-            profile_picture = profile_picture,
-            profile_banner = profile_banner
-        )
+    if request.method == 'POST':
+        profile.display_name = request.POST.get('display_name')
+        profile.bio = request.POST.get('bio')
+
+        if request.FILES.get('profile_picture'):
+            profile.profile_picture = request.FILES['profile_picture']
+        if request.FILES.get('profile_banner'):
+            profile.profile_banner = request.FILES['profile_banner']
 
         profile.save()
-
         return redirect('/community/list/')
-        
-    return render(request, 'profile/form.html')
+    
+    return render(request, 'profile/form.html', {'profile': profile})
 
 @login_required
 def view(request, id):
@@ -116,7 +108,3 @@ def list(request):
     profiles = Profile.objects.all()
     return render(request, 'profile/list.html', {'profiles':profiles})
 
-@login_required
-def delete(request, id):
-    profile = Profile.objects.get(id = id)
-    profile.delete()

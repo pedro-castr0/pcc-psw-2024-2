@@ -7,18 +7,15 @@ $(function(){
         const divForm = $(`#form-denuncia-${objectId}`);
         const url = $(this).data("url");
 
-        // Fecha outros formulários abertos
         $(".form-denuncia").not(divForm).hide();
 
-        // Toggle se já estiver visível
         if(divForm.is(":visible")) { 
             divForm.hide(); 
             return; 
         }
 
-        // Carrega o formulário via GET
         $.get(url, function(response){
-            console.log(response); // <<< verifica se chega o HTML
+            console.log(response);
             if(response.html){
                 divForm.html(response.html).show();
             } else {
@@ -30,7 +27,6 @@ $(function(){
         });
     });
 
-    // Submissão AJAX
     $(document).on("submit", ".ajax-denuncia", function(e){
         e.preventDefault();
 

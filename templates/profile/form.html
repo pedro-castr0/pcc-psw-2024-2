@@ -2,23 +2,58 @@
 
 {% block content %}
 
-<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+{% load static %}
 
-    <input type="hidden" name="user" value="{{user.id}}">
-    
-    <label for="display_name">Display name:</label>
-    <input type="text" name="display_name" value="{{user.profile.display_name}}">
-    
-    <label for="bio">Bio:</label>
-    <textarea name="bio">{{user.profile.bio}}</textarea>
-    
-    <label for="profile_picture">Profile picture:</label>
-    <input type="file" name="profile_picture">
-    
-    <label for="banner">Banner:</label>
-    <input type="file" name="banner">
-    
-    <button type="submit">Save</button>
-</form>
+<div class="container my-5 col-8">
+    <div class="card p-3">
+        <p class="mb-3 font-weight-bold text-title text-dark">EDIT PROFILE</p>
 
-{% endblock content %}
+        <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+            <div class="mb-3">
+                <label for="profile_banner" class="form-label text-content text-dark font-weight-bold">Previous profile banner:</label>
+
+                {% if profile.profile_banner %}
+
+                    <div class="mb-2 profile-banner rounded">
+                        <img src="{{ profile.profile_banner.url }}" class="img-fluid">
+                    </div>
+
+                {% endif %}
+
+                <input class="file-input" type="file" id="profile_banner" name="profile_banner">
+            </div>
+
+            <div class="mb-3">
+                <label for="profile_picture" class="form-label text-content text-dark font-weight-bold">Previous profile picture:</label>
+                
+                {% if profile.profile_picture %}
+
+                    <div class="mb-2">
+                        <img src="{{ profile.profile_picture.url }}" class="rounded-circle profile-picture">
+                    </div>
+
+                {% endif %}
+
+                <input class="file-input" type="file" id="profile_picture" name="profile_picture">
+            </div>
+
+            <div class="mb-3">
+                <label for="display_name" class="form-label text-content text-dark font-weight-bold">Display name:</label>
+                <input type="text" class="form-control" id="display_name" name="display_name" value="{{ profile.display_name }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="bio" class="form-label text-content text-dark font-weight-bold">Bio:</label>
+                <textarea class="form-control" id="bio" name="bio" rows="4">{{ profile.bio }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success button-small-square">
+                <p class="text-tertiary mb-0 font-weight-bold text-white">
+                    Save changes
+                </p>
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="card my-2">
+<div class="card mb-2">
     <img class="card-img-top border-bottom info-banner" src="{% if community.community_banner %}{{ community.community_banner.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
 
     <div class="col p-3">
@@ -23,7 +23,11 @@
                 </div>
             </div>
 
-            {% include "buttons/join.html" %}
+            {% if community.creator.id != user.id %}
+
+                {% include "buttons/join.html" %}
+
+            {% endif %}
             
         </div>
     </div>

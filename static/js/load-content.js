@@ -6,10 +6,13 @@ if (e.target.closest('.load-content')) {
     let url = link.getAttribute('href');
     let target = document.querySelector(link.dataset.target);
 
+    console.log(url)
+
     fetch(url)
         .then(res => res.text())
         .then(html => {
             target.innerHTML = html;
+            // target. (procurar o botçao), dar o click
         });
     }
 });

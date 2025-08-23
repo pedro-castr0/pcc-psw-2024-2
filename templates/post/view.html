@@ -32,9 +32,11 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
-                            <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary" ></i>
-                        </button>
+                        {% if post.author.id == user.id %}
+
+                            {% include 'post/actions/options.html' %}
+
+                        {% endif %}
                     </div>
                 </div>
 
@@ -57,7 +59,7 @@
                         
                     </div>
 
-                    <p class="text-dark my-3"><div class="post-image text-justify">{{ post.content|safe }}</div></p>
+                    <p class="my-3"><div class="post-image text-justify text-dark">{{ post.content|safe }}</div></p>
                 </div>
 
                 <div class="d-flex">
@@ -66,20 +68,26 @@
 
                         <p class="mb-0 ml-2 text-tertiary">Share</p>
                     </button>
+
+                    {% if post.author.id != user.id %}
+
+                        {% include 'post/actions/report.html' %}
+
+                    {% endif %}
+                    
                 </div>
 
                 <p class="text-dark font-weight-bold p-0 my-3 text-title">{{ post.get_comments_count }} comments</p>
 
                 <div class="comment-box mb-3">
-                    <form method="post">
-                        {% csrf_token %}
+                    <form method="post"> {% csrf_token %}
                         <div class="form-group mb-2">
-                            <textarea name="comment" class="form-control" rows="1" placeholder="O que você pensa sobre isso?" required></textarea>
+                            <textarea name="comment" class="form-control" rows="1" placeholder="What do you thing about that?" required></textarea>
                         </div>
 
                         <div class="comment-actions d-none">
-                            <button type="submit" class="btn btn-primary btn-sm me-2">Comentar</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm btn-cancel">Cancelar</button>
+                            <button type="submit" class="btn btn-primary btn-sm me-2">Comment</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm btn-cancel">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -88,7 +96,7 @@
                     
                     {% for comment in comments %}
 
-                        {% include "post/comment_section.html" with comment=comment %}
+                        {% include "post/partials/comments.html" %}
 
                     {% endfor %}
 
@@ -100,7 +108,7 @@
             <div class="mb-3">
                 <p class="font-weight-bold mb-2 text-content">COMMUNITY INFO:</p>
 
-                {% include 'community/info.html' with community=post.community %}
+                {% include 'community/partials/info.html' with community=post.community %}
 
             </div>
 
@@ -108,6 +116,7 @@
                 <p class="font-weight-bold mb-2 text-content">AUTHOR INFO:</p>
 
                 {% include 'user/partials/info.html' with person=post.author %}
+                
             </div>
         </div>
     </div>

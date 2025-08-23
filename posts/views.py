@@ -57,7 +57,7 @@ def edit(request, id):
 
         return redirect('/')
 
-    return render(request, 'post/partials/form.html', {'post': post, 'tags':tags})
+    return render(request, 'post/form.html', {'post': post, 'tags':tags})
 
 @login_required
 def delete(request, id):

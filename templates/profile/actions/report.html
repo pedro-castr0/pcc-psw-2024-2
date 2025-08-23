@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="dropdown d-flex">
+    <a 
+        href="" 
+        class="btn btn-light d-flex align-items-center justify-content-center border rounded button-medium abrir-denuncia" 
+        data-url="{% url 'denuncia:criar_denuncia' app_label='auth' model_name='user' object_id=person.id %}" 
+        data-object-id="{{ person.id }}">
+
+        <i class="fas fa-flag fa-sm fa-fw text-dark"></i>
+        <p class="text-tertiary mb-0 ml-2">
+            Report <span class="font-weight-bold text-danger">
+
+                {% if person.profile.display_name %}
+
+                    {{ person.profile.display_name }}
+
+                {% else %}
+
+                    {{ person.username }}
+
+                {% endif %}
+
+            </span>
+        </p>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-right form-denuncia p-3 animated--grow-in" id="form-denuncia-{{ person.id }}" style="min-width: 300px; display: none;">
+        <div class="text-center text-muted">Loading...</div>
+    </div>
+</div>

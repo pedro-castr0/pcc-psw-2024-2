@@ -39,12 +39,8 @@
                 <a class="collapse-item" href="/user/list/">Users</a>
                 <a class="collapse-item" href="/community/list/">Communities</a>
                 <a class="collapse-item" href="/post/list/">Posts</a>
-                <a class="collapse-item" href="/comment/list/">Comments</a>
                 <a class="collapse-item" href="/actions/list/">Follows</a>
-                <a class="collapse-item" href="/associate/list/">Joins</a>
-                <a class="collapse-item" href="/post/feedback/list/">Feedback (posts)</a>
-                <a class="collapse-item" href="/comment/feedback/list/">Feedback (comments)</a>
-                <a class="collapse-item" href="{% url 'denuncia:painel_denuncias' %}">Painel de Denuncias</a>
+                <a class="collapse-item" href="{% url 'denuncia:painel_denuncias' %}">Report panel</a>
             </div>
         </div>
     </li>
@@ -62,100 +58,6 @@
                 <a class="collapse-item" href="/community/create/">Community</a>
                 <a class="collapse-item" href="/post/create/">Post</a>
                 <a class="collapse-item" href="/comment/comment/">Comment</a>
-            </div>
-        </div>
-    </li>
-
-    <hr class="sidebar-divider">
-
-    <div class="sidebar-heading">
-        CONNECTIONS
-    </div>
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFollowing" aria-expanded="true" aria-controls="collapseFollowing">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Following</span>
-        </a>
-
-        <div id="collapseFollowing" class="collapse" aria-labelledby="headingFollowing" data-parent="#accordionSidebar">
-
-            <div class="bg-dark py-2 collapse-inner rounded">
-            <h6 class="collapse-header text-light">Users:</h6>
-
-                {% if user.is_authenticated %}
-
-                    {% for person in users %}
-
-                        {% if person.id in following_ids %}
-
-                            <a class="collapse-item bg-dark d-flex align-items-center p-2" href="/user/profile/{{ person.profile.id }}">
-                                <img 
-                                    src="{% if person.profile.profile_picture %} {{ person.profile.profile_picture.url }} {% else %} {% static 'img/gradient-01.jpg' %} {% endif %}" 
-                                    class="rounded-circle border m-0"
-                                    style="height: 30px; width: 30px;">
-                                    
-                                <p class="mb-0 ml-2 font-weight-bold text-light">
-
-                                    {% if person.profile.display_name %}
-
-                                        {{ person.profile.display_name }}
-
-                                    {% else %}
-
-                                        {{ person.username }}
-                                    
-                                    {% endif %}
-                                
-                                </p>
-                            </a>
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                {% else %}
-
-                    <p class="mb-0">You're not following anyone.</p>
-
-                {% endif %}
-
-            </div>
-        </div>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseJoined" aria-expanded="true" aria-controls="collapseJoined">
-            <i class="fas fa-fw fa-bell"></i>
-            <span>Joined</span>
-        </a>
-
-        <div id="collapseJoined" class="collapse" aria-labelledby="headingJoined" data-parent="#accordionSidebar">
-
-            <div class="bg-dark py-2 collapse-inner rounded">
-            <h6 class="collapse-header text-light">Communities:</h6>
-
-                {% if joined_communities %}
-
-                    {% for joined_community in joined_communities %}
-
-                        <a class="collapse-item bg-dark d-flex align-items-center p-2" href="/community/{{joined_community.community.id}}">
-                            <img 
-                                src="{% static 'img/gradient-01.jpg' %}" 
-                                class="rounded-circle border m-0"
-                                style="height: 30px; width: 30px;">
-                                
-                            <p class="mb-0 ml-2 font-weight-bold text-light">{{ joined_community.community.name }}</p>
-                        </a>
-
-                    {% endfor %}
-
-                {% else %}
-
-                    <p>You're not into any community.</p>
-
-                {% endif %}
-
             </div>
         </div>
     </li>

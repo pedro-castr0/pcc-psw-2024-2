@@ -1,24 +1,56 @@
-{% extends '_base.html' %}
+{% load static %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up</title>
 
-<form method="post"> {% csrf_token %}
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <h1>{% if user.id %}Update{% else %}Create{% endif %} user</h1><br>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <label for="username">Username:</label>
-    <input type="text" name="username" value="{{user.username}}" required><br>
+        <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
-    <label for="email">Email:</label>
-    <input type="email" name="email" value="{{user.email}}" required><br>
+        <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="{{user.password}}" required><br>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
 
-    <button type="submit">
-        {% if user.id %}Confirm{% else %}Create{% endif %}
-    </button>
+    <body class="bg-gradient-dark d-flex align-items-center" style="min-height: 100vh;">
+        <div class="container ">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card p-4">
+                        <p class="text-center mb-4 text-master font-weight-bold text-dark">Create Account</p>
+                        
+                        <form method="post"> {% csrf_token %}
+                            <div class="mb-3">
+                                <input type="text" class="form-control text-content" name="username" required placeholder="Username">
+                            </div>
 
-</form>
+                            <div class="mb-3">
+                                <input type="email" class="form-control text-content" name="email" required placeholder="Email address">
+                            </div>
 
-{% endblock content %}
+                            <div class="mb-3">
+                                <input type="password" class="form-control text-content" name="password" required placeholder="Password">
+                            </div>
+
+                            <button type="submit" class="btn btn-facebook w-100">
+                                <p class="mb-0 text-tertiary font-weight-bold">Sign Up</p>
+                            </button>
+
+                            <div class="text-center mt-3 text-content text-dark">
+                                Already a user? <a href="{% url 'users:login' %}" class="font-weight-bold text-decoration-none">Sign In</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
