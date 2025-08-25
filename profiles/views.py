@@ -5,12 +5,12 @@ from posts.models import Post
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-
+from django.urls import reverse
 
 @login_required
 def edit(request):
     user = request.user
-    profile, created = Profile.objects.get_or_create(user=user)
+    profile = get_object_or_404(Profile, user__username=user.username)
 
     if request.method == 'POST':
         profile.display_name = request.POST.get('display_name')
@@ -18,84 +18,57 @@ def edit(request):
 
         if request.FILES.get('profile_picture'):
             profile.profile_picture = request.FILES['profile_picture']
+
         if request.FILES.get('profile_banner'):
             profile.profile_banner = request.FILES['profile_banner']
 
         profile.save()
-        return redirect('/community/list/')
+
+        return redirect(reverse('view', kwargs={'username': user.username}))
     
     return render(request, 'profile/form.html', {'profile': profile})
 
 @login_required
-def view(request, id):
-    profile = Profile.objects.get(id = id)
+def view(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
 
     is_following = profile.user.followers.filter(follower_id=request.user.id).exists()
 
-    following_ids = set(
-        request.user.following.values_list('followed_id', flat=True)
-    )
-
-    community_ids = set(
-        request.user.joined_communities.values_list('community_id', flat=True)
-    )
-
-    return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following, 'following_ids':following_ids, 'community_ids':community_ids})
+    return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following})
 
 @login_required
-def likes(request, id):
-    profile = Profile.objects.get(id=id)
+def likes(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
 
     posts = Post.objects.filter(feedback_posts__user=profile.user, feedback_posts__feedback=True).distinct()
 
-    feedbacks = request.user.feedbacks.values('post_id', 'feedback')
-
-    positive_feedbacks = {f['post_id'] for f in feedbacks if f['feedback']}
-    negative_feedbacks = {f['post_id'] for f in feedbacks if not f['feedback']}
-
     return render(request, 'profile/partials/posts.html', {
         'posts': posts,
-        'positive_feedbacks': positive_feedbacks,
-        'negative_feedbacks': negative_feedbacks
     })
 
 @login_required
-def dislikes(request, id):
-    profile = Profile.objects.get(id=id)
+def dislikes(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
 
     posts = Post.objects.filter(feedback_posts__user=profile.user, feedback_posts__feedback=False).distinct()
 
-    feedbacks = request.user.feedbacks.values('post_id', 'feedback')
-
-    positive_feedbacks = {f['post_id'] for f in feedbacks if f['feedback']}
-    negative_feedbacks = {f['post_id'] for f in feedbacks if not f['feedback']}
-
     return render(request, 'profile/partials/posts.html', {
         'posts': posts,
-        'positive_feedbacks': positive_feedbacks,
-        'negative_feedbacks': negative_feedbacks
     })
 
 @login_required
-def posts(request, id):
-    profile = Profile.objects.get(id=id)
+def posts(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
 
     posts = Post.objects.filter(author=profile.user).distinct()
 
-    feedbacks = request.user.feedbacks.values('post_id', 'feedback')
-
-    positive_feedbacks = {f['post_id'] for f in feedbacks if f['feedback']}
-    negative_feedbacks = {f['post_id'] for f in feedbacks if not f['feedback']}
-
     return render(request, 'profile/partials/posts.html', {
         'posts': posts,
-        'positive_feedbacks': positive_feedbacks,
-        'negative_feedbacks': negative_feedbacks
     })
 
 @login_required
-def comments(request, id):
-    profile = Profile.objects.get(id=id)
+def comments(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
 
     comments = Comment.objects.filter(author=profile.user).distinct()
 
@@ -106,5 +79,6 @@ def comments(request, id):
 @login_required
 def list(request):
     profiles = Profile.objects.all()
+    
     return render(request, 'profile/list.html', {'profiles':profiles})
 

@@ -2,6 +2,8 @@ from django.db import models
 from communities.models import Community
 from django.contrib.auth.models import User
 from tags.models import Tag
+from django.urls import reverse
+
 class Post(models.Model):
     title = models.CharField(max_length=300)
     content = models.TextField()
@@ -39,3 +41,6 @@ class Post(models.Model):
     def get_comments(self):
         from comments.models import Comment
         return Comment.objects.filter(post=self)
+    
+    def get_absolute_url(self):
+        return reverse('view', kwargs={'id': self.id})

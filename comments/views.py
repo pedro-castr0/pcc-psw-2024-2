@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 @login_required
 def comment(request):
@@ -12,41 +13,26 @@ def comment(request):
         content = request.POST.get('content')
         post_id = request.POST.get('post')
         parent_id = request.POST.get('parent')
-        
+
         post = get_object_or_404(Post, id=post_id)
         author = request.user
-        
+
         parent = Comment.objects.filter(id=parent_id).first() if parent_id else None
 
-        comment = Comment.objects.create(
+        Comment.objects.create(
             content=content,
             author=author,
             post=post,
             parent=parent
         )
 
-        comment_html = render_to_string("post/comment_section.html", {"comment": comment})
-        comments_count = post.comments.count()
-
-        return JsonResponse({
-            "status": "success", 
-            "comment_html": comment_html, 
-            "comments_count": comments_count,
-            "parent_id": parent_id if parent else None  # Se for resposta, retorna o parent_id
-        })
-    
-    return JsonResponse({"status": "error", "message": "Método não permitido."})
-
-@login_required
-def list(request):
-    comments = Comment.objects.all()
-    return render(request, 'comment/list.html', {'comments':comments})
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def edit(request, id):
     posts = Post.objects.all()
     comments = Comment.objects.all()
-    comment = Comment.objects.get(id = id)
+    comment = get_object_or_404(Comment, id=id)
 
     if request.method == 'POST':
         comment.content = request.POST.get('content')
@@ -63,12 +49,23 @@ def edit(request, id):
     
     return render(request, 'comment/form.html', {'comment':comment, 'comments':comments, 'posts':posts})
 
+@login_required
+def view(request, id):
+    comment = get_object_or_404(Comment, id=id)
+    replies = comment.replies.all()
+
+    return render(request, 'comment/view.html', {'comment':comment, 'replies':replies})
+
 
 @login_required
 def delete(request, id):
-    comment = Comment.objects.get(id = id)
+    comment = get_object_or_404(Comment, id=id)
     comment.delete()
 
-    return redirect('/comment/list/')
+    return redirect(reverse('view_post', kwargs={'id': comment.post.id}))
 
+@login_required
+def list(request):
+    comments = Comment.objects.all()
+    return render(request, 'comment/list.html', {'comments':comments})
 

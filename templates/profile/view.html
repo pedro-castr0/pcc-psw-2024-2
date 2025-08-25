@@ -41,6 +41,7 @@
                             </a>
 
                         {% endif %}
+
                     </div>
                 </div>
             </div>
@@ -51,7 +52,7 @@
                         <li class="nav-item">
                             <a 
                                 class="load-content nav-link border-bottom" 
-                                data-toggle="tab" href="/user/profile/{{ profile.user.id }}/posts/" 
+                                data-toggle="tab" href="/user/profile/{{ profile.user.username }}/posts/" 
                                 data-target="#content-area" 
                                 id="selectedButton">
 
@@ -63,7 +64,7 @@
                             <a 
                                 class="load-content nav-link border-bottom" 
                                 data-toggle="tab" 
-                                href="/user/profile/{{ profile.user.id }}/comments/" 
+                                href="/user/profile/{{ profile.user.username }}/comments/" 
                                 data-target="#content-area">
 
                                 <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Comments</p>
@@ -74,7 +75,7 @@
                             <a 
                                 class="load-content nav-link border-bottom" 
                                 data-toggle="tab" 
-                                href="/user/profile/{{ profile.user.id }}/likes/" 
+                                href="/user/profile/{{ profile.user.username }}/likes/" 
                                 data-target="#content-area">
 
                                 <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Likes</p>
@@ -85,7 +86,7 @@
                             <a 
                                 class="load-content nav-link border-bottom" 
                                 data-toggle="tab" 
-                                href="/user/profile/{{ profile.user.id }}/dislikes/" 
+                                href="/user/profile/{{ profile.user.username }}/dislikes/" 
                                 data-target="#content-area">
 
                                 <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Dislikes</p>

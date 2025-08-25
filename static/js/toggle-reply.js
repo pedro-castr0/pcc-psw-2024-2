@@ -5,9 +5,16 @@ function toggleReplyForm(id) {
 
 function toggleReplies(commentId) {
     let container = document.getElementById("replies-" + commentId);
-    if (container.classList.contains("d-none")) {
-        container.classList.remove("d-none");
-    } else {
-        container.classList.add("d-none");
+    let btnText = document.getElementById("btn-text-" + commentId);
+
+    if (container) {
+        container.classList.toggle("d-none");
+        if (container.classList.contains("d-none")) {
+            btnText.textContent = "Show replies";
+        } else {
+            btnText.textContent = "Hide replies";
+        }
     }
 }
+
+

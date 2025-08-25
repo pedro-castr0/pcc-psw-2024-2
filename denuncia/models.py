@@ -28,10 +28,9 @@ class Denuncia(models.Model):
         max_length=50,
         choices=MOTIVO_CHOICES,
         null=False,
-        blank=False,  # garante que o campo sempre tenha valor
+        blank=False,
     )
 
-    # Referência genérica ao objeto denunciado
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     conteudo = GenericForeignKey('content_type', 'object_id')

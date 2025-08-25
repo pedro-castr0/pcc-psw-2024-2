@@ -19,48 +19,40 @@
 }
 
 .post-image img {
-
     max-width: 50%;
     height: auto;
     border-radius: 0.3rem;
     border: 1px solid #c1c2c750;
     object-fit: cover;
-    
 }
 
 .comment-form {
-
     min-height: 60px;
     max-height: 200px;
-    
+}
+
+.comment-form::placeholder {
+    font-size: 14px;
 }
 
 .info-banner {
-
     height: 80px;
-
 }
 
 .circle-picture {
-
     width: 40px;
     height: 40px;
-
 }
 
 .profile-banner {
-
     height: 200px;
     overflow: hidden;
     position: relative;
-
 }
 
 .profile-picture {
-
     height: 120px;
     width: 120px;
-
 }
 
 .button-medium {
@@ -70,15 +62,12 @@
 }
 
 .button-medium-circle {
-
     height: 40px;
     width: 40px;
-    
 }
 
 .text-master {
     font-size: 26px;
-
 }
 
 .text-title {
@@ -111,46 +100,42 @@
 }
 
 .post-content-wrapper {
-
     max-height: 300px;
     overflow: hidden;
     position: relative;
+}
 
+.post-card-wrapper {
+    max-height: 100px;
+    overflow: hidden;
+    position: relative;
 }
 
 .fade-overlay {
-
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 200px;
+    height: 100px;
     background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #fff 100%);
     pointer-events: none;
-
 }
 
 .see-more-btn {
-
     bottom: 1%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
-
 }
 
 .clickable {
-
     cursor: pointer;
     transition: box-shadow 0.2s ease, transform 0.1s ease;
-
 }
 
 .clickable:hover {
-
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
     transform: translateY(-2px);
-
 }
 
 input[type="file"].file-input {
@@ -204,4 +189,11 @@ input.tag-btn:checked + label {
     color: #ffffff;
 }
 
+.post-comment-form {
+    min-height: 50px;
+    max-height: 200px;
+}
 
+.post-comment-form::placeholder {
+    font-size: 14px;
+}

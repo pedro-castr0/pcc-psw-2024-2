@@ -9,7 +9,7 @@
 
     <div class="card p-3 flex-grow-1 ml-1">
         <p class="mb-2 text-tertiary">
-            posted in <a href="/community/{{post.community.id}}" class="font-weight-bold text-decoration-none">
+            posted in <a href="/community/{{ post.community.name }}" class="font-weight-bold text-decoration-none">
 
                 {% if post.community.display_name %}
 
@@ -32,7 +32,7 @@
 
                 <div class="ml-2">
                     <p class="font-weight-bold mb-0 text-subtitle">
-                        <a href="/user/profile/{{post.author.profile.id}}" class="text-decoration-none">
+                        <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none">
 
                         {% if post.author.profile.display_name %}
 
@@ -81,7 +81,7 @@
 
         </div>
 
-        <div class="post-content-wrapper position-relative my-2">
+        <div class="position-relative my-2 post-content-wrapper">
             <div class="post-content">
                 <div class="post-image text-justify text-dark">
                     {{ post.content|safe }}

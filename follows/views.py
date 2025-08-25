@@ -53,13 +53,3 @@ def unfollow(request):
 def list(request):
     follows = Follow.objects.all()
     return render(request, 'follow/list.html', {'follows':follows})
-
-@login_required
-def following(request):
-    if request.user.is_authenticated:
-        following = Follow.objects.filter(follower=request.user).select_related('followed')
-    else:
-        following = []
-    return {
-        'following': following
-    }

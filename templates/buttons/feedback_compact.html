@@ -1,0 +1,27 @@
+{% load static %}
+
+{% csrf_token %}
+
+<button type="button" 
+    class="btn d-flex flex-column align-items-center justify-content-center rounded-circle button-small-circle ml-2"
+    data-post-id="{{ post.id }}"
+    data-feedback="like"
+    data-positive-feedback="{% if post.id in positive_feedbacks %}true{% else %}false{% endif %}"
+    data-url-feedback="{% url 'feedback' %}"
+    data-url-null="{% url 'null_feedback' %}"
+    id="like-btn-{{ post.id }}">
+
+    <i class="fas fa-caret-up {% if post.id in positive_feedbacks %}text-success{% else %}text-dark{% endif %}"></i>
+</button>
+
+<button type="button" 
+    class="btn d-flex flex-column align-items-center justify-content-center rounded-circle button-small-circle ml-2"
+    data-post-id="{{ post.id }}"
+    data-feedback="dislike"
+    data-negative-feedback="{% if post.id in negative_feedbacks %}true{% else %}false{% endif %}"
+    data-url-feedback="{% url 'feedback' %}"
+    data-url-null="{% url 'null_feedback' %}"
+    id="dislike-btn-{{ post.id }}">
+
+    <i class="fas fa-caret-down {% if post.id in negative_feedbacks %}text-danger{% else %}text-dark{% endif %}"></i>
+</button>

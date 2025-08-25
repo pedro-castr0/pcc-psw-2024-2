@@ -4,6 +4,7 @@ from comments.models import Comment
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
+from django.urls import reverse
 
 @login_required
 def create(request):
@@ -26,7 +27,7 @@ def create(request):
             tags = Tag.objects.filter(id__in=tag_ids)
             post.post_tag.set(tags)
 
-        return redirect('/')
+        return redirect(reverse('view_post', kwargs={'id': post.id}))
 
     return render(request, 'post/partials/form.html')
 
@@ -41,7 +42,7 @@ def edit(request, id):
     tags = Tag.objects.all()
 
     if post.author != request.user:
-        return redirect('/')
+        return redirect(reverse('view_post', kwargs={'id': post.id}))
 
     if request.method == 'POST':
         post.title = request.POST.get('title', post.title)
@@ -55,7 +56,7 @@ def edit(request, id):
             tags = Tag.objects.filter(id__in=tag_ids)
             post.post_tag.set(tags)
 
-        return redirect('/')
+        return redirect(reverse('view_post', kwargs={'id': post.id}))
 
     return render(request, 'post/form.html', {'post': post, 'tags':tags})
 
@@ -66,29 +67,13 @@ def delete(request, id):
     if post.author == request.user:
         post.delete()
 
-    return redirect('/')
+    return redirect(reverse('view_post', kwargs={'name': post.community.name}))
 
 @login_required
 def view(request, id):
     post = get_object_or_404(Post, id=id)
     comments = post.comments.filter(parent__isnull=True)
 
-    positive_feedbacks = set(
-        request.user.feedbacks.filter(feedback=True).values_list('post_id', flat=True)
-    )
-
-    negative_feedbacks = set(
-        request.user.feedbacks.filter(feedback=False).values_list('post_id', flat=True)
-    )
-
-    community_ids = set(
-        request.user.joined_communities.values_list('community_id', flat=True)
-    )
-
-    following_ids = set(
-        request.user.following.values_list('followed_id', flat=True)
-    )
-
-    return render(request, 'post/view.html', {'post': post, 'comments': comments, 'positive_feedbacks':positive_feedbacks, 'negative_feedbacks':negative_feedbacks, 'community_ids':community_ids, 'following_ids':following_ids})
+    return render(request, 'post/view.html', {'post': post, 'comments': comments})
 
 

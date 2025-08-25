@@ -45,25 +45,23 @@
                 </form>
             </td>
             <td>
-                <a href="/comment/edit/{{comment.id}}">
+                <a href="/comment/edit/{{ comment.id }}">
                     Edit
                 </a>
             </td>
             <td>
-                <a href="/comment/delete/{{comment.id}}">
+                <a href="/comment/delete/{{ comment.id }}">
                     Delete
                 </a>
             </td>
             <td>
     <div class="dropdown position-relative">
-        <!-- Botão/ícone -->
         <a href="#" class="abrir-denuncia nav-link"
            data-url="{% url 'denuncia:criar_denuncia' app_label='comments' model_name='comment' object_id=comment.id %}"
            data-object-id="{{ comment.id }}">
             <i class="fas fa-flag"></i>
         </a>
 
-        <!-- Dropdown (conteúdo será injetado via AJAX) -->
         <div class="dropdown-menu dropdown-menu-end shadow-sm form-denuncia p-3"
              id="form-denuncia-{{ comment.id }}"
              style="min-width: 300px; min-height: auto; display: none;">

@@ -9,20 +9,29 @@
     <label for="content">Content:</label><br>
     <textarea name="content" required>{{comment.content}}</textarea><br>
 
-    <input type="hidden" name="author" value="{{user.id}}">
+    <input type="hidden" name="author" value="{{ user.id }}">
 
     <label for="post">Post:</label>
     <select name="post">
+
         {% for post in posts %}
-            <option value="{{post.id}}">{{post.get_title}}</option>
+
+            <option value="{{ post.id }}">{{post.get_title}}</option>
+
         {% endfor %}
+
     </select><br>
 
     <label for="parent">Parent:</label>
+
     <select name="parent">
+
         {% for comment in comments %}
-            <option value="{{comment.id}}">{{comment.get_author}}</option>
+
+            <option value="{{ comment.id }}">{{ comment.get_author }}</option>
+
         {% endfor %}
+
     </select><br>
 
     <button type="submit">

@@ -26,7 +26,7 @@
     <hr class="mt-0">
 
     <div class="d-flex align-items-center justify-content-between">
-        <p class="mb-0 text-content"><i class="fas fa-fw fa-calendar"></i> Created by <a class="text-decoration-none font-weight-bold" href="/user/profile/{{ community.creator.id }}">@{{ community.creator.username }}</a> at {{ community.created }}</p>
+        <p class="mb-0 text-content"><i class="fas fa-fw fa-calendar"></i> Created by <a class="text-decoration-none font-weight-bold" href="/user/profile/{{ community.creator.username }}">@{{ community.creator.username }}</a> at {{ community.created }}</p>
         
         {% for tag in community.community_tag.all %}
 

@@ -5,7 +5,6 @@
 {% load static %}
 
 <div class="container">
-
     <div class="row">
         <div class="col-8 d-flex" >
             <div class="d-flex flex-column">
@@ -22,8 +21,8 @@
 
                             <div class="ml-2">
                                 <p class="font-weight-bold mb-0 text-content">
-                                    <a href="/user/profile/{{post.author.profile.id}}" class="text-decoration-none text-subtitle">
-                                        {{post.author.profile.display_name}}
+                                    <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none text-subtitle">
+                                        {{ post.author.profile.display_name }}
                                     </a>
                                 </p>
                                 <p class="text-muted mb-0 text-content">
@@ -79,27 +78,37 @@
 
                 <p class="text-dark font-weight-bold p-0 my-3 text-title">{{ post.get_comments_count }} comments</p>
 
-                <div class="comment-box mb-3">
-                    <form method="post"> {% csrf_token %}
+                <div class="comment-box">
+                    <form method="post" action="{% url 'comment' %}"> {% csrf_token %}
                         <div class="form-group mb-2">
-                            <textarea name="comment" class="form-control" rows="1" placeholder="What do you thing about that?" required></textarea>
+                            <textarea 
+                                name="content" class="form-control post-comment-form rounded"
+                                rows="1" placeholder="What do you think about that?" required></textarea>
                         </div>
 
-                        <div class="comment-actions d-none">
-                            <button type="submit" class="btn btn-primary btn-sm me-2">Comment</button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm btn-cancel">Cancel</button>
+                        <input type="hidden" name="post" value="{{ post.id }}">
+
+                        <div class="comment-actions d-none mb-2">
+                            <button type="button" class="btn d-flex button-small-square btn-cancel align-items-center rounded-pill">
+                                <span class="text-tertiary text-dark font-weight-bold">Cancel</span>
+                            </button>
+
+                            <button type="submit"
+                                    class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+                                <i class="fas fa-fw fa-paper-plane text-tertiary"></i>
+                            </button>
                         </div>
                     </form>
                 </div>
 
                 <div id="comments-area-{{ post.id }}">
-                    
+
                     {% for comment in comments %}
 
                         {% include "post/partials/comments.html" %}
 
                     {% endfor %}
-
+                    
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ from .forms import DenunciaForm
 from django.http import JsonResponse
 from django.apps import apps
 
-#@login_required
+@login_required
 def criar_denuncia(request, app_label, model_name, object_id):
     model_class = apps.get_model(app_label=app_label, model_name=model_name)
     conteudo = get_object_or_404(model_class, id=object_id)
@@ -24,20 +24,15 @@ def criar_denuncia(request, app_label, model_name, object_id):
         else:
             return JsonResponse({"erro": form.errors.as_json()}, status=400)
 
-    # GET → retorna o formulário
     form = DenunciaForm()
     html = render_to_string("denuncia/form_denuncia.html", {"form": form}, request=request)
     return JsonResponse({"html": html})
-
-
-
 
 
 #@user_passes_test(lambda u: u.is_staff or u.has_perm('user.gerenciar_denuncias'))
 def painel_denuncias(request):
     denuncias = Denuncia.objects.filter(status='pendente').select_related('autor')
     return render(request, "denuncia/painel.html", {"denuncias": denuncias})
-
 
 #@user_passes_test(lambda u: u.is_staff or u.has_perm('user.gerenciar_denuncias'))
 def resolver_denuncia(request, denuncia_id, acao):

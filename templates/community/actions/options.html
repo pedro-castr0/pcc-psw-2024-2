@@ -1,13 +1,13 @@
 {% load static %}
 
-<form action="/community/{{ community.id }}/delete" method="post"> {% csrf_token %}
+<form action="/community/{{ community.name }}/delete/" method="post"> {% csrf_token %}
     <button type="submit" class="btn btn-danger button-small-square d-flex align-items-center">
         <i class="fas fa-trash-alt fa-sm fa-fw mr-2 text-tertiary"></i>
         <p class="mb-0 text-content font-weight-bold text-tertiary">Delete</p>
     </button>
 </form>
 
-<a class="btn btn-primary button-small-square d-flex align-items-center ml-2" href="/community/{{ community.id }}/edit">
+<a class="btn btn-primary button-small-square d-flex align-items-center ml-2" href="/community/{{ community.name }}/edit/">
     <i class="fas fa-pen-alt fa-sm fa-fw mr-2 text-tertiary"></i>
     <p class="mb-0 text-content text-tertiary font-weight-bold">Edit your community</p>
 </a>

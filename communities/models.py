@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from tags.models import Tag
 
 class Community(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100, unique=True, blank=True, null=True)
     display_name = models.CharField(max_length=20)
     context = models.TextField(blank=True, null=True)
     community_tags = models.ManyToManyField(Tag, blank=True, related_name='communities')

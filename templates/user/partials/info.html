@@ -12,7 +12,7 @@
 
                 <div class="ml-2">
                     <p class="font-weight-bold mb-0 text-subtitle">
-                        <a href="/user/profile/{{ person.profile.id }}" class="text-decoration-none">
+                        <a href="/user/profile/{{ person.username }}" class="text-decoration-none">
                             {{ person.profile.display_name }}
                         </a>
                     </p>
@@ -23,7 +23,11 @@
                 </div>
             </div>
 
-            {% include 'buttons/follow.html' %}
+            {% if person.id != user.id %}
+
+                {% include 'buttons/follow.html' %}
+
+            {% endif %}
 
         </div>
 

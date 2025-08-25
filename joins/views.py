@@ -32,14 +32,5 @@ def leave(request):
 @login_required
 def list(request):
     joins = Join.objects.all()
-    return render(request, 'join/list.html', {'joins':joins})
 
-@login_required
-def joined(request):
-    if request.user.is_authenticated:
-        joined_communities = Join.objects.filter(user=request.user).select_related('community')
-    else:
-        joined_communities = []
-    return {
-        'joined_communities': joined_communities
-    }
+    return render(request, 'join/list.html', {'joins':joins})

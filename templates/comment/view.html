@@ -1,0 +1,92 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="card p-3 mb-2">
+
+                {% if comment.parent %}
+
+                <p class="mb-2 text-tertiary">
+                    replying <a href="/user/profile/{{ comment.parent.author.username }}" class="text-decoration-none font-weight-bold">@{{ comment.parent.author.username }}</a> 
+                </p>
+
+                {% endif %}
+
+                <div class="d-flex">
+                    <img 
+                        src="{% if comment.author.profile.profile_picture %} {{ comment.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
+                        class="rounded-circle border circle-picture">
+
+                    <div class="ml-3 flex-grow-1">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center mb-2">
+                                <p class="font-weight-bold mb-0 text-subtitle">
+                                    <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none text-secondary">
+                                        {{ comment.author.profile.display_name }}
+                                    </a>
+                                </p>
+
+                                <p class="mb-0 text-muted ml-1 text-content">
+                                    ∙ {{ comment.posted|date:"M d, Y" }}{% if comment.edited != comment.posted %}<span class="ml-1 text-tertiary">(edited)</span>{% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="mb-2 mr-5 mb-3 text-dark text-justify">{{ comment.content }}</p>
+                    </div>
+                </div>
+
+                {% include 'post/partials/cards.html' with post=comment.post %}
+
+                <p class="mb-0 mt-2 text-tertiary">In
+
+                    <a href="/community/{{ comment.post.community.name }}" class="text-decoration-none font-weight-bold">
+
+                        {% if comment.post.community.display_name %}
+
+                            {{ comment.post.community.display_name }}
+
+                        {% else %}
+
+                            {{ comment.post.community.name }}
+
+                        {% endif %}
+
+                    </a>
+                </p>
+
+                {% include 'comment/actions/options.html' %}
+
+                <div id="replies-{{ comment.id }}" class="d-none">
+
+                    {% if comment.replies.exists %}
+
+                        <p class="text-dark font-weight-bold mt-3 mb-1 text-subtitle">Replies</p>
+
+                        {% for reply in comment.replies.all %}
+
+                            {% include "post/partials/comments.html" with comment=reply %}
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="col-4">
+            {% include 'user/partials/info.html' with person=comment.author %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

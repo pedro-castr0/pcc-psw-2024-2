@@ -49,29 +49,29 @@
                     <ul class="nav nav-tabs mb-3" id="communityTabs" role="tablist">
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link border-bottom" 
-                                data-toggle="tab" href="/community/{{ community.id }}/home/" 
+                                class="load-content nav-link active" 
+                                href="/community/{{ community.name }}/home/" 
                                 data-target="#content-area" 
                                 id="selectedButton">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Home</p>
+                                <p class="font-weight-bold my-0 text-content text-secondary">Home</p>
                             </a>
                         </li>
                         
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link border-bottom" 
-                                data-toggle="tab" 
-                                href="/community/{{ community.id }}/context/" 
+                                class="load-content nav-link" 
+                                href="/community/{{ community.name }}/context/" 
                                 data-target="#content-area">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Context</p>
+                                <p class="font-weight-bold my-0 text-content text-secondary">Context</p>
                             </a>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="content-area"></div>
                 </div>
+
 
                 <div class="col-4">
                     <p class="font-weight-bold mb-2 text-content">CREATOR INFO</p>
@@ -92,6 +92,3 @@
 </div>
 
 {% endblock content %}
-
-
-

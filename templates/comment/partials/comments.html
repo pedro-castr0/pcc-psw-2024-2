@@ -12,7 +12,7 @@
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                     <p class="font-weight-bold mb-0 text-content">
-                        <a href="/user/profile/{{ comment.author.profile.id }}" class="text-decoration-none text-secondary">
+                        <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none text-secondary">
                             {{ comment.author.profile.display_name }}
                         </a>
                     </p>
@@ -29,10 +29,10 @@
                 </div>
             </div>
 
-            <p class="mb-2 text-dark text-content">
+            <p class="mb-2 mr-5 text-dark text-justify">
                 {% if comment.parent.parent %} 
 
-                    <a href="/user/profile/{{ comment.parent.author.profile.id }}" class="text-decoration-none">
+                    <a href="/user/profile/{{ comment.parent.author.username }}" class="text-decoration-none">
                         @{{ comment.parent.author.username }}
                     </a> 
 

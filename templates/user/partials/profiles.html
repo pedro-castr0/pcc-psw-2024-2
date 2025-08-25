@@ -10,7 +10,7 @@
 
                 <div class="ml-2">
                     <p class="font-weight-bold mb-0 text-subtitle">
-                        <a href="{% if person.profile %}/user/profile/{{ person.profile.id }}{% else %}/user/list/{% endif %}" class="text-decoration-none">
+                        <a href="{% if person.profile %}/user/profile/{{ person.username }}{% else %}/user/list/{% endif %}" class="text-decoration-none">
 
                             {% if person.profile.display_name %}
 
