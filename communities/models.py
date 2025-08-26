@@ -22,9 +22,26 @@ class Community(models.Model):
         return self.creator.get_username()    
     
     def get_tags(self):
-        return self.tags.all()
+        # corrigido: usar community_tags
+        return self.community_tags.all()
     
     @staticmethod
     def search_by_tag(tag_name):
-        """Retorna todas as comunidades que possuem a tag com o nome dado"""
-        return Community.objects.filter(tags__name__iexact=tag_name)
+        return Community.objects.filter(community_tags__name__iexact=tag_name)
+
+
+class CommunityRule(models.Model):
+    community = models.ForeignKey(
+        Community,
+        on_delete=models.CASCADE,
+        related_name="rules"
+    )
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created"]
+
+    def __str__(self):
+        return f"{self.community.get_name()} - {self.title}"
