@@ -11,5 +11,7 @@ urlpatterns = [
     path('<str:name>/home/', views.home, name='home'),
     path('<str:name>/post/', views.post, name='post'),
     path('<str:name>/context/', views.context, name='context'),
-
+    path("<str:name>/add-rule/", views.add_rule, name="add_rule"),
+    path("<str:name>/rules/<int:rule_id>/edit/", views.edit_rule, name="edit_rule"),
+    path("<str:name>/rules/<int:rule_id>/delete/", views.delete_rule, name="delete_rule"),
 ]
