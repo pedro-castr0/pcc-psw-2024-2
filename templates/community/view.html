@@ -78,12 +78,61 @@
 
                     {% include 'user/partials/info.html' with person=community.creator %}
 
-                    {% if community.creator.id != user.id %}
-
+                    {% if community.creator.id == user.id %}
+                        <p class="font-weight-bold mb-2 text-content mt-3">COMMUNITY RULES</p>
+                        <a href="{% url 'add_rule' community.name %}" class="btn btn-sm btn-outline-primary">
+                            Adicionar Regras
+                        </a>
+                    {% else %}
                         <p class="font-weight-bold mb-2 text-content mt-3">REPORT</p>
-
                         {% include 'community/actions/report.html' %}
+                    {% endif %}
 
+                    {% if community.rules.exists %}
+                        <div class="mt-3">
+                            <ul class="list-group">
+                                {% for rule in community.rules.all %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong>{{ rule.title }}</strong><br>
+                                            <small class="text-muted">{{ rule.created|date:"d/m/Y H:i" }}</small>
+                                            <p class="mb-0">{{ rule.description }}</p>
+                                        </div>
+                                        
+                                        {% if user.id == community.creator.id %}
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'edit_rule' community.name rule.id %}" class="btn btn-outline-warning" title="Editar">✏️</a>
+                                                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteRuleModal{{ rule.id }}" title="Excluir">
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                            <div class="modal fade" id="deleteRuleModal{{ rule.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteRuleModalLabel{{ rule.id }}" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteRuleModalLabel{{ rule.id }}">Confirmar Exclusão</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Tem certeza que deseja excluir a regra <strong>{{ rule.title }}</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                    <form method="post" action="{% url 'delete_rule' community.name rule.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger">Excluir</button>
+                                                    </form>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     {% endif %}
                 </div>
             </div>
