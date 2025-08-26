@@ -6,27 +6,56 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    <form action="{% url 'search_tags' %}" method="get" class="navbar-search position-relative" data-autocomplete-url="{% url 'tag-autocomplete' %}">
+<form action="{% url 'search' %}" method="get" 
+      class="navbar-search position-relative d-flex align-items-center" 
+      data-autocomplete-url="{% url 'autocomplete' %}"
+      data-tags-url="{% url 'get_tags' %}">
 
-        <div class="input-group position-relative" id="searchDropdown">
-            <input id="tag-input" name="q" type="text" class="form-control bg-light border-0 small" placeholder="Search for..." autocomplete="off">
+    <div class="input-group position-relative">
+        <!-- Campo de busca -->
+        <input id="search-input" name="q" type="text" 
+               class="form-control bg-light border-0 small" 
+               placeholder="Search for..." autocomplete="off">
 
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
-            </div>
-
-            <ul id="autocomplete-dropdown"
-                class="dropdown-menu shadow-sm w-100"
-                style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; max-height: 250px; overflow-y: auto;">
-            </ul>
-
-            <template id="tag-suggestions">
-                <li class="dropdown-item"></li>
-            </template>
+        <!-- Botão da busca -->
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-search fa-sm"></i>
+            </button>
         </div>
-    </form>
+
+        <!-- Dropdown de sugestões (autocomplete) -->
+        <ul id="search-dropdown"
+            class="dropdown-menu shadow-sm w-100"
+            style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; max-height: 250px; overflow-y: auto;">
+        </ul>
+
+        <template id="search-suggestions">
+            <li class="dropdown-item"></li>
+        </template>
+    </div>
+
+    <!-- Filtro de Tags -->
+<div class="nav-item dropdown ms-2">
+    <a href="#" class="nav-link p-2" id="filterDropdown" role="button" 
+       data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-filter fa-lg text-secondary"></i>
+    </a>
+    <ul id="tags-dropdown" 
+        class="dropdown-menu dropdown-menu-end shadow-sm p-2" 
+        style="width: 300px; max-height: 300px; overflow-y: auto;" 
+        aria-labelledby="filterDropdown">
+        <li class="dropdown-item text-muted">Carregando tags...</li>
+    </ul>
+</div>
+
+</form>
+
+
+
+
+
+
 
     <ul class="navbar-nav ml-auto"><li class="nav-item s-nav dropdown notification">
         <a href="#" class="nav-link nav-links rm-drop-mobile drop-w-tooltip" data-bs-toggle="dropdown"
@@ -39,7 +68,7 @@
 
         <ul class="dropdown-menu notify-drop dropdown-menu-end shadow-sm" style="width: 300px;">
             <li class="notify-drop-title px-2 py-1 d-flex justify-content-between align-items-center">
-                <span>Notifications <span id="notification-count-title" class="badge bg-primary ms-2">0</span></span>
+                <span>Notifications <span id="notification-count-title" class="badge bg-primary ms-2" style="color: white;">0</span></span>
                 <a href="#" id="mark-all-read" class="small text-muted">Mark All as Read</a>
             </li>
 
