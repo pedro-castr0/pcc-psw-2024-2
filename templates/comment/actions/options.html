@@ -13,6 +13,9 @@
         <p class="mb-0 text-dark text-tertiary font-weight-bold">Share</p>
     </button>
 
+    <a href="/comment/{{ comment.id }}" class="btn d-flex align-items-center justify-content-center rounded-pill button-small-square ml-2">
+        <p class="mb-0 text-dark text-tertiary font-weight-bold">View</p>
+    </a>
 
     {% if comment.replies.exists %}
 
@@ -30,13 +33,13 @@
     {% if comment.author.id == user.id %}
 
         <form action="/comment/{{ comment.id }}/delete/" method="post"> {% csrf_token %}
-            <button type="submit" class="btn d-flex align-items-center justify-content-center rounded-circle button-small-circle ml-2">
-                <i class="fas fa-fw fa-trash-alt text-dark text-content"></i>
+            <button type="submit" class="btn d-flex align-items-center justify-content-center rounded-pill button-small-square ml-2">
+                <p class="mb-0 text-danger text-tertiary font-weight-bold">Delete</p>
             </button>
         </form>
 
-        <a href="#" class="btn d-flex align-items-center justify-content-center rounded-circle button-small-circle ml-2">
-            <i class="fas fa-fw fa-pen-alt text-dark text-content"></i>
+        <a href="#" class="btn d-flex align-items-center justify-content-center rounded-pill button-small-square ml-2">
+             <p class="mb-0 text-primary text-tertiary font-weight-bold">Edit</p>
         </a>
 
     {% else %}
@@ -47,10 +50,6 @@
 
     {% endif %}
 
-
-    <a href="/comment/{{ comment.id }}" class="btn d-flex align-items-center justify-content-center rounded-pill button-small-square ml-2">
-        <p class="mb-0 text-dark text-tertiary font-weight-bold">View</p>
-    </a>
 </div>
 
 <div id="reply-form-{{ comment.id }}" class="mt-2 d-none mr-5">
