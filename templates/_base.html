@@ -23,7 +23,41 @@
     </head>
 
     <body id="page-top">
-        
+
+        {% include '_nav.html' %}
+
+        <div class="header-content">
+        </div>
+
+        <div id="wrapper">
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content" class="main-content">
+                    
+                    {% include '_header.html' %}
+
+                    <div class="container-fluid">
+
+                        {% block content %}
+
+                        {% endblock content %}
+                        
+                    </div>
+                </div>
+
+                <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                            <span>Copyright &copy; <a href="https://github.com/pedro-castr0">pedro_castr0</a>'s team Website 2025</span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+        </div>
+
         <script>
 
             const FOLLOW_URL = "{% url 'follow' %}";
@@ -31,6 +65,20 @@
             const CSRF_TOKEN = "{{ csrf_token }}";
 
         </script>
+
+        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+        <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+        <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+        <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+
+        <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+        
+        <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
 
         <script src="{% static 'js/follow.js' %}"></script>
 
@@ -57,6 +105,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script src="{% static 'js/ajax-search.js' %}"></script>
+
         <script src="{% static 'js/ajax-tags.js' %}"></script>
 
         <script src="{% static 'js/ajax-notification.js' %}"></script>
@@ -65,52 +114,6 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
-        <div id="wrapper">
-
-        {% include '_nav.html' %}
-            
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <div id="content">
-
-                {% include '_header.html' %}
-
-                <div class="container-fluid">
-
-                    {% block content %}
-
-                    {% endblock content %}
-                    
-                </div>
-            </div>
-
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; <a href="https://github.com/pedro-castr0">pedro_castr0</a>'s team Website 2025</span>
-                    </div>
-                </div>
-            </footer>
-        </div>
-
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
-
-        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-
-        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-        <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-        <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
-
-        <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
-
-        <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
-        
-        <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
-        
     </body>
 </html>
 
