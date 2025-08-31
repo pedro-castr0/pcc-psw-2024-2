@@ -1,94 +1,106 @@
 {% load static %}
 
-<nav class="navbar navbar-expand topbar px-3 gradient-black-magenta header-bar d-flex" style="border-bottom: solid 1px rgba(255, 255, 255, 0.1);">
-    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 text-light">
-        <i class="fa fa-bars"></i>
-    </button>
+<nav class="navbar navbar-expand topbar px-3 gradient-black-magenta header-bar d-flex justify-content-between w-100" style="border-bottom: solid 1px rgba(255, 255, 255, 0.1);">
+    <div class="d-flex align-items-center">
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 text-light">
+            <i class="fa fa-bars"></i>
+        </button>
 
-    <form 
-        action="{% url 'search' %}" method="get"
-        class="navbar-search d-flex align-items-center flex-grow-1 mx-2 position-relative"
-        data-autocomplete-url="{% url 'autocomplete' %}"
-        data-tags-url="{% url 'get_tags' %}">
+        <button class="btn text-light d-flex align-items-center">
+            <img src="{% static 'img/logo-crow.png' %}" style="max-height: 30px; width: auto;">
+            <img src="{% static 'img/logo-text.png' %}" class="ml-1" style="max-height: 24px; width: auto;">
+        </button>
+    </div>
 
-        <div class="input-group w-50">
-            <input 
-                id="search-input"
-                name="q"
-                type="text"
-                class="form-control border-0 rounded-start-pill px-3"
-                placeholder="Search..."
-                autocomplete="off"
-                style="background-color: rgba(255,255,255,0.1); color: #fff;">
+    <div class="d-flex">
+        <form 
+            action="{% url 'search' %}" method="get"
+            class="navbar-search d-flex align-items-center position-relative"
+            data-autocomplete-url="{% url 'autocomplete' %}"
+            data-tags-url="{% url 'get_tags' %}">
 
-            <button class="rounded-right btn-light search-button button-medium-circle" type="submit">
-                <i class="fas fa-search text-content"></i>
-            </button>
-        </div>
+            <div class="input-group">
+                <input 
+                    id="search-input"
+                    name="q"
+                    type="text"
+                    class="form-control border-0  px-3"
+                    placeholder="Search..."
+                    autocomplete="off"
+                    style="background-color: rgba(255,255,255,0.1); color: #fff;">
 
-        <ul id="search-dropdown"
-            class="dropdown-menu shadow-sm w-100"
-            style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; max-height: 250px; overflow-y: auto;">
-        </ul>
-        <template id="search-suggestions">
-            <li class="dropdown-item"></li>
-        </template>
+                <button class="rounded-right btn-light search-button button-medium-circle" type="submit">
+                    <i class="fas fa-search text-content"></i>
+                </button>
+            </div>
 
-        <div class="nav-item dropdown ms-3">
-            <a href="#" class="nav-link p-2" id="filterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-sort-amount-up-alt text-light text-content"></i>
-            </a>
-
-            <ul id="tags-dropdown"
-                class="dropdown-menu dropdown-menu-end shadow-sm p-2"
-                style="width: 300px; max-height: 300px; overflow-y: auto;"
-                aria-labelledby="filterDropdown">
-                <li class="dropdown-item text-muted">Carregando tags...</li>
+            <ul id="search-dropdown"
+                class="dropdown-menu shadow-sm w-100"
+                style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; max-height: 250px; overflow-y: auto;">
             </ul>
-        </div>
-    </form>
+            <template id="search-suggestions">
+                <li class="dropdown-item"></li>
+            </template>
 
-    <ul class="navbar-nav ms-auto d-flex align-items-center">
-        <li class="nav-item dropdown mx-2">
-            <a href="#" class="nav-link position-relative text-light" id="notification-bell" data-bs-toggle="dropdown" aria-expanded="false" data-url="{% url 'get_notifications' %}">
-                <i class="fas fa-fw fa-bell "></i>
-                <span id="notification-count"
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
-                        style="background-color: var(--accent);">0</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm notify-drop"
-                style="width: 300px;">
-                <li class="notify-drop-title px-2 py-1 d-flex justify-content-between align-items-center">
-                    <span>Notifications <span id="notification-count-title"
-                        class="badge bg-primary ms-2" style="color: white;">0</span></span>
-                    <a href="#" id="mark-all-read" class="small text-muted">Mark All as Read</a>
-                </li>
-                <div class="drop-content px-2 py-1" id="notification-list"></div>
-                <template id="notification-template">
-                    <li class="d-flex align-items-start mb-2">
-                        <div class="row w-100">
-                            <div class="col-4">
-                                <img src="" alt="user image" style="width: 50px; border-radius: 50%;">
-                            </div>
-                            <div class="col-8">
-                                <a href="#" class="notification-user fw-bold text-dark"></a>
-                                <div class="notification-type text-muted"></div>
-                                <div class="text-end small">
-                                    <span class="badge bg-primary"><i class=""></i></span>
-                                    <span class="notification-time"></span>
+            <div class="nav-item dropdown ms-3">
+                <a href="#" class="nav-link p-2" id="filterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-sort-amount-up-alt text-light text-content"></i>
+                </a>
+
+                <ul id="tags-dropdown"
+                    class="dropdown-menu dropdown-menu-end shadow-sm p-2"
+                    style="width: 300px; max-height: 300px; overflow-y: auto;"
+                    aria-labelledby="filterDropdown">
+                    <li class="dropdown-item text-muted">Carregando tags...</li>
+                </ul>
+            </div>
+        </form>
+    </div>
+
+    <div class="d-flex align-items-center">
+        <ul class="navbar-nav ms-auto d-flex align-items-center">
+            <li class="nav-item dropdown mx-2">
+                <a href="#" class="nav-link position-relative text-light" id="notification-bell" data-bs-toggle="dropdown" aria-expanded="false" data-url="{% url 'get_notifications' %}">
+                    <i class="fas fa-fw fa-bell "></i>
+                    <span id="notification-count"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                            style="background-color: var(--accent);">0</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm notify-drop"
+                    style="width: 300px;">
+                    <li class="notify-drop-title px-2 py-1 d-flex justify-content-between align-items-center">
+                        <span>Notifications <span id="notification-count-title"
+                            class="badge bg-primary ms-2" style="color: white;">0</span></span>
+                        <a href="#" id="mark-all-read" class="small text-muted">Mark All as Read</a>
+                    </li>
+                    <div class="drop-content px-2 py-1" id="notification-list"></div>
+                    <template id="notification-template">
+                        <li class="d-flex align-items-start mb-2">
+                            <div class="row w-100">
+                                <div class="col-4">
+                                    <img src="" alt="user image" style="width: 50px; border-radius: 50%;">
+                                </div>
+                                <div class="col-8">
+                                    <a href="#" class="notification-user fw-bold text-dark"></a>
+                                    <div class="notification-type text-muted"></div>
+                                    <div class="text-end small">
+                                        <span class="badge bg-primary"><i class=""></i></span>
+                                        <span class="notification-time"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </li>
+                    </template>
+                    <li class="notify-drop-footer text-center py-2">
+                        <a href="#">See More</a>
                     </li>
-                </template>
-                <li class="notify-drop-footer text-center py-2">
-                    <a href="#">See More</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
+                </ul>
+            </li>
+        </ul>
 
-    <i class="fas fa-fw fa-cog text-lilac-link"></i>
+        <i class="fas fa-fw fa-cog text-lilac-link"></i>
+    </div>
+
 </nav>
 
 <style>
@@ -98,8 +110,7 @@
     top: 0;
     left: 0px;
     z-index: 1030;
-    margin-left: 260px;
-    width: calc(100% - 260px);
+    width: 100%;
     
 }
 
