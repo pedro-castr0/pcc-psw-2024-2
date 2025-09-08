@@ -2,7 +2,7 @@
 
 <nav class="sidebar">
   <div class="sidebar-content p-3">
-    <a href="/" class="d-flex align-items-center social-link text-lilac-link mb-2 text-content text-decoration-none p-3">
+    <a href="/" class="d-flex align-items-center social-link link-lilac mb-2 text-content text-decoration-none p-3">
       <i class="fas fa-fw fa-home mr-2"></i>
       Home
     </a>
@@ -13,38 +13,38 @@
       <li>
         <p class="mb-2 font-weight-bold text-tertiary text-blurred">ADMIN PANEL</p>
 
-        <a href="/admin/" class="social-link text-lilac-link mb-2">
+        <a href="/admin/" class="social-link link-lilac mb-2">
           <i class="fas fa-fw fa-cogs"></i>
           Django Admin
         </a>
 
-        <a data-bs-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase" class="social-link text-lilac-link mb-2">
+        <a data-bs-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase" class="social-link link-lilac mb-2">
           <i class="fas fa-fw fa-database"></i>
           Database
         </a>
 
         <div class="collapse" id="collapseDatabase">
           <ul class="collapse-inner-custom">
-            <li><a class="collapse-item-custom text-lilac-link" href="/user/list/"><i class="fas fa-user mr-1"></i>Users</a></li>
-            <li><a class="collapse-item-custom text-lilac-link" href="/community/list/"><i class="fas fa-users mr-1"></i>Communities</a></li>
-            <li><a class="collapse-item-custom text-lilac-link" href="/post/list/"><i class="fas fa-pen-alt mr-1"></i>Posts</a></li>
-            <li><a class="collapse-item-custom text-lilac-link" href="/actions/list/"><i class="fas fa-user-plus mr-1"></i>Follows</a></li>
-            <li><a class="collapse-item-custom text-lilac-link" href="{% url 'denuncia:painel_denuncias' %}"><i class="fas fa-flag mr-1"></i>Report panel</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/user/list/"><i class="fas fa-user mr-1"></i>Users</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/community/list/"><i class="fas fa-users mr-1"></i>Communities</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/post/list/"><i class="fas fa-pen-alt mr-1"></i>Posts</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/actions/list/"><i class="fas fa-user-plus mr-1"></i>Follows</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="{% url 'denuncia:painel_denuncias' %}"><i class="fas fa-flag mr-1"></i>Report panel</a></li>
           </ul>
         </div>
       </li>
 
       <li>
-        <a data-bs-toggle="collapse" href="#collapseRegister" role="button" aria-expanded="false" aria-controls="collapseRegister" class="social-link text-lilac-link">
+        <a data-bs-toggle="collapse" href="#collapseRegister" role="button" aria-expanded="false" aria-controls="collapseRegister" class="social-link link-lilac">
           <i class="fas fa-fw fa-plus-square"></i>
           Register
         </a>
         <div class="collapse" id="collapseRegister">
           <ul class="collapse-inner-custom">
-            <li><a class="collapse-item-custom text-lilac-link" href="/user/create/"><i class="fas fa-user-plus mr-1"></i>User</a></li>
-            <li><a class="collapse-item-custom text-lilac-link" href="/community/create/"><i class="fas fa-users mr-1"></i>Community</a></li>
-            <li><a class="collapse-item-custom text-lilac-link" href="/post/create/"><i class="fas fa-pen-alt mr-1"></i>Post</a></li>
-            <li><a class="collapse-item-custom text-lilac-link" href="/comment/comment/"><i class="fas fa-comment-dots mr-1"></i>Comment</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/user/create/"><i class="fas fa-user-plus mr-1"></i>User</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/community/create/"><i class="fas fa-users mr-1"></i>Community</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/post/create/"><i class="fas fa-pen-alt mr-1"></i>Post</a></li>
+            <li><a class="collapse-item-custom link-lilac" href="/comment/comment/"><i class="fas fa-comment-dots mr-1"></i>Comment</a></li>
           </ul>
         </div>
       </li>
@@ -56,7 +56,7 @@
 
     {% for follow in user.following.all %}
 
-      <a href="/user/profile/{{ follow.followed.username }}" class="d-flex align-items-center mb-2 collapse-item-custom text-lilac-link p-2 text-decoration-none">
+      <a href="/user/profile/{{ follow.followed.username }}" class="d-flex align-items-center mb-2 collapse-item-custom link-lilac p-2 text-decoration-none">
         <img 
             src="{% if follow.followed.profile.profile_picture %}{{ follow.followed.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
             class="rounded-circle circle-picture-small">
@@ -98,7 +98,7 @@
 
     {% for joined in user.joined_communities.all %}
 
-      <a href="/community/{{ joined.community.name }}" class="d-flex align-items-center mb-2 collapse-item-custom text-lilac-link p-2 text-decoration-none">
+      <a href="/community/{{ joined.community.name }}" class="d-flex align-items-center mb-2 collapse-item-custom link-lilac p-2 text-decoration-none">
         <img 
             src="{% if joined.community.community_picture %}{{ joined.community.community_picture.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
             class="rounded-circle circle-picture-small">
@@ -140,7 +140,7 @@
 
     {% for community in user.communities.all %}
 
-      <a href="/community/{{ community.name }}" class="d-flex align-items-center mt-2 collapse-item-custom text-lilac-link p-2 text-decoration-none">
+      <a href="/community/{{ community.name }}" class="d-flex align-items-center mt-2 collapse-item-custom link-lilac p-2 text-decoration-none">
         <img 
             src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
             class="rounded-circle circle-picture-small">
@@ -186,7 +186,7 @@
 
       <div class="ml-2">
           <p class="font-weight-bold mb-0 text-subtitle">
-              <a href="/user/profile/{{ user.username }}" class="text-decoration-none text-lilac-link">
+              <a href="/user/profile/{{ user.username }}" class="text-decoration-none link-lilac">
                   {% if user.profile.display_name %}
                       {{ user.profile.display_name }}
                   {% else %}
@@ -201,7 +201,7 @@
     </div>
 
     <form action="/user/logout/" method="post"> {% csrf_token %}
-      <button type="submit" class="d-flex btn text-lilac-link align-items-center button-small-circle rounded-circle justify-content-center">
+      <button type="submit" class="d-flex btn link-lilac align-items-center button-small-circle rounded-circle justify-content-center">
           <i class="fas fa-fw text-content fa-sign-out-alt"></i>
       </button>
     </form>
@@ -328,19 +328,6 @@
   margin-bottom: 10px;
   width: 100%;
 
-}
-
-.text-lilac-link {
-  color: #f7e8ff !important;
-}
-
-.text-lilac-link:hover {
-  color: #aa5bdb !important;
-  transition: all 0.2s ease;
-}
-
-.text-blurred {
-  color: rgba(255,255,255,0.25);
 }
 
 .text-overflow {

@@ -14,7 +14,7 @@
   function initContentWrappers(root = document) {
     const WRAPPERS = [
       { selector: '.post-content-wrapper', limit: 300 },
-      { selector: '.post-card-wrapper',    limit: 100 } // cards menores
+      { selector: '.post-card-wrapper',    limit: 60 } // cards menores
     ];
 
     WRAPPERS.forEach(({ selector, limit }) => {

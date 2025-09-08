@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Feedback
 from django.http import JsonResponse
 
-@login_required
 def feedback(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -27,7 +26,12 @@ def feedback(request):
         liked = post.feedback_posts.filter(user=user, feedback=True).exists()
         disliked = post.feedback_posts.filter(user=user, feedback=False).exists()
 
-        return JsonResponse({'status': 'success', 'created': created, 'likes_count': post.likes_count, 'dislikes_count': post.dislikes_count, 'liked': liked, 'disliked': disliked})
+        return JsonResponse({
+            'status': 'success',
+            'karma': post.get_karma(),
+            'liked': liked,
+            'disliked': disliked
+        })
     
 @login_required
 def null_feedback(request):
@@ -44,7 +48,10 @@ def null_feedback(request):
     
     post.save()
 
-    return JsonResponse({'status': 'success', 'likes_count': post.likes_count, 'dislikes_count': post.dislikes_count})
+    return JsonResponse({
+        'status': 'success',
+        'karma': post.get_karma(),
+    })
 
 @login_required
 def list(request):

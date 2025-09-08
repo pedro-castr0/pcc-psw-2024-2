@@ -1,60 +1,80 @@
 {% load static %}
 
-<div class="card w-100">
-    <a href="/post/{{post.id}}" class="stretched-link"></a>
+<div class="mb-4">
+    <div class="card card-dark w-100">
+        <div class="d-flex">
+            <div class="m-3">
+                <div class="d-flex align-items-center">
+                    <img 
+                        src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                        class="rounded-circle circle-picture-tiny">
 
-    <div class="d-flex">
-        <div class="m-3">
-            <p class="mb-0 text-tertiary">
-                posted by <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none font-weight-bold">
+                    <p class="ml-2 mb-0 text-tertiary">
+                        <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none font-weight-bold link-lilac">
 
-                    {% if post.author.profile.display_name %}
+                            {% if post.author.profile.display_name %}
 
-                        {{ post.author.profile.display_name }}
+                                {{ post.author.profile.display_name }}
 
-                    {% else %}
+                            {% else %}
 
-                        {{ post.author.username }}
+                                {{ post.author.username }}
 
-                    {% endif %}
+                            {% endif %}
 
-                </a>
-                
-                on {{ post.posted|date:"M d, Y" }}</span>
-
-            </p>
-
-            <p class="font-weight-bold my-2 text-dark text-subtitle">{{ post.title }}</p>
-
-            <div class="position-relative my-2 post-card-wrapper">
-                <div class="post-content">
-                    <div class="post-image text-justify text-dark">
-                        {{ post.content|safe }}
-                    </div>
+                        </a>
+                        ∙ on {{ post.posted|date:"M d, Y" }}</span>
+                    </p>
                 </div>
 
-                <div class="fade-overlay d-none"></div>
 
-                <div class="see-more-btn position-absolute d-none"></div>
-            </div>
+                <p class="font-weight-bold my-2 text-white text-subtitle">{{ post.title }}
+                    <span class="m-0 font-weight-bold text-tertiary
+                                {% if post.get_karma > 0 %}text-green
+                                {% elif post.get_karma < 0 %}text-red
+                                {% else %}text-blurred
+                                {% endif %}"
 
-            <div class="d-flex align-items-center flex-wrap">
+                                id="karma-{{ post.id }}">
 
-                {% for tag in post.post_tag.all %}
+                            {% if post.get_karma > 0 %}+{{ post.get_karma }}{% else %}{{ post.get_karma }}{% endif %}
+                    </span>
+                </p>
+                <div class="position-relative my-2 post-card-wrapper">
+                    <div class="post-content">
+                        <div class="post-image text-justify text-white">
+                            {{ post.content|safe }}
+                        </div>
+                    </div>
 
-                    <a class="btn btn-secondary d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold button-post-tag mr-2">
-                        <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
-                    </a>
+                    <div class="fade-overlay d-none"></div>
 
-                {% empty %}
+                    <div class="see-more-btn position-absolute d-none"></div>
+                </div>
 
-                    <span class="text-muted">No tags</span>
+                <div class="d-flex align-items-center flex-wrap">
 
-                {% endfor %}
-                
+                    {% for tag in post.post_tag.all %}
+
+                        <a class="btn button-tag-dark-lilac d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold mr-2">
+                            <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
+                        </a>
+
+                    {% empty %}
+
+                        <span class="text-muted">No tags</span>
+
+                    {% endfor %}
+                    
+                </div>
             </div>
         </div>
-
-
     </div>
+
+    {% if community.id != user.id %}
+
+        {% include 'post/partials/posted.html' %}
+
+    {% endif %}
+
 </div>

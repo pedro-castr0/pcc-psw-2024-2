@@ -33,6 +33,9 @@ class Post(models.Model):
     def get_dislikes(self):
         from feedback.models import Feedback
         return Feedback.objects.filter(post=self, feedback=False).count()
+    
+    def get_karma(self):
+        return self.get_likes() - self.get_dislikes()
 
     def get_comments_count(self):
         from comments.models import Comment

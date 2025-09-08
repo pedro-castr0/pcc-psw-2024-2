@@ -7,41 +7,41 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <div class="card profile-banner">
-                <img 
-                    src="{% if profile.profile_banner %}{{ profile.profile_banner.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
-                    class="img-fluid rounded">
-            </div>
-
             <div class="d-flex">
                 <div class="d-flex align-items-center m-3 justify-content-between w-100">
-                    <div class="d-flex align-items-center ">
+                    <div class="d-flex align-items-center">
                         <img 
-                            class="rounded-circle border profile-picture" 
-                            src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
+                            class="rounded-circle profile-picture" 
+                            src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
                             
                         <div class="ml-3">
-                            <p class="font-weight-bold my-0 text-dark text-master">{{ profile.display_name }}</p>
-                            <p class="text-content">
-                                <span class="font-weight-bold">@{{ profile.user.username }}</span> · 
-                                <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span> followers · {{ profile.user.posts.count }} posts</p>
+                            <p class="font-weight-bold my-0 text-white text-master">{{ profile.display_name }}</p>
+
+                            <p class="text-content text-blurred mb-2">
+                                <span class="font-weight-bold text-white">@{{ profile.user.username }}</span> · 
+                                <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span> followers · {{ profile.user.posts.count }} posts
+                            </p>
+                                
+                            <div class="d-flex align-items-center">
+
+                                {% if profile.user.id != user.id %}
+
+                                    {% include 'buttons/follow.html' with person=profile.user %}
+
+                                {% else %}
+
+                                    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3">
+                                        <p class="mb-0 text-tertiary text-white font-weight-bold">Edit profile</p>
+                                    </a>
+
+                                    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3 ml-2">
+                                        <p class="mb-0 text-tertiary text-white font-weight-bold">Account settings</p>
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-
-                        {% if profile.user.id != user.id %}
-
-                            {% include 'buttons/follow.html' with person=profile.user %}
-
-                        {% else %}
-
-                            <a href="/user/profile/edit/" class="btn btn-primary d-flex align-items-center justify-content-center rounded button-small-square">
-                                <p class="mb-0 text-tertiary font-weight-bold">Edit your profile</p>
-                            </a>
-
-                        {% endif %}
-
                     </div>
                 </div>
             </div>
@@ -51,45 +51,45 @@
                     <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link border-bottom" 
+                                class="load-content nav-link border-bottom mr-2 " 
                                 data-toggle="tab" href="/user/profile/{{ profile.user.username }}/posts/" 
                                 data-target="#content-area" 
                                 id="selectedButton">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Posts</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Posts</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link border-bottom" 
+                                class="load-content nav-link border-bottom mr-2" 
                                 data-toggle="tab" 
                                 href="/user/profile/{{ profile.user.username }}/comments/" 
                                 data-target="#content-area">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Comments</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Comments</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link border-bottom" 
+                                class="load-content nav-link border-bottom mr-2" 
                                 data-toggle="tab" 
                                 href="/user/profile/{{ profile.user.username }}/likes/" 
                                 data-target="#content-area">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Likes</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Likes</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a 
-                                class="load-content nav-link border-bottom" 
+                                class="load-content nav-link border-bottom mr-2" 
                                 data-toggle="tab" 
                                 href="/user/profile/{{ profile.user.username }}/dislikes/" 
                                 data-target="#content-area">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-secondary">Dislikes</p>
+                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Dislikes</p>
                             </a>
                         </li>
                     </ul>

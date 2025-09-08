@@ -1,122 +1,118 @@
 {% load static %}
 
-<div class="d-flex my-2">
+<div class="d-flex mb-4">
     <div class="d-flex flex-column">
 
         {% include "buttons/feedback.html" %}
         
     </div>
 
-    <div class="card p-3 flex-grow-1 ml-1">
-        <p class="mb-2 text-tertiary">
-            posted in <a href="/community/{{ post.community.name }}" class="font-weight-bold text-decoration-none">
+    <div class="ml-2">
+        <div class="card card-dark p-3 flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex align-items-center">
+                    <img 
+                        src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                        class="rounded-circle circle-picture">
 
-                {% if post.community.display_name %}
+                    <div class="ml-2">
+                        <p class="font-weight-bold mb-0 text-subtitle">
+                            <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none link-lilac">
 
-                  {{ post.community.display_name }}
+                            {% if post.author.profile.display_name %}
 
-                {% else %}
+                                {{ post.author.profile.display_name }}
 
-                  {{ post.community.name }}
+                            {% else %}
 
-                {% endif %}
+                                {{ post.author.username }}
 
-            </a>
-        </p>
+                            {% endif %}
 
-        <div class="d-flex justify-content-between align-items-center my-2">
-            <div class="d-flex align-items-center">
-                <img 
-                    src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
-                    class="rounded-circle border circle-picture">
+                            </a>
+                        </p>
 
-                <div class="ml-2">
-                    <p class="font-weight-bold mb-0 text-subtitle">
-                        <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none">
-
-                        {% if post.author.profile.display_name %}
-
-                            {{ post.author.profile.display_name }}
-
-                        {% else %}
-
-                            {{ post.author.username }}
-
-                        {% endif %}
-
-                        </a>
-                    </p>
-                    <p class="text-muted mb-0 text-content">
-                        <span class="font-weight-bold">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }}{% if post.edited != post.posted %}<span class="ml-1 text-tertiary">(edited)</span>{% endif %}
-                    </p>
+                        <p class="mb-0 text-tertiary">
+                            <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }}{% if post.edited != post.posted %}<span class="ml-1 text-tertiary">(edited)</span>{% endif %}
+                        </p>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="d-flex">
+                
+                <div class="d-flex">
 
-                {% if post.author.id == user.id %}
+                    {% if post.author.id == user.id %}
 
-                    {% include 'post/actions/options.html' %}
+                        {% include 'post/actions/options.html' %}
 
-                {% endif %}
+                    {% endif %}
 
-            </div>
-        </div>
-
-        <p class="font-weight-bold my-2 text-dark text-title">{{ post.title }}</p>
-
-        <div class="d-flex align-items-center flex-wrap my-2">
-
-            {% for tag in post.post_tag.all %}
-
-                <a class="btn btn-secondary d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold button-post-tag mr-2">
-                    <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
-                </a>
-
-            {% empty %}
-
-                <span class="text-muted">No tags</span>
-
-            {% endfor %}
-
-        </div>
-
-        <div class="position-relative my-2 post-content-wrapper">
-            <div class="post-content">
-                <div class="post-image text-justify text-dark">
-                    {{ post.content|safe }}
                 </div>
             </div>
 
-            <div class="fade-overlay d-none"></div>
+            <p class="font-weight-bold my-2 text-white text-title">{{ post.title }}</p>
 
-            <div class="see-more-btn position-absolute d-none">
-                <a role="button" href="/post/{{post.id}}" class="btn btn-primary d-flex align-items-center justify-content-center button-small-square">
-                    <p class="mb-0 font-weight-bold text-tertiary">View post</p>
+            <div class="d-flex align-items-center flex-wrap my-2">
+
+                {% for tag in post.post_tag.all %}
+
+                    <a class="btn button-tag-dark-lilac d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold mr-2">
+                        <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
+                    </a>
+
+                {% empty %}
+
+                    <span class="text-muted">No tags</span>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="position-relative my-2 post-content-wrapper">
+                <div class="post-content">
+                    <div class="post-image text-justify text-white">
+                        {{ post.content|safe }}
+                    </div>
+                </div>
+
+                <div class="fade-overlay d-none"></div>
+
+                <div class="see-more-btn position-absolute d-none">
+                    <a role="button" href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium rounded-pill px-3">
+                        <p class="mb-0 text-tertiary text-white font-weight-bold">See post</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="d-flex mt-2">
+                <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center rounded button-medium rounded-pill px-3">
+                    <i class="text-white fas fa-fw fa-comment text-tertiary"></i>
+                    <p class="mb-0 ml-2 text-tertiary text-white font-weight-bold">{{ post.get_comments_count }}</p>
+                </a>
+
+                <button type="button" class="btn button-magenta d-flex align-items-center justify-content-center button-medium rounded ml-2 rounded-pill px-3">
+                    <i class="text-white fas fa-fw fa-share-alt text-tertiary"></i>
+                    <p class="mb-0 ml-2 text-tertiary text-white font-weight-bold">Share</p>
+                </button>
+
+                {% if post.author.id != user.id %}
+
+                    {% include 'post/actions/report.html' %}
+
+                {% endif %}
+
+                <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium-circle rounded-circle p-0 ml-2">
+                    <i class="fas fa-fw fa-expand-arrows-alt text-white text-tertiary"></i>
                 </a>
             </div>
         </div>
 
-        <div class="d-flex mt-2">
-            <a href="/post/{{ post.id }}" class="btn btn-light d-flex align-items-center justify-content-center border rounded button-medium">
-                <i class="text-dark fas fa-fw fa-comment"></i>
-                <p class="mb-0 ml-2 text-tertiary">{{ post.get_comments_count }}</p>
-            </a>
+        {% if community.id != user.id %}
+                        
+            {% include 'post/partials/posted.html' %}
 
-            <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded ml-2 button-medium">
-                <i class="text-dark fas fa-fw fa-link"></i>
-                <p class="mb-0 ml-2 text-tertiary">Share</p>
-            </button>
+        {% endif %}
 
-            {% if post.author.id != user.id %}
-
-                {% include 'post/actions/report.html' %}
-
-            {% endif %}
-
-            <a href="/post/{{ post.id }}" class="btn btn-light d-flex align-items-center justify-content-center border rounded-circle p-0 button-medium-circle ml-2">
-                <i class="fas fa-fw fa-eye text-dark"></i>
-            </a>
-        </div>
     </div>
+
+
 </div>
