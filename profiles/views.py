@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.db.models import Count, Q
 
 @login_required
 def edit(request):
@@ -34,7 +35,14 @@ def view(request, username):
 
     is_following = profile.user.followers.filter(follower_id=request.user.id).exists()
 
-    return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following})
+    get_karma = User.objects.annotate(
+
+        karma=Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=True))
+             - Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=False))
+
+        ).get(id=profile.user.id)
+
+    return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following, 'get_karma':get_karma})
 
 @login_required
 def likes(request, username):
@@ -73,7 +81,7 @@ def comments(request, username):
     comments = Comment.objects.filter(author=profile.user).distinct()
 
     return render(request, 'profile/partials/comments.html', {
-        'comments': comments
+        'comments': comments, 'hide_comment_buttons': True
     })
 
 @login_required

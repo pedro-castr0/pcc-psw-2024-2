@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.urls import reverse
+from django.db.models import Count, Q
 
 @login_required
 def create(request):
@@ -74,6 +75,13 @@ def view(request, id):
     post = get_object_or_404(Post, id=id)
     comments = post.comments.filter(parent__isnull=True)
 
-    return render(request, 'post/view.html', {'post': post, 'comments': comments})
+    get_karma = User.objects.annotate(
+
+        karma=Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=True))
+            - Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=False))
+
+        ).get(id=post.author.id)
+
+    return render(request, 'post/view.html', {'post': post, 'comments': comments, 'hide_posted':True, 'post_button_hide':True, 'get_karma':get_karma})
 
 

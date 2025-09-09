@@ -4,35 +4,35 @@
     <div class="comment">
         <div class="d-flex mt-2">
             <img 
-                src="{% if comment.author.profile.profile_picture %}{{ comment.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
-                class="rounded-circle border circle-picture">
+                src="{% if comment.author.profile.profile_picture %}{{ comment.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                class="rounded-circle circle-picture">
 
             <div class="ml-3 flex-grow-1">
                 <div class="d-flex align-items-center">
-                    <p class="font-weight-bold mb-0 text-content">
-                        <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none text-secondary">
-                            @{{ comment.author.username }}
+                    <p class="font-weight-bold mb-0 text-subtitle">
+                        <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none link-lilac">
+                            {{ comment.author.profile.display_name }}
                         </a>
-                    </p>
-                    <p class="mb-0 text-muted ml-1 text-content">
-                        ∙ {{ comment.posted|date:"M d, Y" }}
+                        <span class="text-blurred text-tertiary font-weight-normal"> ∙ {{ comment.posted|date:"M d, Y" }}</span>
                     </p>
                 </div>
 
-                <p class="my-2 mr-5 text-dark text-justify">
+                <p class="my-2 mr-5 text-white text-justify text-content">
 
                     {% if comment.parent %}
 
-                        <a href="/user/profile/{{ comment.parent.author.username }}" class="text-decoration-none">
+                        <a href="/user/profile/{{ comment.parent.author.username }}" class="text-decoration-none link-lilac">
                             @{{ comment.parent.author.username }}
                         </a>
 
                     {% endif %}
 
                     {{ comment.content }}
+
                 </p>
 
                 {% include 'comment/actions/options.html' %}
+
             </div>
         </div>
 

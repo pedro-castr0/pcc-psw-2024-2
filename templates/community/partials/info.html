@@ -1,24 +1,24 @@
 {% load static %}
 
-<div class="card mb-2">
-    <img class="card-img-top border-bottom info-banner" src="{% if community.community_banner %}{{ community.community_banner.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
+<div class="card card-dark mb-2">
+    <img class="card-img-top info-banner" src="{% if community.community_banner %}{{ community.community_banner.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
 
     <div class="col p-3">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
                 <img 
-                    src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
-                    class="rounded-circle border circle-picture">
+                    src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                    class="rounded circle-picture">
 
-                <div class="ml-2">
+                <div class="ml-3">
                     <p class="font-weight-bold mb-0 text-subtitle">
-                        <a href="/community/{{ community.name }}" class="text-decoration-none">
+                        <a href="/community/{{ community.name }}" class="text-decoration-none link-lilac">
                             {{ community.display_name }}
                         </a>
                     </p>
 
-                    <p class="text-muted mb-0 text-content">
-                        <span class="ml-1" id="members-count-{{ community.id }}">{{ community.members.count }}</span> members
+                    <p class="mb-0 text-tertiary text-blurred">
+                        <span id="members-count-{{ community.id }}">{{ community.members.count }}</span> members
                     </p>
                 </div>
             </div>

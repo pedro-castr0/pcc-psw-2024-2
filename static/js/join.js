@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     btn.dataset.joined = data.joined;
                     document.getElementById(`join-text-${communityId}`).innerText = data.joined ? "Leave" : "Join";
 
-                    btn.classList.toggle('btn-primary', !data.joined);
-                    btn.classList.toggle('btn-danger', data.joined);
+                    btn.classList.toggle('button-white', !data.joined);
+                    btn.classList.toggle('button-magenta', data.joined);
 
                     const countElem = document.getElementById(`members-count-${communityId}`);
                     if (countElem) countElem.innerText = data.members_count;

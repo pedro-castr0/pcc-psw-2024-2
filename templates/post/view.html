@@ -8,93 +8,75 @@
     <div class="row">
         <div class="col-8 d-flex" >
             <div class="d-flex flex-column">
+
+                {% include "buttons/back.html" %}
+                
                 {% include "buttons/feedback.html" %}
+
             </div>
 
-            <div class="card p-3 ml-1 flex-grow-1">
+            <div class="card card-dark p-3 ml-2 flex-grow-1">
                 <div class="col">
                     <div class="row d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <img 
                                 src="{% if post.author.profile.profile_picture %} {{ post.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-                                class="rounded-circle border circle-picture">
+                                class="rounded-circle circle-picture">
 
                             <div class="ml-2">
-                                <p class="font-weight-bold mb-0 text-content">
-                                    <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none text-subtitle">
-                                        {{ post.author.profile.display_name }}
-                                    </a>
-                                </p>
-                                <p class="text-muted mb-0 text-content">
-                                    <span class="font-weight-bold">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }} {% if post.edited != post.posted %}<span class="ml-1 text-tertiary" >(edited)</span>{% endif %}
+                                <a href="/user/profile/{{ post.author.username }}" class="font-weight-bold mb-0 text-decoration-none text-subtitle link-lilac">
+                                    {{ post.author.profile.display_name }}
+                                </a>
+
+                                <p class="text-blurred mb-0 text-tertiary">
+                                    <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }} {% if post.edited != post.posted %}(edited){% endif %}
                                 </p>
                             </div>
                         </div>
-
-                        {% if post.author.id == user.id %}
-
-                            {% include 'post/actions/options.html' %}
-
-                        {% endif %}
                     </div>
                 </div>
 
                 <div>
-                    <p class="font-weight-bold my-3 text-dark text-master">{{ post.title }}</p>
+                    <p class="font-weight-bold my-3 text-white text-title">{{ post.title }}</p>
 
                     <div class="d-flex align-items-center flex-wrap">
 
                         {% for tag in post.post_tag.all %}
 
-                            <a class="btn btn-secondary d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold button-post-tag mr-2">
-                                <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
-                            </a>
+                            {% include 'buttons/tag.html' %}
 
                         {% empty %}
 
-                            <span class="text-muted">No tags</span>
+                            <span class="text-blurred text-tertiary">No tags</span>
 
                         {% endfor %}
                         
                     </div>
 
-                    <p class="my-3"><div class="post-image text-justify text-dark">{{ post.content|safe }}</div></p>
+                    <p class="my-3"><div class="post-image text-justify text-white">{{ post.content|safe }}</div></p>
                 </div>
 
-                <div class="d-flex">
-                    <button type="button" class="btn btn-light d-flex align-items-center justify-content-center border rounded text-tertiary button-medium" >
-                        <i class="text-dark fas fa-fw fa-link"></i>
+                {% include 'post/actions/options.html' %}
 
-                        <p class="mb-0 ml-2 text-tertiary">Share</p>
-                    </button>
-
-                    {% if post.author.id != user.id %}
-
-                        {% include 'post/actions/report.html' %}
-
-                    {% endif %}
-                    
-                </div>
-
-                <p class="text-dark font-weight-bold p-0 my-3 text-title">{{ post.get_comments_count }} comments</p>
+                <p class="text-white font-weight-bold p-0 my-3 text-subtitle">{{ post.get_comments_count }} comments</p>
 
                 <div class="comment-box">
                     <form method="post" action="{% url 'comment' %}"> {% csrf_token %}
                         <div class="form-group mb-2">
                             <textarea 
-                                name="content" class="form-control post-comment-form rounded"
-                                rows="1" placeholder="What do you think about that?" required></textarea>
+                                name="content" class="form-control comment-form rounded"
+                                rows="1" placeholder="What do you think about that, {{ user.profile.display_name }}?" required></textarea>
                         </div>
 
                         <input type="hidden" name="post" value="{{ post.id }}">
 
                         <div class="comment-actions d-none mb-2">
-                            <button type="button" class="btn d-flex button-small-square btn-cancel align-items-center rounded-pill">
-                                <span class="text-tertiary text-dark font-weight-bold">Cancel</span>
+                            <button type="button" class="btn button-magenta d-flex button-small-square btn-cancel align-items-center rounded-pill">
+                                <span class="text-tertiary font-weight-bold">Cancel</span>
                             </button>
 
                             <button type="submit"
-                                    class="btn text-dark d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+                                    class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
                                 <i class="fas fa-fw fa-paper-plane text-tertiary"></i>
                             </button>
                         </div>
@@ -114,17 +96,30 @@
         </div>
 
         <div class="col-4">
+            <div class="mb-2">
+
+                {% include 'user/partials/about.html' with person=post.author %}
+                
+            </div>
+
             <div class="mb-3">
-                <p class="font-weight-bold mb-2 text-content">COMMUNITY INFO:</p>
 
                 {% include 'community/partials/info.html' with community=post.community %}
 
             </div>
 
-            <div class="mb-3">
-                <p class="font-weight-bold mb-2 text-content">AUTHOR INFO:</p>
+            <div class="mb-2">
+                <p class="font-weight-bold mb-2 text-content text-blurred">COMMUNITY POSTS</p>
 
-                {% include 'user/partials/info.html' with person=post.author %}
+                {% for post in post.community.posts.all %}
+
+                    <div class="mb-2">
+
+                        {% include 'post/partials/cards.html' %}
+
+                    </div>
+
+                {% endfor %}
                 
             </div>
         </div>

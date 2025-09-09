@@ -1,46 +1,13 @@
-<div class="card p-3 mb-3">
-    <p class="font-weight-bold text-dark m-0 text-subtitle">
-
-        {% if community.display_name %}
-
-            {{ community.display_name }}
-
-        {% else %}
-            
-            {{ community.name }}
-
-        {% endif %}
-        
-    </p>
+<div class="card card-dark p-3 mb-3">
 
     {% if community.context %}
 
-        <p class="my-3 text-content"><div class="text-justify text-dark">{{ community.context|safe }}</div></p>
+        <p class="text-content m-0"><div class="text-justify text-white">{{ community.context|safe }}</div></p>
     
     {% else %}
 
-        <p class="my-3 text-content text-justify">This community doesn't have context.</p>
+        <p class="text-content text-justify text-blurred m-0">This community doesn't have context.</p>
 
     {% endif %}
-
-    <hr class="mt-0">
-
-    <div class="d-flex align-items-center justify-content-between">
-        <p class="mb-0 text-content"><i class="fas fa-fw fa-calendar"></i> Created by <a class="text-decoration-none font-weight-bold" href="/user/profile/{{ community.creator.username }}">@{{ community.creator.username }}</a> at {{ community.created }}</p>
-        
-        {% for tag in community.community_tag.all %}
-
-            <a class="btn btn-secondary d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold button-community-tag mr-2">
-                <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
-            </a>
-
-        {% empty %}
-
-            <a class="btn btn-danger font-weight-bold text-center button-small-square px-2">
-                <p class="mb-0 text-tertiary">No tags</p>
-            </a>
-
-        {% endfor %}
-    </div>
 
 </div>

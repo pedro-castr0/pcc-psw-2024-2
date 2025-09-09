@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.db.models import Count, Q
 
 @login_required
 def comment(request):
@@ -52,9 +53,17 @@ def edit(request, id):
 @login_required
 def view(request, id):
     comment = get_object_or_404(Comment, id=id)
+    
     replies = comment.replies.all()
 
-    return render(request, 'comment/view.html', {'comment':comment, 'replies':replies})
+    get_karma = User.objects.annotate(
+
+        karma=Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=True))
+            - Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=False))
+
+        ).get(id=comment.author.id)
+
+    return render(request, 'comment/view.html', {'comment':comment, 'replies':replies, 'get_karma': get_karma, 'hide_view_button':True})
 
 
 @login_required

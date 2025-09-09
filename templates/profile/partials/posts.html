@@ -1,6 +1,6 @@
 {% for post in posts %}
 
-    <div class="my-2">
+    <div class="mb-4">
 
         {% include 'post/partials/cards.html' %}
         
@@ -9,6 +9,6 @@
 
 {% empty %}
 
-    <p class="my-2 text-content">This user hasn't interacted with any posts.</p>
+    <p class="my-2 text-content text-blurred">This user hasn't interacted with any posts.</p>
 
 {% endfor %}

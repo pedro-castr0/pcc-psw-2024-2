@@ -1,0 +1,54 @@
+{% for rule in community.rules.all %}
+
+    <div class="mb-3">
+        <p class="font-weight-bold mb-2 text-subtitle text-white text-justify">{{ rule.title }}</p>
+        <p class="text-blurred mb-2 text-content text-justify">{{ rule.description }}</p>
+
+        {% if user.id == community.creator.id %}
+
+            <div class="mt-2 d-flex align-items-center">
+                <a 
+                    href="{% url 'edit_rule' community.name rule.id %}" 
+                    class="btn button-magenta-simple d-flex justify-content-center align-items-center button-small-circle rounded-pill p-0">
+                    
+                    <i class="fas fa-fw fa-pen-alt text-white text-tertiary"></i>
+                </a>
+
+                <button type="button" 
+                        class="btn button-magenta-simple d-flex justify-content-center align-items-center button-small-circle rounded-pill p-0 ml-2" 
+                        data-toggle="modal" 
+                        data-target="#deleteRuleModal{{ rule.id }}">
+
+                    <i class="fas fa-fw fa-trash-alt text-red text-tertiary"></i>
+                </button>
+            </div>
+
+            <div class="modal fade" id="deleteRuleModal{{ rule.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirm delete</h5>
+                            <button type="button" class="close text-light" data-dismiss="modal">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete rule 
+                            <strong>{{ rule.title }}</strong>?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <form method="post" action="{% url 'delete_rule' community.name rule.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+{% endfor %}

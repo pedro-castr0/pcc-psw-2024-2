@@ -5,7 +5,7 @@
         src="{% if post.community.community_picture %}{{ post.community.community_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
         class="rounded circle-picture-tiny">
 
-    <p class="mb-0 text-tertiary ml-2 text-white">
+    <p class="mb-0 text-tertiary ml-2 text-blurred ">
         posted in 
 
         <a href="/community/{{ post.community.name }}" class="font-weight-bold text-decoration-none link-lilac">

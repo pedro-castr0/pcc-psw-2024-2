@@ -1,45 +1,41 @@
 {% load static %}
 
-<div class="card p-3 mb-2">
-    <p class="mb-2 text-tertiary">commented on <a class="text-decoration-none font-weight-bold" href="/post/{{comment.post.id}}">{{comment.post.title}}</a></p>
+<div class="card card-dark p-3 mb-4">
     <div class="d-flex">
-        
         <img 
-            src="{% if comment.author.profile.profile_picture %} {{ comment.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-            class="rounded-circle border circle-picture">
+            src="{% if comment.author.profile.profile_picture %}{{ comment.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+            class="rounded-circle circle-picture-tiny">
 
-        <div class="ml-3 flex-grow-1">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center">
-                    <p class="font-weight-bold mb-0 text-content">
-                        <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none text-secondary">
-                            {{ comment.author.profile.display_name }}
-                        </a>
-                    </p>
+        <p class="ml-2 mb-0 text-tertiary">
+            <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none font-weight-bold link-lilac">
 
-                    <p class="mb-0 text-muted ml-1 text-content">
-                        ∙ {{ comment.posted|date:"M d, Y" }}{% if comment.edited != comment.posted %}<span class="ml-1 text-tertiary">(edited)</span>{% endif %}
-                    </p>
-                </div>
+                {% if comment.author.profile.display_name %}
 
-                <div>
-                    <button type="button" class="btn d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
-                        <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary"></i>
-                    </button>
-                </div>
-            </div>
+                    {{ comment.author.profile.display_name }}
 
-            <p class="mb-2 mr-5 text-dark text-justify">
-                {% if comment.parent.parent %} 
+                {% else %}
 
-                    <a href="/user/profile/{{ comment.parent.author.username }}" class="text-decoration-none">
-                        @{{ comment.parent.author.username }}
-                    </a> 
+                    {{ comment.author.username }}
 
-                {% endif %} 
+                {% endif %}
 
-                {{ comment.content }}
-            </p>
-        </div>
+            </a>
+            ∙ on {{ comment.posted|date:"M d, Y" }}
+        </p>
     </div>
+
+    <div class="text-justify text-white my-2">{{ comment.content }}</div>
+
+    {% if comment.parent %}
+
+        <p class="text-blurred text-tertiary mb-2">
+            replying <a href="/user/profile/{{ comment.parent.author.username }}" class="link-lilac text-decoration-none font-weight-bold">{{ comment.parent.author.profile.display_name }}</a>
+        </p>
+
+    {% endif %}
+
+    {% include 'post/partials/cards.html' with post=comment.post %}
+
+    {% include 'comment/actions/options.html' %}
+
 </div>

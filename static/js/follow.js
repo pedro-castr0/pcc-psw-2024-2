@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Atualiza classes do botão
                     if (data.following) {
-                        btn.classList.remove('button-blue');
-                        btn.classList.add('button-red');
+                        btn.classList.remove('button-white');
+                        btn.classList.add('button-magenta');
                     } else {
-                        btn.classList.remove('button-red');
-                        btn.classList.add('button-blue');
+                        btn.classList.remove('button-magenta');
+                        btn.classList.add('button-white');
                     }
 
                     // Atualiza contagem de followers em todos os spans correspondentes

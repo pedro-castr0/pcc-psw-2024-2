@@ -1,21 +1,51 @@
 {% load static %}
 
-<div class="dropdown">
-    <a class="btn d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle" href="#" role="button" id="postOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-fw fa-ellipsis-v text-dark text-tertiary"></i>
-    </a>
+<div class="d-flex mt-2">
 
-    <div class="dropdown-menu dropdown-menu-left border rounded animated--grow-in" aria-labelledby="postOptions">
-        <a class="dropdown-item d-flex align-items-center" href="/post/{{ post.id }}/edit">
-            <i class="fas fa-edit fa-sm fa-fw mr-2 text-primary"></i>
-            <p class="mb-0 text-content text-primary">Edit</p>
+    {% if not post_button_hide %}
+
+        <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium rounded-pill px-3 mr-2">
+            <i class="text-white fas fa-fw fa-comment text-tertiary"></i>
+            <p class="mb-0 ml-2 text-tertiary text-white font-weight-bold">{{ post.get_comments_count }}</p>
+        </a>
+
+    {% endif %}
+
+    <button type="button" class="btn button-magenta d-flex align-items-center justify-content-center button-medium rounded-pill px-3 mr-2">
+        <i class="text-white fas fa-fw fa-share-alt text-tertiary"></i>
+        <p class="mb-0 ml-2 text-tertiary text-white font-weight-bold">Share</p>
+    </button>
+
+    {% if post.author.id != user.id %}
+
+        {% include 'post/actions/report.html' %}
+
+    {% else %}
+    
+    <div class="d-flex align-items-center">
+        <a 
+            class="btn button-magenta d-flex align-items-center justify-content-center button-small-circle rounded-pill p-0 mr-2" 
+            href="/post/{{ post.id }}/edit">
+
+            <i class="fas fa-fw fa-pen-alt text-tertiary"></i>
         </a>
 
         <form action="/post/{{ post.id }}/delete" method="post"> {% csrf_token %}
-            <button type="submit" class="dropdown-item d-flex align-items-center">
-                <i class="fas fa-trash-alt fa-sm fa-fw mr-2 text-danger"></i>
-                <p class="mb-0 text-content text-danger">Delete</p>
+            <button type="submit" class="btn button-magenta d-flex align-items-center justify-content-center button-small-circle rounded-pill p-0 mr-2">
+                <i class="fas fa-fw fa-trash-alt text-tertiary text-red"></i>
             </button>
         </form>
     </div>
+
+
+    {% endif %}
+
+    {% if not post_button_hide %}
+
+        <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium-circle rounded-circle p-0">
+            <i class="fas fa-fw fa-expand-arrows-alt text-white text-tertiary"></i>
+        </a>
+
+    {% endif %}
+
 </div>

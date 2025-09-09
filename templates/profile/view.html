@@ -5,166 +5,142 @@
 {% load static %}
 
 <div class="container">
+    <div class="d-flex align-items-center m-3">
+        <img 
+            class="rounded-circle profile-picture" 
+            src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
+            
+        <div class="ml-3">
+            <p class="font-weight-bold my-0 text-white text-master">{{ profile.display_name }}</p>
+
+            <p class="text-content text-blurred mb-2">
+                <span class="font-weight-bold text-white">@{{ profile.user.username }}</span> · 
+                <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span> followers · {{ profile.user.posts.count }} posts
+            </p>
+                
+            <div class="d-flex align-items-center">
+
+                {% if profile.user.id != user.id %}
+
+                    {% include 'buttons/follow.html' with person=profile.user %}
+
+                {% else %}
+
+                    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3">
+                        <p class="mb-0 text-tertiary text-white font-weight-bold">Edit profile</p>
+                    </a>
+
+                    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3 ml-2">
+                        <p class="mb-0 text-tertiary text-white font-weight-bold">Account settings</p>
+                    </a>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col">
-            <div class="d-flex">
-                <div class="d-flex align-items-center m-3 justify-content-between w-100">
-                    <div class="d-flex align-items-center">
-                        <img 
-                            class="rounded-circle profile-picture" 
-                            src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
-                            
-                        <div class="ml-3">
-                            <p class="font-weight-bold my-0 text-white text-master">{{ profile.display_name }}</p>
+        <div class="col-8">
+            <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2 " 
+                        data-toggle="tab" href="/user/profile/{{ profile.user.username }}/posts/" 
+                        data-target="#content-area" 
+                        id="selectedButton">
 
-                            <p class="text-content text-blurred mb-2">
-                                <span class="font-weight-bold text-white">@{{ profile.user.username }}</span> · 
-                                <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span> followers · {{ profile.user.posts.count }} posts
-                            </p>
-                                
-                            <div class="d-flex align-items-center">
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Posts</p>
+                    </a>
+                </li>
 
-                                {% if profile.user.id != user.id %}
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2" 
+                        data-toggle="tab" 
+                        href="/user/profile/{{ profile.user.username }}/comments/" 
+                        data-target="#content-area">
 
-                                    {% include 'buttons/follow.html' with person=profile.user %}
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Comments</p>
+                    </a>
+                </li>
 
-                                {% else %}
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2" 
+                        data-toggle="tab" 
+                        href="/user/profile/{{ profile.user.username }}/likes/" 
+                        data-target="#content-area">
 
-                                    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3">
-                                        <p class="mb-0 text-tertiary text-white font-weight-bold">Edit profile</p>
-                                    </a>
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Likes</p>
+                    </a>
+                </li>
 
-                                    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3 ml-2">
-                                        <p class="mb-0 text-tertiary text-white font-weight-bold">Account settings</p>
-                                    </a>
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2" 
+                        data-toggle="tab" 
+                        href="/user/profile/{{ profile.user.username }}/dislikes/" 
+                        data-target="#content-area">
 
-                                {% endif %}
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Dislikes</p>
+                    </a>
+                </li>
+            </ul>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="tab-content" id="content-area">
+
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-8">
-                    <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
-                        <li class="nav-item">
-                            <a 
-                                class="load-content nav-link border-bottom mr-2 " 
-                                data-toggle="tab" href="/user/profile/{{ profile.user.username }}/posts/" 
-                                data-target="#content-area" 
-                                id="selectedButton">
+        <div class="col-4">
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Posts</p>
-                            </a>
-                        </li>
+            {% include 'user/partials/about.html' with person=profile.user %}
 
-                        <li class="nav-item">
-                            <a 
-                                class="load-content nav-link border-bottom mr-2" 
-                                data-toggle="tab" 
-                                href="/user/profile/{{ profile.user.username }}/comments/" 
-                                data-target="#content-area">
+            <p class="font-weight-bold mb-2 mt-3 text-content text-blurred">OWNED COMMUNITIES ({{ profile.user.communities.count }})</p>
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Comments</p>
-                            </a>
-                        </li>
+            {% for community in profile.user.communities.all %}
 
-                        <li class="nav-item">
-                            <a 
-                                class="load-content nav-link border-bottom mr-2" 
-                                data-toggle="tab" 
-                                href="/user/profile/{{ profile.user.username }}/likes/" 
-                                data-target="#content-area">
+                {% include 'community/partials/info.html' %}
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Likes</p>
-                            </a>
-                        </li>
+            {% empty %}
 
-                        <li class="nav-item">
-                            <a 
-                                class="load-content nav-link border-bottom mr-2" 
-                                data-toggle="tab" 
-                                href="/user/profile/{{ profile.user.username }}/dislikes/" 
-                                data-target="#content-area">
+                <p class="my-2 text-content">This user doesn't have any communities.</p>
 
-                                <p class="font-weight-bold text-decoration-none my-0 text-content text-white">Dislikes</p>
-                            </a>
-                        </li>
-                    </ul>
+            {% endfor %}
 
-                    <div class="tab-content" id="content-area">
+            <p class="font-weight-bold mb-2 mt-3 text-content text-blurred">FOLLOWING ({{ profile.user.following.count }})</p>
 
-                    </div>
-                </div>
+            {% for follow in profile.user.following.all %}
 
-                <div class="col-4">
-                    <p class="font-weight-bold mb-2 text-content">USER INFO</p>
+                {% include 'user/partials/profiles.html' with person=follow.followed %}
+            
+            {% empty %}
 
-                    <div class="card p-3 mb-3">
-                        <p class="font-weight-bold text-dark m-0 text-subtitle">{{ profile.display_name }}</p>
+                <p class="my-2 text-tertiary text-blurred">This user don't follow anyone.</p>
 
-                        {% if profile.bio %}
+            {% endfor %}
 
-                            <p class="my-3 text-dark text-content">{{ profile.bio }}</p>
-                        
-                        {% else %}
+            <p class="font-weight-bold mb-2 mt-3 text-content text-blurred">JOINED ({{ profile.user.joined_communities.count }})</p>
 
-                            <p class="my-3 text-content">This user have no bio yet.</p>
+            {% for join in profile.user.joined_communities.all %}
 
-                        {% endif %}
+                {% include 'community/partials/info.html' with community=join.community %}
 
-                        <hr class="mt-0">
+            {% empty %}
 
-                        <p class="m-0 text-content"><i class="fas fa-fw fa-calendar"></i> Joined {{ profile.user.date_joined|date:"M d, Y" }}</p>
-                    </div>
+                <p class="my-2 text-tertiary text-blurred">This user hasn't joined any community.</p>
 
-                    <p class="font-weight-bold my-1 text-content">OWNED COMMUNITIES</p>
+            {% endfor %}
 
-                    {% for community in profile.user.communities.all %}
+            {% if profile.user.id != user.id %}
 
-                        {% include 'community/partials/info.html' %}
+                <p class="font-weight-bold mb-2 text-content mt-3 text-blurred">REPORT</p>
 
-                    {% empty %}
+                {% include 'profile/actions/report.html' with person=profile.user %}
 
-                        <p class="my-2 text-content">This user doesn't have any communities.</p>
+            {% endif %}
 
-                    {% endfor %}
-
-                    <p class="font-weight-bold mb-2 mt-3 text-content">FOLLOWING</p>
-
-                    {% for follow in profile.user.following.all %}
-
-                        {% include 'user/partials/profiles.html' with person=follow.followed %}
-                    
-                    {% empty %}
-
-                        <p class="my-2 text-content">This user don't follow anyone.</p>
-
-                    {% endfor %}
-
-                    <p class="font-weight-bold mb-2 mt-3 text-content">JOINED</p>
-
-                    {% for join in profile.user.joined_communities.all %}
-
-                        {% include 'community/partials/info.html' with community=join.community %}
-
-                    {% empty %}
-
-                        <p class="my-2 text-content">This user hasn't joined any community.</p>
-
-                    {% endfor %}
-
-                    {% if profile.user.id != user.id %}
-
-                        <p class="font-weight-bold mb-2 text-content mt-3">REPORT</p>
-
-                        {% include 'profile/actions/report.html' with person=profile.user %}
-
-                    {% endif %}
-                </div>
-            </div>
         </div>
     </div>
 </div>

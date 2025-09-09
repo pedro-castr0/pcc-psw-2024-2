@@ -77,8 +77,9 @@ def view(request, name):
 def home(request, name):
     posts = Post.objects.filter(community__name=name).distinct()
     community = get_object_or_404(Community, name=name)
+
     return render(request, 'community/partials/home.html', {
-        'posts': posts, 'community': community
+        'posts': posts, 'community': community, 'hide_posted':True
     })
 
 @login_required

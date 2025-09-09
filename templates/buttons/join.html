@@ -1,6 +1,6 @@
 
 <button type="button"
-        class="btn btn-join d-flex align-items-center justify-content-center px-3 button-small-square {% if community.id in community_ids %}btn-danger{% else %}btn-primary{% endif %}"
+        class="btn btn-join rounded-pill d-flex align-items-center justify-content-center px-3 button-small-square {% if community.id in community_ids %}button-magenta{% else %}button-white{% endif %}"
         data-community-id="{{ community.id }}"
         data-joined="{% if community.id in community_ids %}true{% else %}false{% endif %}"
         data-join-url="{% url 'join' %}"

@@ -37,16 +37,6 @@
                         </p>
                     </div>
                 </div>
-                
-                <div class="d-flex">
-
-                    {% if post.author.id == user.id %}
-
-                        {% include 'post/actions/options.html' %}
-
-                    {% endif %}
-
-                </div>
             </div>
 
             <p class="font-weight-bold my-2 text-white text-title">{{ post.title }}</p>
@@ -55,9 +45,7 @@
 
                 {% for tag in post.post_tag.all %}
 
-                    <a class="btn button-tag-dark-lilac d-flex align-items-center justify-content-center rounded px-2 mb-0 font-weight-bold mr-2">
-                        <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
-                    </a>
+                    {% include 'buttons/tag.html' %}
 
                 {% empty %}
 
@@ -83,36 +71,15 @@
                 </div>
             </div>
 
-            <div class="d-flex mt-2">
-                <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center rounded button-medium rounded-pill px-3">
-                    <i class="text-white fas fa-fw fa-comment text-tertiary"></i>
-                    <p class="mb-0 ml-2 text-tertiary text-white font-weight-bold">{{ post.get_comments_count }}</p>
-                </a>
+            {% include 'post/actions/options.html' %}
 
-                <button type="button" class="btn button-magenta d-flex align-items-center justify-content-center button-medium rounded ml-2 rounded-pill px-3">
-                    <i class="text-white fas fa-fw fa-share-alt text-tertiary"></i>
-                    <p class="mb-0 ml-2 text-tertiary text-white font-weight-bold">Share</p>
-                </button>
-
-                {% if post.author.id != user.id %}
-
-                    {% include 'post/actions/report.html' %}
-
-                {% endif %}
-
-                <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium-circle rounded-circle p-0 ml-2">
-                    <i class="fas fa-fw fa-expand-arrows-alt text-white text-tertiary"></i>
-                </a>
-            </div>
         </div>
 
-        {% if community.id != user.id %}
+        {% if not hide_posted %}
                         
             {% include 'post/partials/posted.html' %}
 
         {% endif %}
 
     </div>
-
-
 </div>

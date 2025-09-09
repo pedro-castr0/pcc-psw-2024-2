@@ -29,14 +29,18 @@
 .comment-form {
     min-height: 60px;
     max-height: 200px;
+    border: 1px solid #31293E !important;
+    background: #1A1424 !important;
 }
 
 .comment-form::placeholder {
-    font-size: 14px;
+    font-size: 14px !important;
+    color: #FFFFFF50 !important;
 }
 
 .info-banner {
     height: 80px;
+    border-bottom: 1px solid #31293E;
 }
 
 .circle-picture {
@@ -57,13 +61,26 @@
     border: 1px solid #31293E;
 }
 
-.profile-banner {
+.profile-picture {
+    height: 120px;
+    width: 120px;
+    border: 1px solid #31293E;
+}
+
+.profile-picture-medium {
+    height: 80px;
+    width: 80px;
+    border: 1px solid #31293E;
+}
+
+.community-banner {
     height: 200px;
     overflow: hidden;
     position: relative;
+    border: 1px solid #31293E;
 }
 
-.profile-picture {
+.community-picture {
     height: 120px;
     width: 120px;
     border: 1px solid #31293E;
@@ -205,15 +222,6 @@ input.tag-btn:checked + label {
     color: #ffffff;
 }
 
-.post-comment-form {
-    min-height: 50px;
-    max-height: 200px;
-}
-
-.post-comment-form::placeholder {
-    font-size: 14px;
-}
-
 .main-content {
   margin-left: 260px;
   margin-top: 100px;
@@ -246,7 +254,7 @@ input.tag-btn:checked + label {
 }
 
 .text-blurred {
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.5);
 }
 
 .button-tiny-circle {
@@ -287,9 +295,19 @@ input.tag-btn:checked + label {
 .button-magenta {
     background: #110D17 !important;
     border: 1px solid #31293E !important;
+    color: #FFFFFF !important;
 }
 
 .button-magenta:hover {
+    background: #31293E !important;
+    transition: all 0.2s ease;
+}
+
+.button-magenta-simple {
+    color: #FFFFFF !important;
+}
+
+.button-magenta-simple:hover {
     background: #31293E !important;
     transition: all 0.2s ease;
 }
@@ -314,20 +332,50 @@ input.tag-btn:checked + label {
     transition: all 0.2s ease;
 }
 
+.button-white {
+    background: #ffffff !important;
+    color: #110D17 !important;
+}
+
+.button-white:hover {
+    background: #d3d3d3ff !important;
+    transition: all 0.2s ease;
+}
+
 .nav-tabs {
-    border-bottom: 1px solid #31293E !important; /* cor da borda inferior */
+    border-bottom: 1px solid #31293E !important;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .nav-tabs .nav-link {
-    background-color: #110D17 !important;  /* fundo padrão */
-    border: 1px solid #31293E !important;  /* borda */
+    background: transparent !important;
+    border: none !important;
+    color: #FFFFFF50 !important;
+    height: 40px;
+    position: relative;
+    transition: color 0.2s ease-in-out;
 }
 
 .nav-tabs .nav-link:hover {
-    background-color: #31293E !important;
-    border-color: #31293E !important;
+    color: #FFFFFF !important;
 }
 
 .nav-tabs .nav-link.active {
-    background-color: #31293E !important; /* borda inferior “some” para parecer conectada ao conteúdo */
+    color: #FFFFFF !important;
+}
+
+.nav-tabs .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    width: 100%;
+    height: 2px;
+    background-color: #ffffff; /* roxo de destaque */
+    border-radius: 2px 2px 0 0;
+}
+
+.border-dark {
+    border-bottom: 1px solid #31293E;
 }

@@ -1,13 +1,17 @@
 {% load static %}
 
-<form action="/community/{{ community.name }}/delete/" method="post"> {% csrf_token %}
-    <button type="submit" class="btn btn-danger button-small-square d-flex align-items-center">
-        <i class="fas fa-trash-alt fa-sm fa-fw mr-2 text-tertiary"></i>
-        <p class="mb-0 text-content font-weight-bold text-tertiary">Delete</p>
-    </button>
-</form>
+{% if community.creator.id == user.id %}
 
-<a class="btn btn-primary button-small-square d-flex align-items-center ml-2" href="/community/{{ community.name }}/edit/">
-    <i class="fas fa-pen-alt fa-sm fa-fw mr-2 text-tertiary"></i>
-    <p class="mb-0 text-content text-tertiary font-weight-bold">Edit your community</p>
+    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3" href="/community/{{ community.name }}/edit/">
+        <p class="mb-0 text-content text-tertiary font-weight-bold">Manage community</p>
+    </a>
+
+{% else %}
+
+    {% include 'buttons/join.html' %}
+
+{% endif %}
+
+<a href="/community/{{ community.name }}/post/" class="btn button-white d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3 ml-2">
+    <span class="text-tertiary font-weight-bold mb-0">Make a post!</span>
 </a>
