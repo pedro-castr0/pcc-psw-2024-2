@@ -13,11 +13,11 @@
                         <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none link-lilac">
                             {{ comment.author.profile.display_name }}
                         </a>
-                        <span class="text-blurred text-tertiary font-weight-normal"> ∙ {{ comment.posted|date:"M d, Y" }}</span>
+                        <span class="text-blurred text-tertiary font-weight-normal"> ∙ {{ comment.posted|timesince }}</span>
                     </p>
                 </div>
 
-                <p class="my-2 mr-5 text-white text-justify text-content">
+                <p class="my-2 text-white text-justify text-content">
 
                     {% if comment.parent %}
 
@@ -38,7 +38,7 @@
 
         {% if comment.replies.exists %}
 
-            <div id="replies-{{ comment.id }}" class="ml-4 d-none">
+            <div id="replies-{{ comment.id }}" class="ml-3 d-none">
 
                 {% for reply in comment.replies.all %}
 

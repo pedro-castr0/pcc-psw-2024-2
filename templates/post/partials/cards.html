@@ -20,7 +20,7 @@
                 {% endif %}
 
             </a>
-            ∙ on {{ post.posted|date:"M d, Y" }}
+            ∙ {{ post.posted|timesince }} ago
         </p>
     </div>
 
@@ -39,7 +39,7 @@
     </p>
     <div class="position-relative my-2 post-card-wrapper">
         <div class="post-content">
-            <div class="post-image text-justify text-white">
+            <div class="post-image text-justify text-white text-content">
                 {{ post.content|safe }}
             </div>
         </div>
@@ -57,7 +57,7 @@
 
         {% empty %}
 
-            <span class="text-muted">No tags</span>
+            <span class="text-blurred text-tertiary font-weight-bold">No tags</span>
 
         {% endfor %}
         

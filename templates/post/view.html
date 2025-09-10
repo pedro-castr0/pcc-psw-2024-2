@@ -16,22 +16,20 @@
             </div>
 
             <div class="card card-dark p-3 ml-2 flex-grow-1">
-                <div class="col">
-                    <div class="row d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <img 
-                                src="{% if post.author.profile.profile_picture %} {{ post.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-02.jpg' %} {% endif %}" 
-                                class="rounded-circle circle-picture">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img 
+                            src="{% if post.author.profile.profile_picture %} {{ post.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-03.jpg' %} {% endif %}" 
+                            class="rounded-circle circle-picture">
 
-                            <div class="ml-2">
-                                <a href="/user/profile/{{ post.author.username }}" class="font-weight-bold mb-0 text-decoration-none text-subtitle link-lilac">
-                                    {{ post.author.profile.display_name }}
-                                </a>
+                        <div class="ml-2">
+                            <a href="/user/profile/{{ post.author.username }}" class="font-weight-bold mb-0 text-decoration-none text-subtitle link-lilac">
+                                {{ post.author.profile.display_name }}
+                            </a>
 
-                                <p class="text-blurred mb-0 text-tertiary">
-                                    <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }} {% if post.edited != post.posted %}(edited){% endif %}
-                                </p>
-                            </div>
+                            <p class="text-blurred mb-0 text-tertiary">
+                                <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ {{ post.posted|timesince }} ago {% if post.edited != post.posted %}(edited){% endif %}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -47,22 +45,26 @@
 
                         {% empty %}
 
-                            <span class="text-blurred text-tertiary">No tags</span>
+                            <span class="text-blurred text-tertiary font-weight-bold">No tags</span>
 
                         {% endfor %}
                         
                     </div>
 
-                    <p class="my-3"><div class="post-image text-justify text-white">{{ post.content|safe }}</div></p>
+                    <p class="my-3"><div class="post-image text-justify text-white text-content">{{ post.content|safe }}</div></p>
                 </div>
 
                 {% include 'post/actions/options.html' %}
 
                 <p class="text-white font-weight-bold p-0 my-3 text-subtitle">{{ post.get_comments_count }} comments</p>
 
-                <div class="comment-box">
-                    <form method="post" action="{% url 'comment' %}"> {% csrf_token %}
-                        <div class="form-group mb-2">
+                <div class="comment-box d-flex align-items-top">
+                    <img 
+                        src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                        class="rounded-circle circle-picture">
+
+                    <form method="post" action="{% url 'comment' %}" class="d-flex flex-grow-1 ml-3"> {% csrf_token %}
+                        <div class="form-group mb-2 w-100">
                             <textarea 
                                 name="content" class="form-control comment-form rounded"
                                 rows="1" placeholder="What do you think about that, {{ user.profile.display_name }}?" required></textarea>

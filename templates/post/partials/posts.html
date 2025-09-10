@@ -32,8 +32,8 @@
                             </a>
                         </p>
 
-                        <p class="mb-0 text-tertiary">
-                            <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ on {{ post.posted|date:"M d, Y" }}{% if post.edited != post.posted %}<span class="ml-1 text-tertiary">(edited)</span>{% endif %}
+                        <p class="text-blurred mb-0 text-tertiary">
+                            <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ {{ post.posted|timesince }} ago {% if post.edited != post.posted %}(edited){% endif %}
                         </p>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
 
                 {% empty %}
 
-                    <span class="text-muted">No tags</span>
+                    <span class="text-blurred">No tags</span>
 
                 {% endfor %}
 
@@ -57,7 +57,7 @@
 
             <div class="position-relative my-2 post-content-wrapper">
                 <div class="post-content">
-                    <div class="post-image text-justify text-white">
+                    <div class="post-image text-justify text-white text-content">
                         {{ post.content|safe }}
                     </div>
                 </div>

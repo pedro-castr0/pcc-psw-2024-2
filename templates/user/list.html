@@ -2,73 +2,76 @@
 
 {% block content %}
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>USERNAME</th>
-            <th>EMAIL</th>
-            <th>FOLLOW</th>
-            <th>EDIT</th>
-            <th>DELETE</th>
-            <th>DENUNCIA</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        {% for user in users %}
-
-        <tr>
-            <td>#{{user.id}}</td>
-            <td>{{user.username}}</td>
-            <td>{{user.email}}</td>
-            <td>
-                <form method="post" action="{% url 'follow' %}"> {% csrf_token %}
-                    <input type="hidden" name="followed_id" value="{{ user.id }}">
-                    <button type="submit">Follow</button>
-                </form>
-            </td>
-            <td>
-                <a href="/user/edit/{{user.id}}">
-                    Edit
-                </a>
-            </td>
-            <td>
-                <a href="/user/delete/{{user.id}}">
-                    Delete
-                </a>
-            </td>
-
-            <td>
-    <div class="dropdown position-relative">
-        <!-- Botão/ícone -->
-        <a href="#" class="abrir-denuncia nav-link"
-           data-url="{% url 'denuncia:criar_denuncia' app_label='auth' model_name='user' object_id=user.id %}"
-           data-object-id="{{ user.id }}">
-            <i class="fas fa-flag"></i>
-        </a>
-
-        <!-- Dropdown (conteúdo será injetado via AJAX) -->
-        <div class="dropdown-menu dropdown-menu-end shadow-sm form-denuncia p-3"
-             id="form-denuncia-{{ user.id }}"
-             style="min-width: 300px; min-height: auto; display: none;">
-            <div class="text-center text-muted">Carregando...</div>
+<div class="container my-4">
+    <div class="card shadow-sm border-0 rounded-3" style="background-color:#110D17;">
+        <div class="card-header text-white fw-bold" style="background-color:#31293E; border-bottom: 2px solid #31293E;">
+            Lista de Usuários
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0" style="background-color:#110D17; border:1px solid #31293E;">
+                    <thead style="background-color:#31293E;">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Follow</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                            <th scope="col">Denúncia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td class="align-middle">#{{ user.id }}</td>
+                            <td class="align-middle">{{ user.username }}</td>
+                            <td class="align-middle">{{ user.email }}</td>
+                            <td class="align-middle">
+                                <form method="post" action="{% url 'follow' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="followed_id" value="{{ user.id }}">
+                                    <button type="submit" class="btn btn-sm text-white" style="background-color:#31293E; border:none;">
+                                        Follow
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="align-middle">
+                                <a href="/user/edit/{{user.id}}" class="btn btn-sm btn-outline-light">
+                                    Edit
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <a href="/user/delete/{{user.id}}" class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <div class="dropdown position-relative">
+                                    <a href="#" class="abrir-denuncia nav-link text-danger"
+                                       data-url="{% url 'denuncia:criar_denuncia' app_label='auth' model_name='user' object_id=user.id %}"
+                                       data-object-id="{{ user.id }}">
+                                        <i class="fas fa-flag"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end shadow-sm form-denuncia p-3"
+                                         id="form-denuncia-{{ user.id }}"
+                                         style="min-width: 300px; min-height: auto; display: none;">
+                                        <div class="text-center text-muted">Carregando...</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-end" style="background-color:#31293E; border-top: 2px solid #31293E;">
+            <a href="/user/create/" class="btn btn-sm text-white fw-bold" style="background-color:#110D17; border:1px solid #31293E;">
+                + Create
+            </a>
         </div>
     </div>
-</td>
-
-
-        </tr>
-
-
-
-        {% endfor %}
-
-    </tbody>
-</table>
-
-<a href="/user/create/">
-    Create
-</a>
+</div>
 
 {% endblock content %}

@@ -16,36 +16,36 @@
         <p class="mb-0 ml-2 text-tertiary text-white font-weight-bold">Share</p>
     </button>
 
-    {% if post.author.id != user.id %}
-
-        {% include 'post/actions/report.html' %}
-
-    {% else %}
-    
-    <div class="d-flex align-items-center">
-        <a 
-            class="btn button-magenta d-flex align-items-center justify-content-center button-small-circle rounded-pill p-0 mr-2" 
-            href="/post/{{ post.id }}/edit">
-
-            <i class="fas fa-fw fa-pen-alt text-tertiary"></i>
-        </a>
-
-        <form action="/post/{{ post.id }}/delete" method="post"> {% csrf_token %}
-            <button type="submit" class="btn button-magenta d-flex align-items-center justify-content-center button-small-circle rounded-pill p-0 mr-2">
-                <i class="fas fa-fw fa-trash-alt text-tertiary text-red"></i>
-            </button>
-        </form>
-    </div>
-
-
-    {% endif %}
-
     {% if not post_button_hide %}
 
-        <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium-circle rounded-circle p-0">
+        <a href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium-circle rounded-circle p-0 mr-2">
             <i class="fas fa-fw fa-expand-arrows-alt text-white text-tertiary"></i>
         </a>
 
     {% endif %}
 
+    <div class="d-flex align-items-center">
+
+        {% if post.author.id != user.id %}
+
+            {% include 'post/actions/report.html' %}
+
+        {% else %}
+
+            <a 
+                class="btn button-magenta d-flex align-items-center justify-content-center button-small-circle rounded-pill p-0 mr-2" 
+                href="/post/{{ post.id }}/edit">
+
+                <i class="fas fa-fw fa-pen-alt text-tertiary"></i>
+            </a>
+
+            <form action="/post/{{ post.id }}/delete" method="post"> {% csrf_token %}
+                <button type="submit" class="btn button-magenta d-flex align-items-center justify-content-center button-small-circle rounded-pill p-0">
+                    <i class="fas fa-fw fa-trash-alt text-tertiary text-red"></i>
+                </button>
+            </form>
+
+        {% endif %}
+
+    </div>
 </div>
