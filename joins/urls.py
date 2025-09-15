@@ -4,5 +4,6 @@ from . import views
 urlpatterns = [
     path('join/', views.join, name='join'),
     path('list/', views.list, name='list'),
-    path('leave/', views.leave, name='leave')
+    path('leave/', views.leave, name='leave'),
+    path('kick/<int:id>', views.kick, name='kick')
 ]

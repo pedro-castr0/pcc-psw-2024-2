@@ -1,7 +1,8 @@
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Community, Join
+from django.urls import reverse
 
 @login_required
 def join(request):
@@ -34,3 +35,11 @@ def list(request):
     joins = Join.objects.all()
 
     return render(request, 'join/list.html', {'joins':joins})
+
+@login_required
+def kick(request, id):
+    join = get_object_or_404(Join, id=id)
+    join.delete()
+
+    return redirect(reverse('view_community', kwargs={'name': join.community.name}))
+

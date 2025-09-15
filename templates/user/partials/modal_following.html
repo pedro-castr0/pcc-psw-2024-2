@@ -1,0 +1,57 @@
+{% load static %}
+
+<div class="modal" id="followingModal" tabindex="-1" role="dialog" aria-labelledby="followingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content card-dark">
+            <div class="modal-header d-flex gradient-black-magenta border-bottom-magenta align-items-center">
+                <p class="modal-title text-subtitle font-weight-bold text-white my-0" id="followingModalLabel">Following list</p>
+
+                <button type="button" class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle button-small-circle" data-dismiss="modal">
+                    <p class="text-subtitle m-0 font-weight-bold" aria-hidden="true">&times;</p>
+                </button>
+            </div>
+
+            <div class="modal-body p-2">
+
+                {% for follow in person.following.all %}
+
+                    <div class="d-flex align-items-center justify-content-between card-hover-magenta p-3 rounded">
+                        <div class="d-flex align-items-center">
+                            <img 
+                                src="{% if follow.followed.profile.profile_picture %}{{ follow.followed.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                                class="rounded-circle circle-picture">
+
+                            <div class="ml-3">
+                                <p class="font-weight-bold mb-0 text-subtitle">
+                                    <a href="{% if follow.followed.profile %}/user/profile/{{ follow.followed.username }}{% else %}/user/list/{% endif %}" class="text-decoration-none link-lilac">
+                                        {{ follow.followed.profile.display_name }}
+                                    </a>
+                                </p>
+
+                                <p class="text-blurred mb-0 text-tertiary">
+                                    <span class="followers-count" data-user-id="{{ follow.followed.id }}">{{ follow.followed.followers.count }}</span> followers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+
+                            {% if user.id != follow.followed.id %}
+
+                                {% include "buttons/follow.html" with person=follow.followed %}
+
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                {% empty %}
+
+                    <p class="m-3 text-content text-blurred">This user isn't follow anyone.</p>
+
+                {% endfor %}
+
+            </div>    
+        </div>
+    </div>
+</div>

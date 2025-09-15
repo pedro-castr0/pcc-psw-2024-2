@@ -13,7 +13,7 @@
 
             </div>
 
-            <div class="card card-dark p-3 mb-4 ml-2">
+            <div class="card card-dark p-3 ml-2">
                 <div class="d-flex">
                     <img 
                         src="{% if comment.author.profile.profile_picture %}{{ comment.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
@@ -51,10 +51,9 @@
 
                 {% include 'comment/actions/options.html' %}
 
-                <div id="replies-{{ comment.id }}" class="d-none">
+                {% if comment.replies.exists %}
 
-                    {% if comment.replies.exists %}
-
+                    <div id="replies-{{ comment.id }}" class="d-none">
                         <p class="text-white font-weight-bold my-3 text-subtitle">Replies</p>
 
                         {% for reply in comment.replies.all %}
@@ -63,9 +62,10 @@
 
                         {% endfor %}
 
-                    {% endif %}
+                    </div>
+                    
+                {% endif %}
 
-                </div>
             </div>
         </div>
 

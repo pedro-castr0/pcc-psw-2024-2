@@ -7,15 +7,15 @@
         
     </div>
 
-    <div class="ml-2">
-        <div class="card card-dark p-3 flex-grow-1">
+    <div class="ml-2 flex-grow-1">
+        <div class="card card-dark p-3">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <div class="d-flex align-items-center">
                     <img 
                         src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
                         class="rounded-circle circle-picture">
 
-                    <div class="ml-2">
+                    <div class="ml-3">
                         <p class="font-weight-bold mb-0 text-subtitle">
                             <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none link-lilac">
 

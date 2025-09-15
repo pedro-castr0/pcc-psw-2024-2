@@ -20,11 +20,11 @@
                 {% endif %}
 
             </a>
-            ∙ on {{ comment.posted|date:"M d, Y" }}
+            ∙ on {{ comment.posted|timesince }}
         </p>
     </div>
 
-    <div class="text-justify text-white my-2">{{ comment.content }}</div>
+    <div class="text-justify text-white my-2 text-content">{{ comment.content }}</div>
 
     {% if comment.parent %}
 

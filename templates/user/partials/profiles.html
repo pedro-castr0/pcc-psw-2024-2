@@ -11,17 +11,7 @@
                 <div class="ml-3">
                     <p class="font-weight-bold mb-0 text-subtitle">
                         <a href="{% if person.profile %}/user/profile/{{ person.username }}{% else %}/user/list/{% endif %}" class="text-decoration-none link-lilac">
-
-                            {% if person.profile.display_name %}
-
-                                {{ person.profile.display_name }}
-
-                            {% else %}
-
-                                {{ person.username }}
-
-                            {% endif %}
-
+                            {{ person.profile.display_name }}
                         </a>
                     </p>
 

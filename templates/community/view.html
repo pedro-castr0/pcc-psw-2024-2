@@ -21,7 +21,7 @@
 
             <p class="text-content text-blurred mb-2">
                 <span class="font-weight-bold text-white">@{{ community.name }}</span> · 
-                <span id="members-count-{{ community.id }}">{{ community.members.count }}</span> followers · {{ community.posts.count }} posts
+                <a href="" data-toggle="modal" data-target="#membersModal" class="text-decoration-none text-blurred link-lilac"><span id="members-count-{{ community.id }}">{{ community.members.count }}</span> members</a> · {{ community.posts.count }} posts
             </p>
             
             <div class="d-flex align-items-center">
@@ -114,5 +114,7 @@
         </div>
     </div>
 </div>
+
+{% include 'user/partials/modal_members.html' %}
 
 {% endblock content %}

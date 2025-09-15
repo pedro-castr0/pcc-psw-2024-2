@@ -1,0 +1,29 @@
+{% load static %}
+
+<div class="modal" id="ownedModal" tabindex="-1" role="dialog" aria-labelledby="ownedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content card-dark">
+            <div class="modal-header d-flex gradient-black-magenta border-bottom-magenta align-items-center">
+                <p class="modal-title text-subtitle font-weight-bold text-white my-0" id="ownedModalLabel">Owned communities</p>
+
+                <button type="button" class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle button-small-circle" data-dismiss="modal">
+                    <p class="text-subtitle m-0 font-weight-bold" aria-hidden="true">&times;</p>
+                </button>
+            </div>
+
+            <div class="modal-body p-2">
+
+                {% for community in person.communities.all %}
+
+                    {% include 'community/partials/info.html' %}
+
+                {% empty %}
+
+                    <p class="m-3 text-content text-blurred">This user doesn't own any community.</p>
+
+                {% endfor %}
+
+            </div>    
+        </div>
+    </div>
+</div>

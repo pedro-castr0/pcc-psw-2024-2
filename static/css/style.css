@@ -1,5 +1,6 @@
 .ql-editor img {
-    max-width: 50%;
+    width: 50%;
+    margin-left: 25%;
     height: auto;
     border-radius: 0.3rem;
     border: 1px solid #c1c2c7;
@@ -19,11 +20,12 @@
 }
 
 .post-image img {
-    max-width: 50%;
+    width: 50%;
     height: auto;
     border-radius: 0.3rem;
-    border: 1px solid #c1c2c750;
+    border: 1px solid #31293E !important;
     object-fit: cover;
+    margin-left: 25%;
 }
 
 .comment-form {
@@ -41,55 +43,62 @@
 .info-banner {
     height: 80px;
     border-bottom: 1px solid #31293E;
+    object-fit: cover;
 }
 
 .circle-picture {
     width: 40px;
     height: 40px;
     border: 1px solid #31293E;
+    object-fit: cover;
 }
 
 .circle-picture-small {
     width: 30px;
     height: 30px;
     border: 1px solid #31293E;
+    object-fit: cover;
 }
 
 .circle-picture-tiny {
     width: 20px;
     height: 20px;
     border: 1px solid #31293E;
+    object-fit: cover;
 }
 
 .profile-picture {
     height: 120px;
     width: 120px;
     border: 1px solid #31293E;
+    object-fit: cover;
 }
 
 .profile-picture-medium {
     height: 80px;
     width: 80px;
     border: 1px solid #31293E;
+    object-fit: cover;
 }
 
 .community-banner {
     height: 200px;
-    overflow: hidden;
-    position: relative;
+    width: 100%;
     border: 1px solid #31293E;
+    overflow: hidden;
+    object-fit: cover;
 }
 
 .community-picture {
     height: 120px;
     width: 120px;
     border: 1px solid #31293E;
+    overflow: hidden;
+    object-fit: cover;
 }
 
 .button-medium {
-
     height: 40px;
-
 }
 
 .button-medium-circle {
@@ -121,6 +130,10 @@
     font-size: 12px;
 }
 
+.text-tiny {
+    font-size: 6px;
+}
+
 .button-small-square {
     height: 30px;
 }
@@ -128,6 +141,11 @@
 .button-small-circle {
     height: 30px; 
     width: 30px;
+}
+
+.button-tiny-circle {
+    height: 20px !important; 
+    width: 20px !important;
 }
 
 .post-content-wrapper {
@@ -370,10 +388,47 @@ input.tag-btn:checked + label {
     bottom: 1px;
     width: 100%;
     height: 2px;
-    background-color: #ffffff; /* roxo de destaque */
+    background-color: #ffffff;
     border-radius: 2px 2px 0 0;
 }
 
-.border-dark {
-    border-bottom: 1px solid #31293E;
+.border-bottom-magenta {
+    border-bottom: 1px solid #31293E !important;
+}
+
+.border-magenta {
+    border: 1px solid #31293E !important;
+}
+
+.modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #f7e8ff rgba(255,255,255,0);
+}
+
+.modal-content {
+    margin-top: 40%;
+}
+
+.modal-header {
+    height: 60px !important;
+}
+
+.card-hover-magenta:hover {
+    background: #282133 !important;
+}
+
+.text-overflow {
+  width: 140px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.text-overflow-small {
+  width: 70px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

@@ -12,9 +12,10 @@ def home(request):
     posts = Post.objects.all()
     communities = Community.objects.all()
     users = User.objects.all()
+    tags = Tag.objects.all()
 
     return render(request, 'home/home.html', {
-        'posts':posts, 'communities':communities, 'users':users
+        'posts':posts, 'communities':communities, 'users':users, 'tags':tags
     })
 
 def search(request):

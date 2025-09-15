@@ -15,7 +15,13 @@
 
             <p class="text-content text-blurred mb-2">
                 <span class="font-weight-bold text-white">@{{ profile.user.username }}</span> · 
-                <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span> followers · {{ profile.user.posts.count }} posts
+                <a href="" class="text-decoration-none text-blurred link-lilac" data-toggle="modal" data-target="#followersModal">
+                    <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span>
+                     followers
+                </a> · 
+                <a href="" class="text-decoration-none text-blurred link-lilac" data-toggle="modal" data-target="#followingModal">
+                    {{ profile.user.following.count }} following
+                </a> · {{ profile.user.posts.count }} posts
             </p>
                 
             <div class="d-flex align-items-center">
@@ -97,52 +103,12 @@
 
             {% include 'user/partials/about.html' with person=profile.user %}
 
-            <p class="font-weight-bold mb-2 mt-3 text-content text-blurred">OWNED COMMUNITIES ({{ profile.user.communities.count }})</p>
-
-            {% for community in profile.user.communities.all %}
-
-                {% include 'community/partials/info.html' %}
-
-            {% empty %}
-
-                <p class="my-2 text-content">This user doesn't have any communities.</p>
-
-            {% endfor %}
-
-            <p class="font-weight-bold mb-2 mt-3 text-content text-blurred">FOLLOWING ({{ profile.user.following.count }})</p>
-
-            {% for follow in profile.user.following.all %}
-
-                {% include 'user/partials/profiles.html' with person=follow.followed %}
-            
-            {% empty %}
-
-                <p class="my-2 text-tertiary text-blurred">This user don't follow anyone.</p>
-
-            {% endfor %}
-
-            <p class="font-weight-bold mb-2 mt-3 text-content text-blurred">JOINED ({{ profile.user.joined_communities.count }})</p>
-
-            {% for join in profile.user.joined_communities.all %}
-
-                {% include 'community/partials/info.html' with community=join.community %}
-
-            {% empty %}
-
-                <p class="my-2 text-tertiary text-blurred">This user hasn't joined any community.</p>
-
-            {% endfor %}
-
-            {% if profile.user.id != user.id %}
-
-                <p class="font-weight-bold mb-2 text-content mt-3 text-blurred">REPORT</p>
-
-                {% include 'profile/actions/report.html' with person=profile.user %}
-
-            {% endif %}
-
         </div>
     </div>
 </div>
+
+{% include 'user/partials/modal_followers.html' with person=profile.user %}
+
+{% include 'user/partials/modal_following.html' with person=profile.user %}
 
 {% endblock content %}

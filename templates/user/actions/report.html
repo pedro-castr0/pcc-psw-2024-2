@@ -1,0 +1,16 @@
+{% load static %}
+
+<div class="dropdown d-flex ml-2">
+    <a 
+        href="" 
+        class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle button-small-circle abrir-denuncia" 
+        data-url="{% url 'denuncia:criar_denuncia' app_label='auth' model_name='user' object_id=person.id %}" 
+        data-object-id="{{ person.id }}">
+
+        <i class="fas fa-flag fa-fw text-tertiary"></i>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-right form-denuncia p-3 animated--grow-in" id="form-denuncia-{{ person.id }}" style="min-width: 300px; display: none;">
+        <div class="text-center text-muted">Loading...</div>
+    </div>
+</div>
