@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 from django.http import JsonResponse
+=======
+from django.http import JsonResponse, HttpResponseForbidden
+# Importação atualizada para incluir permission_required
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Community, Join
 from django.urls import reverse
 
+# Esta view está correta. A ação de entrar numa comunidade
+# deve estar disponível para qualquer usuário logado.
 @login_required
 @permission_required('joins.add_join', raise_exception=True)
 def join(request):
@@ -20,6 +27,8 @@ def join(request):
         members_count = community.members.count()
         return JsonResponse({'status': 'success', 'joined': True, 'members_count': members_count})
 
+# Esta view também está correta. A lógica já garante que
+# o usuário só pode remover a si mesmo de uma comunidade.
 @login_required
 @permission_required('joins.delete_join', raise_exception=True)
 def leave(request):
@@ -31,19 +40,35 @@ def leave(request):
         community = get_object_or_404(Community, id=community_id)
         members_count = community.members.count()
         return JsonResponse({'status': 'success', 'joined': False, 'members_count': members_count})
-    
+
+# Apenas usuários com permissão para 'ver' joins podem acessar esta lista.
 @login_required
+<<<<<<< HEAD
 @permission_required('joins.view_join', raise_exception=True)
+=======
+@permission_required('join.view_join', raise_exception=True)
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def list(request):
     joins = Join.objects.all()
 
     return render(request, 'join/list.html', {'joins':joins})
 
+# Apenas usuários com permissão para 'deletar' um join (expulsar) podem acessar.
 @login_required
+<<<<<<< HEAD
 @permission_required('joins.delete_join', raise_exception=True)
+=======
+@permission_required('join.delete_join', raise_exception=True)
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def kick(request, id):
     join = get_object_or_404(Join, id=id)
+    community = join.community
+
+    # VERIFICAÇÃO DE SEGURANÇA CRÍTICA:
+    # Apenas o criador da comunidade ou um superusuário pode expulsar alguém.
+    if request.user != community.creator and not request.user.is_superuser:
+        return HttpResponseForbidden("Você não tem permissão para expulsar membros desta comunidade.")
+
     join.delete()
 
-    return redirect(reverse('view_community', kwargs={'name': join.community.name}))
-
+    return redirect(reverse('view', kwargs={'name': community.name}))

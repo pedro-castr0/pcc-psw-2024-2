@@ -1,13 +1,25 @@
+# seu_projeto/comments/views.py
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment, Post
 from django.contrib.auth.models import User
+<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, JsonResponse
+=======
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
+from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.db.models import Count, Q
 
 @login_required
+<<<<<<< HEAD
+=======
+# Apenas usuários com permissão de 'adicionar comentário' podem acessar esta view.
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.add_comment', raise_exception=True)
 def comment(request):
     if request.method == 'POST':
@@ -30,20 +42,27 @@ def comment(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
+<<<<<<< HEAD
+=======
+# Apenas usuários com permissão de 'modificar comentário' podem acessar.
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.change_comment', raise_exception=True)
 def edit(request, id):
+    comment = get_object_or_404(Comment, id=id)
+
+    # Verificação extra: garante que apenas o autor do comentário ou um superusuário pode editá-lo.
+    if not (request.user == comment.author or request.user.is_superuser):
+        return HttpResponseForbidden("Você não tem permissão para editar este comentário.")
+
     posts = Post.objects.all()
     comments = Comment.objects.all()
-    comment = get_object_or_404(Comment, id=id)
 
     if request.method == 'POST':
         comment.content = request.POST.get('content')
-        author_id = request.POST.get('author')
-        comment.author = User.objects.get(id = author_id)
         post_id = request.POST.get('post')
         comment.post = Post.objects.get(id = post_id)
         parent_id = request.POST.get('parent')
-        comment.parent = Comment.objects.get(id = parent_id)
+        comment.parent = Comment.objects.get(id = parent_id) if parent_id else None
 
         comment.save()
 
@@ -52,33 +71,50 @@ def edit(request, id):
     return render(request, 'comment/form.html', {'comment':comment, 'comments':comments, 'posts':posts})
 
 @login_required
+<<<<<<< HEAD
 @permission_required('comments.view_comment', raise_exception=True)
+=======
+# Qualquer usuário logado pode ver um comentário individual.
+# Se precisar restringir, descomente a linha abaixo.
+# @permission_required('comments.view_comment', raise_exception=True)
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def view(request, id):
     comment = get_object_or_404(Comment, id=id)
     
     replies = comment.replies.all()
 
     get_karma = User.objects.annotate(
-
         karma=Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=True))
             - Count("posts__feedback_posts", filter=Q(posts__feedback_posts__feedback=False))
-
         ).get(id=comment.author.id)
 
     return render(request, 'comment/view.html', {'comment':comment, 'replies':replies, 'get_karma': get_karma, 'hide_view_button':True})
 
 
 @login_required
+<<<<<<< HEAD
+=======
+# Apenas usuários com permissão de 'deletar comentário' podem acessar.
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.delete_comment', raise_exception=True)
 def delete(request, id):
     comment = get_object_or_404(Comment, id=id)
+
+    # Verificação extra: garante que apenas o autor ou um superusuário pode deletar.
+    if not (request.user == comment.author or request.user.is_superuser):
+        return HttpResponseForbidden("Você não tem permissão para deletar este comentário.")
+
+    post_id = comment.post.id  # Salva o ID do post antes de deletar o comentário
     comment.delete()
 
-    return redirect(reverse('view_post', kwargs={'id': comment.post.id}))
+    return redirect(reverse('view_post', kwargs={'id': post_id}))
 
 @login_required
+<<<<<<< HEAD
+=======
+# Apenas usuários com permissão de 'ver comentário' podem acessar a lista completa.
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.view_comment', raise_exception=True)
 def list(request):
     comments = Comment.objects.all()
     return render(request, 'comment/list.html', {'comments':comments})
-

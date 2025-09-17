@@ -1,11 +1,15 @@
 from django.shortcuts import redirect, render
+<<<<<<< HEAD
+=======
+# Importação atualizada para incluir permission_required
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import User, Follow
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from notification.models import Notification
-from django.http import JsonResponse
 
+# Esta view já está correta com @login_required, pois seguir é uma ação
+# padrão para qualquer usuário autenticado.
 @login_required
 @permission_required('follows.add_follow', raise_exception=True)
 def follow(request):
@@ -35,6 +39,8 @@ def follow(request):
             'followers_count': followed.followers.count()
         })
 
+# Esta view também está correta com @login_required. A lógica interna
+# já garante que o usuário só pode dar unfollow em quem ele mesmo segue.
 @login_required
 @permission_required('follows.delete_follow', raise_exception=True)
 def unfollow(request):
@@ -49,8 +55,13 @@ def unfollow(request):
             'followers_count': followed.followers.count()
         })
 
+# Apenas usuários com permissão para 'ver' follows podem acessar esta lista.
 @login_required
+<<<<<<< HEAD
 @permission_required('follows.view_follow', raise_exception=True)
+=======
+@permission_required('follow.view_follow', raise_exception=True)
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def list(request):
     follows = Follow.objects.all()
     return render(request, 'follow/list.html', {'follows':follows})

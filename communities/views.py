@@ -3,11 +3,19 @@ from communities.models import Community, CommunityRule
 from posts.models import Post
 from tags.models import Tag
 from django.contrib.auth.models import User
+<<<<<<< HEAD
+=======
+# Importação atualizada para incluir o permission_required
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 from .forms import CommunityRuleForm
 
 @login_required
+<<<<<<< HEAD
+=======
+# Apenas usuários com permissão para 'adicionar comunidade' podem criar uma.
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('communities.add_community', raise_exception=True)
 def create(request):
     if request.method == 'GET':
@@ -34,9 +42,18 @@ def create(request):
         return redirect(reverse('view_community', kwargs={'name': community.name}))
 
 @login_required
+<<<<<<< HEAD
+=======
+# Apenas usuários com permissão para 'modificar comunidade' podem editar.
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('communities.change_community', raise_exception=True)
 def edit(request, name):
     community = get_object_or_404(Community, name=name)
+
+    # Verificação extra: apenas o criador pode editar.
+    if request.user != community.creator:
+        # Poderia ser um HttpResponseForbidden("Acesso negado") também.
+        return redirect(reverse('view', kwargs={'name': community.name}))
 
     if request.method == 'POST':
         community.name = request.POST.get('name')
@@ -56,6 +73,10 @@ def edit(request, name):
     return render(request, 'community/form.html', {'community': community})
 
 @login_required
+<<<<<<< HEAD
+=======
+# Apenas usuários com permissão para 'deletar comunidade' podem deletar.
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('communities.delete_community', raise_exception=True)
 def delete(request, name):
     community = get_object_or_404(Community, name=name)
@@ -67,6 +88,8 @@ def delete(request, name):
 
     return redirect(reverse('list'))
 
+# Views de leitura geralmente não precisam de permissão específica,
+# a menos que você queira que apenas certos usuários possam vê-las.
 @login_required
 @permission_required('communities.view_community', raise_exception=True)
 def view(request, name):
@@ -107,7 +130,12 @@ def list(request):
     return render(request, 'community/list.html', {'communities': communities})
 
 @login_required
+<<<<<<< HEAD
 @permission_required('communities.view_community', raise_exception=True)
+=======
+# Apenas usuários com permissão para 'adicionar regra de comunidade' podem adicionar.
+@permission_required('communities.add_communityrule', raise_exception=True)
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def add_rule(request, name):
     community = get_object_or_404(Community, name=name)
 
@@ -127,6 +155,7 @@ def add_rule(request, name):
     return render(request, "community/add_rule.html", {"form": form, "community": community})
 
 @login_required
+<<<<<<< HEAD
 @permission_required('communities.view_community', raise_exception=True)
 def edit_rule(request, name, rule_id):
     community = get_object_or_404(Community, name=name)
@@ -160,3 +189,9 @@ def delete_rule(request, name, rule_id):
         rule.delete()
 
     return redirect(reverse('view_community', kwargs={'name': community.name}))
+=======
+# Apenas usuários com permissão para 'modificar regra de comunidade' podem editar.
+@permission_required('communities.change_communityrule', raise_exception=True)
+def edit_rule(request, name, rule_id):
+    community = get_
+>>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9

@@ -44,18 +44,4 @@ def tempo_relativo(dt):
     elif delta < timedelta(hours=1):
         minutes = int(delta.total_seconds() / 60)
         return f"{minutes} minuto{'s' if minutes > 1 else ''} atrás"
-    elif delta < timedelta(days=1):
-        hours = int(delta.total_seconds() / 3600)
-        return f"{hours} hora{'s' if hours > 1 else ''} atrás"
-    elif delta < timedelta(days=7):
-        days = delta.days
-        return f"{days} dia{'s' if days > 1 else ''} atrás"
-    elif delta < timedelta(days=30):
-        weeks = delta.days // 7
-        return f"{weeks} semana{'s' if weeks > 1 else ''} atrás"
-    elif delta < timedelta(days=365):
-        months = delta.days // 30
-        return f"{months} mês{'es' if months > 1 else ''} atrás"
-    else:
-        years = delta.days // 365
-        return f"{years} ano{'s' if years > 1 else ''} atrás"
+    # ... (resto da função)
