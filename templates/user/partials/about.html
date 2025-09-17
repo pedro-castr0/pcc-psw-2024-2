@@ -52,19 +52,38 @@
             </p>
         </div>
 
-        <div class="d-flex align-items-center mr-3 mt-2">
-            <a href="" class="text-tertiary text-blurred mb-0 text-justify text-decoration-none link-lilac" data-toggle="modal" data-target="#joinedModal">
-                <i class="fas fa-fw fa-users"></i>
-                Active in {{ person.joined_communities.count }} communities
-            </a>
-        </div>
+        {% if person.joined_communities.exists %}
 
-        <div class="d-flex align-items-center mr-3 mt-2">
-            <a href="" class="text-tertiary text-blurred mb-0 text-justify text-decoration-none link-lilac" data-toggle="modal" data-target="#ownedModal">
-                <i class="fas fa-fw fa-hammer"></i>
-                Own {{ person.communities.count }} communities
-            </a>
-        </div>
+            <div class="d-flex align-items-center mr-3 mt-2">
+                <a href="" class="text-tertiary text-blurred mb-0 text-justify text-decoration-none link-lilac" data-toggle="modal" data-target="#joinedModal">
+                    <i class="fas fa-fw fa-users"></i>
+                    Active in {{ person.joined_communities.count }} communities
+                </a>
+            </div>
+
+        {% endif %}
+
+        {% if person.communities.exists %}
+
+            <div class="d-flex align-items-center mr-3 mt-2">
+                <a href="" class="text-tertiary text-blurred mb-0 text-justify text-decoration-none link-lilac" data-toggle="modal" data-target="#ownedModal">
+                    <i class="fas fa-fw fa-hammer"></i>
+                    Own {{ person.communities.count }} communities
+                </a>
+            </div>
+
+        {% endif %}
+
+        {% if person.is_superuser %}
+
+            <div class="d-flex align-items-center mr-3 mt-2">
+                <p class="text-tertiary text-blurred mb-0 text-justify text-decoration-none">
+                    <i class="fas fa-fw fa-crown"></i>
+                    Site admin
+                </p>
+            </div>
+
+        {% endif %}
     </div>
 </div>
 

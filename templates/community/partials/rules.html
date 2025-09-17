@@ -1,8 +1,9 @@
-{% for rule in community.rules.all %}
-
-    <div class="mb-3">
+<div class="d-grid gap-2">
+    {% for rule in community.rules.all %}
+    
+    <div>
         <p class="font-weight-bold mb-2 text-subtitle text-white text-justify">{{ rule.title }}</p>
-        <p class="text-blurred mb-2 text-content text-justify">{{ rule.description }}</p>
+        <p class="text-blurred text-content text-justify mb-0">{{ rule.description }}</p>
 
         {% if user.id == community.creator.id %}
 
@@ -48,7 +49,7 @@
             </div>
 
         {% endif %}
-
     </div>
 
-{% endfor %}
+    {% endfor %}
+</div>

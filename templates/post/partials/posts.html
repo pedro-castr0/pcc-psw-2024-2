@@ -16,21 +16,23 @@
                         class="rounded-circle circle-picture">
 
                     <div class="ml-3">
-                        <p class="font-weight-bold mb-0 text-subtitle">
-                            <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none link-lilac">
+                        <div class="d-flex align-items-center">
+                            <p class="font-weight-bold mb-0 text-subtitle">
+                                <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none link-lilac">
 
-                            {% if post.author.profile.display_name %}
+                                    {{ post.author.profile.display_name }}
 
-                                {{ post.author.profile.display_name }}
+                                </a>
+                            </p>
 
-                            {% else %}
+                            {% if post.author.is_superuser %}
 
-                                {{ post.author.username }}
+                                <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
 
                             {% endif %}
 
-                            </a>
-                        </p>
+                        </div>
+
 
                         <p class="text-blurred mb-0 text-tertiary">
                             <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ {{ post.posted|timesince }} ago {% if post.edited != post.posted %}(edited){% endif %}

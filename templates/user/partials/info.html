@@ -10,11 +10,20 @@
                     class="rounded-circle border circle-picture">
 
                 <div class="ml-2">
-                    <p class="font-weight-bold mb-0 text-subtitle">
-                        <a href="/user/profile/{{ person.username }}" class="text-decoration-none">
-                            {{ person.profile.display_name }}
-                        </a>
-                    </p>
+                    <div class="d-flex align-items-center">
+                        <p class="font-weight-bold mb-0 text-subtitle">
+                            <a href="/user/profile/{{ person.username }}" class="text-decoration-none link-lilac">
+                                {{ person.profile.display_name }}
+                            </a>
+                        </p>
+
+                        {% if person.is_superuser %}
+                                
+                            <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                        {% endif %}
+
+                    </div>
 
                     <p class="text-muted mb-0 text-content" >
                         @{{ person.username }}

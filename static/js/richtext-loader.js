@@ -5,17 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
         modules: {
             toolbar: [
                 [
-                    {'font': []},
-                    {'header': []},
-                    {'align': []},
                     'bold', 'italic', 'underline', 'strike', 'blockquote',
                     {'color': []},
-                    {'background': []},
                 ],
                 ['code-block', 'link'],
                 ['clean'],
                 ['image'],
-                ['video']
             ]
         },
         class:"rounded border"

@@ -1,21 +1,18 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from .models import Notification
 from django.utils import timezone
 from datetime import timedelta
 
-
-
 @login_required
+@permission_required('notification.view_notification', raise_exception=True)
 def get_notifications(request):
     notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
     
-    # Marca como lidas
     notifications.filter(read=False).update(read=True)
 
     data = []
     for n in notifications:
-        # Link do usuário: se tiver remetente, aponta para o perfil dele; senão '#'
         user_link = f"/user/profile/{n.sender.username}/" if n.sender else "#"
 
         data.append({
@@ -30,6 +27,7 @@ def get_notifications(request):
     return JsonResponse({"notifications": data, "count": notifications.count()})
 
 
+@login_required
 def tempo_relativo(dt):
     """
     Recebe um datetime e retorna uma string representando o tempo

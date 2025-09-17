@@ -42,14 +42,19 @@ def log_in(request):
         else:
             return redirect('/user/login/')
 
+@login_required
 def log_out(request):
     logout(request)
     return redirect('/user/login/')
 
+@login_required
+@permission_required('users.view_user')
 def list(request):
     users = User.objects.all()
     return render(request, 'user/list.html', {'users':users})
 
+@login_required
+@permission_required('users.change_user')
 def edit(request, id):
     user = User.objects.get(id = id)
 
@@ -64,6 +69,8 @@ def edit(request, id):
     
     return render(request, 'user/form.html', {'user':user})
 
+@login_required
+@permission_required('users.delete_user')
 def delete(request, id):
     user = User.objects.get(id = id)
     user.delete()

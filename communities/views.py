@@ -3,14 +3,12 @@ from communities.models import Community, CommunityRule
 from posts.models import Post
 from tags.models import Tag
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
-
 from .forms import CommunityRuleForm
 
-# === Comunidades ===
-
 @login_required
+@permission_required('communities.add_community', raise_exception=True)
 def create(request):
     if request.method == 'GET':
         return render(request, 'community/form.html')
@@ -33,9 +31,10 @@ def create(request):
         )
         community.save()
         
-        return redirect(reverse('view', kwargs={'name': community.name}))
+        return redirect(reverse('view_community', kwargs={'name': community.name}))
 
 @login_required
+@permission_required('communities.change_community', raise_exception=True)
 def edit(request, name):
     community = get_object_or_404(Community, name=name)
 
@@ -52,28 +51,30 @@ def edit(request, name):
 
         community.save()
 
-        return redirect(reverse('view', kwargs={'name': community.name}))
+        return redirect(reverse('view_community', kwargs={'name': community.name}))
     
     return render(request, 'community/form.html', {'community': community})
 
 @login_required
+@permission_required('communities.delete_community', raise_exception=True)
 def delete(request, name):
     community = get_object_or_404(Community, name=name)
 
     if request.user != community.creator:
-        return redirect(reverse('view', kwargs={'name': community.name}))
+        return redirect(reverse('view_community', kwargs={'name': community.name}))
 
     community.delete()
 
-    # redirecionar para listagem de comunidades
     return redirect(reverse('list'))
 
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def view(request, name):
     community = get_object_or_404(Community, name=name)
     return render(request, 'community/view.html', {'community': community})
 
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def home(request, name):
     posts = Post.objects.filter(community__name=name).distinct()
     community = get_object_or_404(Community, name=name)
@@ -83,6 +84,7 @@ def home(request, name):
     })
 
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def context(request, name):
     community = get_object_or_404(Community, name=name)
     return render(request, 'community/partials/context.html', {
@@ -90,6 +92,7 @@ def context(request, name):
     })
 
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def post(request, name):
     community = get_object_or_404(Community, name=name)
     tags = Tag.objects.all()
@@ -98,13 +101,13 @@ def post(request, name):
     })
 
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def list(request):
     communities = Community.objects.all()
     return render(request, 'community/list.html', {'communities': communities})
 
-# === Regras da Comunidade ===
-
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def add_rule(request, name):
     community = get_object_or_404(Community, name=name)
 
@@ -117,25 +120,26 @@ def add_rule(request, name):
             rule = form.save(commit=False)
             rule.community = community
             rule.save()
-            return redirect(reverse('view', kwargs={'name': community.name}))
+            return redirect(reverse('view_community', kwargs={'name': community.name}))
     else:
         form = CommunityRuleForm()
 
     return render(request, "community/add_rule.html", {"form": form, "community": community})
 
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def edit_rule(request, name, rule_id):
     community = get_object_or_404(Community, name=name)
     rule = get_object_or_404(CommunityRule, id=rule_id, community=community)
 
     if request.user != community.creator:
-        return redirect(reverse('view', kwargs={'name': community.name}))
+        return redirect(reverse('view_community', kwargs={'name': community.name}))
 
     if request.method == "POST":
         form = CommunityRuleForm(request.POST, instance=rule)
         if form.is_valid():
             form.save()
-            return redirect(reverse('view', kwargs={'name': community.name}))
+            return redirect(reverse('view_community', kwargs={'name': community.name}))
     else:
         form = CommunityRuleForm(instance=rule)
 
@@ -144,14 +148,15 @@ def edit_rule(request, name, rule_id):
     })
 
 @login_required
+@permission_required('communities.view_community', raise_exception=True)
 def delete_rule(request, name, rule_id):
     community = get_object_or_404(Community, name=name)
     rule = get_object_or_404(CommunityRule, id=rule_id, community=community)
 
     if request.user != community.creator:
-        return redirect(reverse('view', kwargs={'name': community.name}))
+        return redirect(reverse('view_community', kwargs={'name': community.name}))
 
     if request.method == "POST":
         rule.delete()
 
-    return redirect(reverse('view', kwargs={'name': community.name}))
+    return redirect(reverse('view_community', kwargs={'name': community.name}))

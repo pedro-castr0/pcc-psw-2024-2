@@ -85,27 +85,33 @@
                 </div>
             </div>
 
-            {% if community.rules.exists %}
+            <p class="font-weight-bold text-content text-white mb-2 mt-3">RULES</p>
 
-                <p class="font-weight-bold text-content text-blurred mb-2 mt-3">RULES</p>
+            <div class="card card-dark p-3">
 
-                <div class="card card-dark p-3">
+                {% if community.rules.exists %}
 
                     {% include 'community/partials/rules.html'%}
 
-                </div>
+                {% else %}
 
-            {% endif %}
+                    <p class="text-content text-blurred mb-0">This community doesn't have any rule yet.</p>
 
-            {% if community.creator.id == user.id %}
+                {% endif %}
 
-                <a href="{% url 'add_rule' community.name %}" class="btn button-magenta d-flex justify-content-center align-items-center button-small-square rounded mt-2">
-                    <span class="font-weight-bold text-tertiary">Add rule</span>
-                </a>
+                {% if community.creator.id == user.id %}
 
-            {% else %}
+                    <a href="{% url 'add_rule' community.name %}" class="btn button-magenta d-flex justify-content-center align-items-center button-small-square rounded mt-2">
+                        <span class="font-weight-bold text-tertiary">Add rule</span>
+                    </a>
 
-                <p class="font-weight-bold text-content text-blurred mb-2 mt-3">REPORT</p>
+                {% endif %}
+
+            </div>
+
+            {% if community.creator.id != user.id %}
+
+                <p class="font-weight-bold text-content text-white mb-2 mt-3">REPORT</p>
 
                 {% include 'community/actions/report.html' %}
 

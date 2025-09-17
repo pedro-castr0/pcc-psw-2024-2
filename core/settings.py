@@ -74,7 +74,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'feedback.context_processors.feedbacks',
                 'follows.context_processors.following',
-                'joins.context_processors.joined'
+                'joins.context_processors.joined',
+                'communities.context_processors.owned'
             ],
         },
     },

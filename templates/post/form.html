@@ -4,79 +4,56 @@
 
 {% load static %}
 
-<div class="container my-5 d-flex">
-  <div class="col-8">
-    <div class="card p-3">
-      <p class="mb-3 font-weight-bold text-title text-dark">
-          {% if post.id %}Edit{% else %}Create{% endif %} your post
-      </p>
+<div class="container d-flex flex-column col-8 my-3">
+      <div class="d-flex align-items-center mb-2">
+        <img 
+            src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+            class="rounded circle-picture-tiny">
 
+        <p class="mb-0 text-tertiary ml-2 text-blurred ">
+            in 
+
+            <a href="/community/{{ community.name }}" class="font-weight-bold text-decoration-none link-lilac">
+
+            {% if community.display_name %}
+
+                {{ community.display_name }}
+
+            {% else %}
+
+                {{ community.name }}
+
+            {% endif %}
+
+            </a>
+        </p>
+    </div>
+    
+    <div class="card card-dark p-3">
       <form method="POST" enctype="multipart/form-data" id="rich-text-form" {% if not post.id %} action="/post/create/" {% endif %}> {% csrf_token %}
         <input name="community_id" type="hidden" value="{{ community.id }}">
 
         <div class="mb-3">
-            <p class="text-muted text-content">
-              In <a {% if not post.id %}
-
-                      href="/community/{{ community.id }}/"
-
-                    {% else %}
-
-                      href="/community/{{ post.community.id }}/"
-
-                    {% endif %}
-
-                    class="font-weight-bold text-decoration-none">
-              
-              {% if not post.id %}
-
-                {% if community.display_name %}
-
-                  {{ community.display_name }}
-
-                {% else %}
-
-                  {{ community.name }}
-
-                {% endif %}
-
-              {% else %}
-
-                {% if post.community.display_name %}
-
-                  {{ post.community.display_name }}
-
-                {% else %}
-
-                  {{ post.community.name }}
-
-                {% endif %}
-
-              {% endif %}
-
-            </a></p>
+            <label for="title" class="form-label text-white font-weight-bold text-content">Title:</label>
+            <input type="text" class="form-control input-text" id="title" name="title" value="{{ post.title }}" required>
         </div>
 
         <div class="mb-3">
-            <label for="title" class="form-label text-dark font-weight-bold text-content">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-dark font-weight-bold text-content">Content:</label>
+            <label class="form-label text-white font-weight-bold text-content">Content:</label>
             <div id="rich-text-loader" class="border rounded p-2" style="min-height: 150px;">{{ post.content|safe }}</div>
             <input id="container" name="content" type="hidden">
         </div>
 
         <div class="mb-3">
-            <label class="form-label text-dark font-weight-bold text-content">Post tags:</label>
-            <div class="d-flex flex-wrap">
+            <label class="form-label text-white font-weight-bold text-content">Post tags:</label>
+            
+            <div class="d-grid flex-wrap">
 
                 {% for tag in tags %}
 
-                  <div class="form-check d-inline-block px-0">
+                  <div class="form-check d-inline-block">
                     <input class="form-check-input tag-btn text-tertiary" type="checkbox" name="post_tag" id="tag_{{ tag.id }}" value="{{ tag.id }}" {% if post and tag in post.post_tag.all %} checked {% endif %}>
-                    <label class="form-check-label text-tertiary font-weight-bold mr-2" for="tag_{{ tag.id }}">{{ tag.name }}</label>
+                    <label class="form-check-label text-tertiary font-weight-bold" for="tag_{{ tag.id }}">{{ tag.name }}</label>
                   </div>
 
                 {% endfor %}
@@ -84,34 +61,14 @@
             </div>
         </div>
 
-
-        <div class="mb-3">
-            <label for="file" class="text-dark font-weight-bold text-content">Attach file(s):</label>
-            <input class="file-input" name="file" type="file" multiple>
-        </div>
-
-        <button type="submit" class="btn btn-success button-small-square">
-            <p class="text-tertiary mb-0 font-weight-bold text-white">
+        <button type="submit" class="btn button-white rounded-pill button-small-square">
+            <p class="text-tertiary mb-0 font-weight-bold">
                 {% if post.id %}Save{% else %}Post{% endif %}
             </p>
         </button>
       </form>
     </div>
-  </div>
-  <div class="col-4">
-    <p class="font-weight-bold mb-2 text-content">COMMUNITY INFO:</p>
 
-    {% if not post.id %}
-
-      {% include 'community/partials/info.html' %}
-
-    {% else %}
-
-      {% include 'community/partials/info.html' with community=post.community %}
-
-    {% endif %}
-    
-  </div>
 </div>
 
 

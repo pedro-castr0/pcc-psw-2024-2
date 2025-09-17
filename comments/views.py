@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment, Post
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.db.models import Count, Q
 
 @login_required
+@permission_required('comments.add_comment', raise_exception=True)
 def comment(request):
     if request.method == 'POST':
         content = request.POST.get('content')
@@ -30,6 +30,7 @@ def comment(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
+@permission_required('comments.change_comment', raise_exception=True)
 def edit(request, id):
     posts = Post.objects.all()
     comments = Comment.objects.all()
@@ -51,6 +52,7 @@ def edit(request, id):
     return render(request, 'comment/form.html', {'comment':comment, 'comments':comments, 'posts':posts})
 
 @login_required
+@permission_required('comments.view_comment', raise_exception=True)
 def view(request, id):
     comment = get_object_or_404(Comment, id=id)
     
@@ -67,6 +69,7 @@ def view(request, id):
 
 
 @login_required
+@permission_required('comments.delete_comment', raise_exception=True)
 def delete(request, id):
     comment = get_object_or_404(Comment, id=id)
     comment.delete()
@@ -74,6 +77,7 @@ def delete(request, id):
     return redirect(reverse('view_post', kwargs={'id': comment.post.id}))
 
 @login_required
+@permission_required('comments.view_comment', raise_exception=True)
 def list(request):
     comments = Comment.objects.all()
     return render(request, 'comment/list.html', {'comments':comments})

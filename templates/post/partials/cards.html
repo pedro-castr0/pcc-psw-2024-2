@@ -5,23 +5,24 @@
         <img 
             src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
             class="rounded-circle circle-picture-tiny">
+        
+        <div class="d-flex align-items-center">
+            <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none font-weight-bold link-lilac text-tertiary ml-2">
 
-        <p class="ml-2 mb-0 text-tertiary">
-            <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none font-weight-bold link-lilac">
-
-                {% if post.author.profile.display_name %}
-
-                    {{ post.author.profile.display_name }}
-
-                {% else %}
-
-                    {{ post.author.username }}
-
-                {% endif %}
+                {{ post.author.profile.display_name }}
 
             </a>
-            ∙ {{ post.posted|timesince }} ago
-        </p>
+
+            {% if post.author.is_superuser %}
+                    
+                <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+            {% endif %}
+
+            <p class="ml-1 mb-0 text-tertiary text-blurred">
+                ∙ {{ post.posted|timesince }} ago
+            </p>
+        </div>
     </div>
 
 

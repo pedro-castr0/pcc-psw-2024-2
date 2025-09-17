@@ -4,11 +4,12 @@ from comments.models import Comment
 from posts.models import Post
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 from django.db.models import Count, Q
 
 @login_required
+@permission_required('profiles.change_profile', raise_exception=True)
 def edit(request):
     user = request.user
     profile = get_object_or_404(Profile, user__username=user.username)
@@ -30,6 +31,7 @@ def edit(request):
     return render(request, 'profile/form.html', {'profile': profile})
 
 @login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def view(request, username):
     profile = get_object_or_404(Profile, user__username=username)
 
@@ -45,6 +47,7 @@ def view(request, username):
     return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following, 'get_karma':get_karma})
 
 @login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def likes(request, username):
     profile = get_object_or_404(Profile, user__username=username)
 
@@ -55,6 +58,7 @@ def likes(request, username):
     })
 
 @login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def dislikes(request, username):
     profile = get_object_or_404(Profile, user__username=username)
 
@@ -65,6 +69,7 @@ def dislikes(request, username):
     })
 
 @login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def posts(request, username):
     profile = get_object_or_404(Profile, user__username=username)
 
@@ -75,6 +80,7 @@ def posts(request, username):
     })
 
 @login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def comments(request, username):
     profile = get_object_or_404(Profile, user__username=username)
 
@@ -85,6 +91,7 @@ def comments(request, username):
     })
 
 @login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def list(request):
     profiles = Profile.objects.all()
     

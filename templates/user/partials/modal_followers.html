@@ -22,11 +22,20 @@
                                 class="rounded-circle circle-picture">
 
                             <div class="ml-3">
-                                <p class="font-weight-bold mb-0 text-subtitle">
-                                    <a href="{% if follow.follower.profile %}/user/profile/{{ follow.follower.username }}{% else %}/user/list/{% endif %}" class="text-decoration-none link-lilac">
-                                        {{ follow.follower.profile.display_name }}
-                                    </a>
-                                </p>
+                                <div class="d-flex align-items-center">
+                                    <p class="font-weight-bold mb-0 text-subtitle">
+                                        <a href="/user/profile/{{ follow.follower.username }}" class="text-decoration-none link-lilac">
+                                            {{ follow.follower.profile.display_name }}
+                                        </a>
+                                    </p>
+
+                                    {% if follow.follower.is_superuser %}
+
+                                        <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                                    {% endif %}
+
+                                </div>
 
                                 <p class="text-blurred mb-0 text-tertiary">
                                     <span class="followers-count" data-user-id="{{ follow.follower.id }}">{{ follow.follower.followers.count }}</span> followers

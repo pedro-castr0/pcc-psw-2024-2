@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from communities.models import Community
- 
-# Create your models here.
 
 class Join(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='members')

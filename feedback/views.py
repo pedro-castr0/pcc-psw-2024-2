@@ -1,8 +1,10 @@
 from django.shortcuts import redirect, get_object_or_404, render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import Post, Feedback
 from django.http import JsonResponse
 
+@login_required
+@permission_required('feedback.add_feedback', raise_exception=True)
 def feedback(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -34,6 +36,7 @@ def feedback(request):
         })
     
 @login_required
+@permission_required('feedback.delete_feedback', raise_exception=True)
 def null_feedback(request):
     post_id = request.POST.get('post_id')
     user = request.user
@@ -54,6 +57,7 @@ def null_feedback(request):
     })
 
 @login_required
+@permission_required('feedback.view_feedback', raise_exception=True)
 def list(request):
     feedbacks = Feedback.objects.all()
     return render(request, 'feedback/list.html', {'feedbacks':feedbacks})

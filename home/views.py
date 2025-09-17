@@ -18,21 +18,20 @@ def home(request):
         'posts':posts, 'communities':communities, 'users':users, 'tags':tags
     })
 
+@login_required
 def search(request):
     query = request.GET.get('q', '').strip()
-    selected_tags = request.GET.getlist('tags')  # IDs das tags selecionadas
+    selected_tags = request.GET.getlist('tags')
 
     posts = Post.objects.all()
     users = User.objects.none()
     communities = Community.objects.none()
 
-    # Filtro por título/conteúdo
     if query:
         posts = posts.filter(title__icontains=query).distinct()
         users = User.objects.filter(username__icontains=query)[:10]
         communities = Community.objects.filter(name__icontains=query)
 
-    # Filtro por tags
     if selected_tags:
         posts = posts.filter(post_tag__id__in=selected_tags).distinct()
 
@@ -44,10 +43,7 @@ def search(request):
         'selected_tags': list(map(int, selected_tags)),  # para manter o estado dos checkboxes
     })
 
-
-
-
-
+@login_required
 def autocomplete(request):
     query = request.GET.get('q', '')
     results = {
@@ -57,19 +53,16 @@ def autocomplete(request):
     }
 
     if query:
-        # até 10 usuários
         results['users'] = list(
             User.objects.filter(username__icontains=query)
             .values_list('username', flat=True)[:3]
         )
 
-        # até 10 comunidades
         results['communities'] = list(
             Community.objects.filter(name__icontains=query)
             .values_list('name', flat=True)[:3]
         )
 
-        # até 10 posts (opcional, pode remover se não quiser)
         results['posts'] = list(
             Post.objects.filter(title__icontains=query)
             .values_list('title', flat=True)[:3]

@@ -6,11 +6,10 @@ class Community(models.Model):
     name = models.CharField(max_length=100, unique=True, blank=True, null=True)
     display_name = models.CharField(max_length=20)
     context = models.TextField(blank=True, null=True)
-    community_tags = models.ManyToManyField(Tag, blank=True, related_name='communities')
     created = models.DateField(auto_now_add=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='communities')
     community_picture = models.ImageField(upload_to='community/pics/', blank=True, null=True)
     community_banner = models.ImageField(upload_to='community/banners/', blank=True, null=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='communities')
     
     def __str__(self):
         return self.__class__.__name__
@@ -19,16 +18,11 @@ class Community(models.Model):
         return self.name or self.display_name
 
     def get_creator(self):
-        return self.creator.get_username()    
-    
-    def get_tags(self):
-        # corrigido: usar community_tags
-        return self.community_tags.all()
+        return self.creator.get_username()
     
     @staticmethod
     def search_by_tag(tag_name):
         return Community.objects.filter(community_tags__name__iexact=tag_name)
-
 
 class CommunityRule(models.Model):
     community = models.ForeignKey(
@@ -36,6 +30,7 @@ class CommunityRule(models.Model):
         on_delete=models.CASCADE,
         related_name="rules"
     )
+
     title = models.CharField(max_length=100)
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)

@@ -1,13 +1,16 @@
-<div class="card card-dark p-3 mb-3">
+{% if community.context %}
 
-    {% if community.context %}
+    <div class="card card-dark p-3">
+        <p class="m-0">
+            <div class="text-content text-white text-justify">{{ community.context|safe }}</div>
+        </p>
+    </div>
 
-        <p class="m-0"><div class="text-content text-white">{{ community.context|safe }}</div></p>
-    
-    {% else %}
+{% else %}
 
-        <p class="text-content text-justify text-blurred m-0">This community doesn't have context.</p>
+    <div class="card card-dark text-center p-5">
+        <i class="fas fa-question fa-2x mb-3 text-blurred"></i>
+        <p class="mb-0 text-content text-blurred">This community doesn't have context.</p>
+    </div>
 
-    {% endif %}
-
-</div>
+{% endif %}

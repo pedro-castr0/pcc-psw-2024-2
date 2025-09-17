@@ -50,7 +50,11 @@
 
                 {% for post in posts %}
 
-                    {% include "post/partials/posts.html" %}
+                    {% if post.author.id in following_ids or post.community.id in community_ids or post.community.id in owned_communities_ids %}
+
+                        {% include "post/partials/posts.html" %}
+
+                    {% endif %}
 
                 {% endfor %}
 
@@ -63,81 +67,49 @@
         </div>
 
         <div class="col-4">
-            <div class="mb-3">
-                <p class="font-weight-bold mb-2 text-content">COMMUNITIES TO JOIN</p>
+            <p class="font-weight-bold mb-2 text-content text-white">
+                CURRENT TAGS ({{ tags.count }})
+            </p>
 
-                {% if communities %}
+            <div class="d-flex flex-wrap overflow-auto p-2">
 
-                    {% for community in communities %}
-
-                        {% if community.id not in community_ids %}
-
-                            {% if user.id != community.creator.id %}
-
-                                {% include 'community/partials/info.html' %}
-
-                            {% endif %}
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                {% else %}
-
-                    <p class="text-muted">Nenhuma comunidade encontrada.</p>
-
-                {% endif %}
-
-            </div>
-
-            <div class="mb-3">
-                <p class="font-weight-bold mb-2 text-content">USERS TO FOLLOW</p>
+                {% for tag in tags %}
                 
-                {% if users %}
+                    <a href="/search/?q=&tags={{ tag.id }}" class="btn button-tag-dark-lilac d-flex align-items-center justify-content-center rounded px-2 mb-2 mr-2">
+                        <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
+                        <span class="ml-1 mb-0 text-tertiary text-blurred font-weight-normal">{{ tag.posts.count }}</span>
+                    </a>
 
-                    {% for person in users %}
+                {% endfor %}
 
-                        {% if person.id not in following_ids %}
+                {% if user.is_superuser %}
 
-                            {% if user.id != person.id %}
-
-                                {% include 'user/partials/profiles.html' %}
-
-                            {% endif %}
-
-                        {% endif %}
-
-                    {% endfor %}
-
-                {% else %}
-
-                    <p class="text-muted">Nenhum usuário encontrado.</p>
-                    
-                {% endif %}
-
-            </div>
-
-            <div class="mb-3">
-                <p class="font-weight-bold mb-2 text-content text-white">CURRENT TAGS ({{ tags.count }})</p>
-                
-                <div class="d-flex flex-wrap">
-                
-                    {% for tag in tags %}
-
-                        <a href="/search/?q=&tags={{ tag.id }}" class="btn button-tag-dark-lilac d-flex align-items-center justify-content-center rounded px-2 mb-2 mr-2">
-                            <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
-
-                            <span class="ml-1 mb-0 text-tertiary text-blurred font-weight-normal">{{ tag.posts.count }}</span>
-                        </a>
-
-                    {% endfor %}
-
-                    <a href="/admin/tags/tag/add/" class="btn button-magenta button-tiny-circle d-flex align-items-center justify-content-center rounded-circle p-0">
+                    <a href="/admin/tags/tag/add/" 
+                    class="btn button-magenta button-tiny-circle d-flex align-items-center justify-content-center rounded-circle p-0">
                         <i class="fas fa-fw fa-plus text-tiny font-weight-bold"></i>
                     </a>
 
-                </div>
+                {% endif %}
+
             </div>
+        </div>
+
+        <div 
+            style="position: fixed; bottom: 20px; right: 20px; width: 28%;">
+            <div class="my-2 d-flex flex-wrap overflow-auto">
+                <a href="#" class="text-tertiary text-blurred link-lilac mb-2 mr-2 text-decoration-none">Privacy Policy</a>
+                <a href="#" class="text-tertiary text-blurred link-lilac mb-2 mr-2 text-decoration-none">User Agreement</a>
+                <a href="#" class="text-tertiary text-blurred link-lilac mb-2 mr-2 text-decoration-none">Accessibility</a>
+            </div>
+
+            <span class="text-tertiary text-blurred">
+                
+                <a href="https://github.com/pedro-castr0/pcc-psw-2024-2" target="_blank" class="text-blurred link-lilac text-decoration-none">
+                    <i class="fab fa-github text-tertiary mr-1"></i>
+                    pedro-castr0's team
+                </a>
+                    © 2025. All rights reserved.
+            </span>
         </div>
     </div>
 </div>

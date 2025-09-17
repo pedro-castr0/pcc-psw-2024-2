@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Community, Post, Tag
 from comments.models import Comment
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 from django.db.models import Count, Q
 
 @login_required
+@permission_required('posts.add_post', raise_exception=True)
 def create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -33,11 +33,13 @@ def create(request):
     return render(request, 'post/partials/form.html')
 
 @login_required
+@permission_required('posts.view_post', raise_exception=True)
 def list(request):
     posts = Post.objects.all()
     return render(request, 'post/list.html', {'posts':posts})
 
 @login_required
+@permission_required('posts.change_post', raise_exception=True)
 def edit(request, id):
     post = get_object_or_404(Post, id=id)
     tags = Tag.objects.all()
@@ -62,6 +64,7 @@ def edit(request, id):
     return render(request, 'post/form.html', {'post': post, 'tags':tags})
 
 @login_required
+@permission_required('posts.delete_post', raise_exception=True)
 def delete(request, id):
     post = get_object_or_404(Post, id=id)
 
@@ -71,6 +74,7 @@ def delete(request, id):
     return redirect(reverse('view_post', kwargs={'name': post.community.name}))
 
 @login_required
+@permission_required('posts.view_post', raise_exception=True)
 def view(request, id):
     post = get_object_or_404(Post, id=id)
     comments = post.comments.filter(parent__isnull=True)

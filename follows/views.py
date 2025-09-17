@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import User, Follow
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -7,6 +7,7 @@ from notification.models import Notification
 from django.http import JsonResponse
 
 @login_required
+@permission_required('follows.add_follow', raise_exception=True)
 def follow(request):
     if request.method == 'POST':
         followed_id = request.POST.get('followed_id')
@@ -14,20 +15,18 @@ def follow(request):
         follower = request.user
 
         if followed.id != follower.id:
-            # Cria o relacionamento de follow
             follow_obj, created = Follow.objects.get_or_create(
                 followed=followed,
                 follower=follower
             )
 
             if created:
-                # Cria notificação usando sender
                 Notification.objects.create(
-                    user=followed,       # quem vai receber a notificação
-                    sender=follower,     # quem está seguindo
+                    user=followed,
+                    sender=follower,
                     message=f"começou a seguir você.",
-                    type_icon="bx bxs-user-plus",  # opcional: ícone específico
-                    link=f"/perfil/{follower.id}/"  # opcional: link para o perfil
+                    type_icon="bx bxs-user-plus",
+                    link=f"/perfil/{follower.id}/"
                 )
 
         return JsonResponse({
@@ -37,6 +36,7 @@ def follow(request):
         })
 
 @login_required
+@permission_required('follows.delete_follow', raise_exception=True)
 def unfollow(request):
     if request.method == 'POST':
         followed_id = request.POST.get('followed_id')
@@ -50,6 +50,7 @@ def unfollow(request):
         })
 
 @login_required
+@permission_required('follows.view_follow', raise_exception=True)
 def list(request):
     follows = Follow.objects.all()
     return render(request, 'follow/list.html', {'follows':follows})

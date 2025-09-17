@@ -9,11 +9,20 @@
                     class="rounded-circle circle-picture">
 
                 <div class="ml-3">
-                    <p class="font-weight-bold mb-0 text-subtitle">
-                        <a href="{% if person.profile %}/user/profile/{{ person.username }}{% else %}/user/list/{% endif %}" class="text-decoration-none link-lilac">
-                            {{ person.profile.display_name }}
-                        </a>
-                    </p>
+                    <div class="d-flex align-items-center">
+                        <p class="font-weight-bold mb-0 text-subtitle">
+                            <a href="/user/profile/{{ person.username }}" class="text-decoration-none link-lilac">
+                                {{ person.profile.display_name }}
+                            </a>
+                        </p>
+
+                        {% if person.is_superuser %}
+                                
+                            <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                        {% endif %}
+
+                    </div>
 
                     <p class="text-blurred mb-0 text-tertiary">
                         <span class="followers-count" data-user-id="{{ person.id }}">{{ person.followers.count }}</span> followers

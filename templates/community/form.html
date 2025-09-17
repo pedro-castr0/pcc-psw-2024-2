@@ -4,22 +4,46 @@
 
 {% block content %}
 
-<div class="container my-5 col-8">
-    <div class="card p-3">
-        <p class="mb-3 font-weight-bold text-title text-dark">
-            {% if community.id %}Edit{% else %}Create{% endif %} your community
-        </p>
+<div class="container d-flex flex-column col-8 my-3">
+    {% if community.id %}
+    
+        <div class="d-flex align-items-center mb-2">
+            <img 
+                src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                class="rounded circle-picture-tiny">
 
+            <p class="mb-0 text-tertiary ml-2 text-blurred ">
+                editing 
+
+                <a href="/community/{{ community.name }}" class="font-weight-bold text-decoration-none link-lilac">
+
+                {% if community.display_name %}
+
+                    {{ community.display_name }}
+
+                {% else %}
+
+                    {{ community.name }}
+
+                {% endif %}
+
+                </a>
+            </p>
+        </div>
+
+    {% endif %}
+
+    <div class="card card-dark p-3">
         <form method="POST" enctype="multipart/form-data" id="rich-text-form"> {% csrf_token %}
             <div class="mb-3">
-                <label for="community_banner" class="form-label text-dark font-weight-bold text-content">
+                <label for="community_banner" class="form-label text-white font-weight-bold text-content">
                     {% if not community.id %}Community banner:{% else %}Previous community banner:{% endif %}
                 </label>
 
                 {% if community.community_banner %}
                 
-                    <div class="mb-2 profile-banner">
-                        <img src="{{ community.community_banner.url }}" class="img-fluid rounded">
+                    <div class="mb-2 community-banner rounded">
+                        <img src="{{ community.community_banner.url }}" class="img-fluid">
                     </div>
 
                 {% endif %}
@@ -28,14 +52,14 @@
             </div>
 
             <div class="mb-3">
-                <label for="community_picture" class="text-dark font-weight-bold text-content">
+                <label for="community_picture" class="text-white font-weight-bold text-content">
                     {% if not community.id %}Community picture:{% else %}Previous community picture:{% endif %}
                 </label>
 
                 {% if community.community_picture %}
 
                     <div class="mb-2">
-                        <img src="{{ community.community_picture.url }}" class="rounded profile-picture">
+                        <img src="{{ community.community_picture.url }}" class="rounded community-picture">
                     </div>
 
                 {% endif %}
@@ -44,26 +68,33 @@
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label text-dark font-weight-bold text-content text-content">Community name:</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ community.name }}">
+                <label for="name" class="form-label text-white font-weight-bold text-content text-content">Community name:</label>
+                <input type="text" class="form-control input-text text-white" id="name" name="name" value="{{ community.name }}">
             </div>
 
             <div class="mb-3">
-                <label for="display_name" class="form-label text-dark font-weight-bold text-content">Display name:</label>
-                <input type="text" class="form-control" id="display_name" name="display_name" value="{{ community.display_name }}">
+                <label for="display_name" class="form-label text-white font-weight-bold text-content">Display name:</label>
+                <input type="text" class="form-control input-text text-white" id="display_name" name="display_name" value="{{ community.display_name }}">
             </div>
 
             <div class="mb-3">
-                <label class="form-label text-dark font-weight-bold text-content">Context:</label>
-                <div id="rich-text-loader" class="border rounded p-2 mb-2" style="min-height: 150px;">{{ community.context|safe }}</div>
+                <label class="form-label text-white font-weight-bold text-content">Context:</label>
+                <div id="rich-text-loader" class="p-2 mb-2" style="min-height: 150px;">{{ community.context|safe }}</div>
                 <input id="container" name="context" type="hidden">
             </div>
 
-            <button type="submit" class="btn btn-success button-small-square">
-                <p class="text-tertiary mb-0 font-weight-bold text-tertiary text-white">
-                    {% if community.id %}Update{% else %}Create{% endif %}
-                </p>
-            </button>
+            <div class="d-flex">
+                <button type="submit" class="btn button-white button-small-square rounded-pill">
+                    <p class="text-tertiary mb-0 font-weight-bold text-tertiary">
+                        {% if community.id %}Update{% else %}Create{% endif %}
+                    </p>
+                </button>
+
+                <button onclick="history.back()" 
+                    class="btn button-magenta d-flex align-items-center justify-content-center rounded-pill button-small-square ml-2">
+                    <p class="m-0 font-weight-bold text-tertiary" aria-hidden="true">Cancel</p>
+                </button>
+            </div>
         </form>
     </div>
 </div>
