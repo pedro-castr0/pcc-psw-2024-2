@@ -3,23 +3,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment, Post
 from django.contrib.auth.models import User
-<<<<<<< HEAD
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponse, JsonResponse
-=======
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.db.models import Count, Q
 
 @login_required
-<<<<<<< HEAD
-=======
-# Apenas usuários com permissão de 'adicionar comentário' podem acessar esta view.
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.add_comment', raise_exception=True)
 def comment(request):
     if request.method == 'POST':
@@ -42,10 +32,6 @@ def comment(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
-<<<<<<< HEAD
-=======
-# Apenas usuários com permissão de 'modificar comentário' podem acessar.
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.change_comment', raise_exception=True)
 def edit(request, id):
     comment = get_object_or_404(Comment, id=id)
@@ -71,13 +57,7 @@ def edit(request, id):
     return render(request, 'comment/form.html', {'comment':comment, 'comments':comments, 'posts':posts})
 
 @login_required
-<<<<<<< HEAD
 @permission_required('comments.view_comment', raise_exception=True)
-=======
-# Qualquer usuário logado pode ver um comentário individual.
-# Se precisar restringir, descomente a linha abaixo.
-# @permission_required('comments.view_comment', raise_exception=True)
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def view(request, id):
     comment = get_object_or_404(Comment, id=id)
     
@@ -92,10 +72,6 @@ def view(request, id):
 
 
 @login_required
-<<<<<<< HEAD
-=======
-# Apenas usuários com permissão de 'deletar comentário' podem acessar.
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.delete_comment', raise_exception=True)
 def delete(request, id):
     comment = get_object_or_404(Comment, id=id)
@@ -110,10 +86,6 @@ def delete(request, id):
     return redirect(reverse('view_post', kwargs={'id': post_id}))
 
 @login_required
-<<<<<<< HEAD
-=======
-# Apenas usuários com permissão de 'ver comentário' podem acessar a lista completa.
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @permission_required('comments.view_comment', raise_exception=True)
 def list(request):
     comments = Comment.objects.all()

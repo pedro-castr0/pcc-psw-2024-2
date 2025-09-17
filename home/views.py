@@ -20,11 +20,6 @@ def home(request):
         'posts':posts, 'communities':communities, 'users':users, 'tags':tags
     })
 
-<<<<<<< HEAD
-=======
-# Adicionado @login_required para garantir que apenas usuários
-# autenticados possam realizar buscas.
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @login_required
 def search(request):
     query = request.GET.get('q', '').strip()
@@ -50,11 +45,6 @@ def search(request):
         'selected_tags': list(map(int, selected_tags)),  # para manter o estado dos checkboxes
     })
 
-<<<<<<< HEAD
-=======
-# Adicionado @login_required para proteger o endpoint de autocomplete
-# contra acesso não autenticado.
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 @login_required
 def autocomplete(request):
     query = request.GET.get('q', '')

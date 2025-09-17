@@ -41,22 +41,15 @@ def create(request):
 
 # A lista de todos os posts é uma view administrativa.
 @login_required
-<<<<<<< HEAD
 @permission_required('posts.view_post', raise_exception=True)
-=======
 @permission_required('post.view_post', raise_exception=True)
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def list(request):
     posts = Post.objects.all()
     return render(request, 'post/list.html', {'posts':posts})
 
 # Apenas o autor OU um moderador com permissão pode editar.
 @login_required
-<<<<<<< HEAD
 @permission_required('posts.change_post', raise_exception=True)
-=======
-@permission_required('post.change_post', raise_exception=True)
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def edit(request, id):
     post = get_object_or_404(Post, id=id)
     tags = Tag.objects.all()
@@ -82,11 +75,7 @@ def edit(request, id):
 
 # Apenas o autor OU um moderador com permissão pode deletar.
 @login_required
-<<<<<<< HEAD
 @permission_required('posts.delete_post', raise_exception=True)
-=======
-@permission_required('post.delete_post', raise_exception=True)
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def delete(request, id):
     post = get_object_or_404(Post, id=id)
     community_name = post.community.name # Salva o nome da comunidade antes de deletar

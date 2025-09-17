@@ -1,19 +1,10 @@
 from django.shortcuts import redirect, get_object_or_404, render
-<<<<<<< HEAD
-=======
-# Importação atualizada para incluir o permission_required
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import Post, Feedback
 from django.http import JsonResponse
 
-<<<<<<< HEAD
 @login_required
 @permission_required('feedback.add_feedback', raise_exception=True)
-=======
-# Adicionado @login_required para garantir que apenas usuários logados possam dar feedback.
-@login_required
->>>>>>> d3fda6153cad5849a46df16316911fee48a79ab9
 def feedback(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
