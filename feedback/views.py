@@ -1,8 +1,11 @@
 from django.shortcuts import redirect, get_object_or_404, render
-from django.contrib.auth.decorators import login_required
+# Importação atualizada para incluir o permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import Post, Feedback
 from django.http import JsonResponse
 
+# Adicionado @login_required para garantir que apenas usuários logados possam dar feedback.
+@login_required
 def feedback(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -32,7 +35,8 @@ def feedback(request):
             'liked': liked,
             'disliked': disliked
         })
-    
+
+# Esta view já estava correta com @login_required.
 @login_required
 def null_feedback(request):
     post_id = request.POST.get('post_id')
@@ -53,7 +57,9 @@ def null_feedback(request):
         'karma': post.get_karma(),
     })
 
+# Apenas usuários com permissão para 'ver feedback' podem acessar esta lista.
 @login_required
+@permission_required('feedback.view_feedback', raise_exception=True)
 def list(request):
     feedbacks = Feedback.objects.all()
     return render(request, 'feedback/list.html', {'feedbacks':feedbacks})

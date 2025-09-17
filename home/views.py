@@ -3,10 +3,12 @@ from posts.models import Post
 from communities.models import Community
 from tags.models import Tag
 from django.contrib.auth.models import User
+# A importação já inclui o login_required, que é o que precisamos aqui.
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse
 
+# Esta view já estava correta, garantindo que a página inicial
+# só pode ser vista por usuários logados.
 @login_required
 def home(request):
     posts = Post.objects.all()
@@ -18,6 +20,9 @@ def home(request):
         'posts':posts, 'communities':communities, 'users':users, 'tags':tags
     })
 
+# Adicionado @login_required para garantir que apenas usuários
+# autenticados possam realizar buscas.
+@login_required
 def search(request):
     query = request.GET.get('q', '').strip()
     selected_tags = request.GET.getlist('tags')  # IDs das tags selecionadas
@@ -44,10 +49,9 @@ def search(request):
         'selected_tags': list(map(int, selected_tags)),  # para manter o estado dos checkboxes
     })
 
-
-
-
-
+# Adicionado @login_required para proteger o endpoint de autocomplete
+# contra acesso não autenticado.
+@login_required
 def autocomplete(request):
     query = request.GET.get('q', '')
     results = {
@@ -76,4 +80,3 @@ def autocomplete(request):
         )
 
     return JsonResponse(results, safe=False)
-

@@ -4,10 +4,13 @@ from comments.models import Comment
 from posts.models import Post
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+# Importação atualizada para incluir permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 from django.db.models import Count, Q
 
+# A lógica desta view é para um usuário editar o *seu próprio* perfil.
+# @login_required é suficiente e seguro.
 @login_required
 def edit(request):
     user = request.user
@@ -29,6 +32,8 @@ def edit(request):
     
     return render(request, 'profile/form.html', {'profile': profile})
 
+# Ver o perfil de outro usuário é uma ação padrão para membros da comunidade.
+# @login_required é suficiente.
 @login_required
 def view(request, username):
     profile = get_object_or_404(Profile, user__username=username)
@@ -44,49 +49,36 @@ def view(request, username):
 
     return render(request, 'profile/view.html', {'profile': profile, 'is_following': is_following, 'get_karma':get_karma})
 
+# As views parciais abaixo também são para visualização pública (entre usuários logados).
+# Todas já estão corretamente protegidas com @login_required.
 @login_required
 def likes(request, username):
     profile = get_object_or_404(Profile, user__username=username)
-
     posts = Post.objects.filter(feedback_posts__user=profile.user, feedback_posts__feedback=True).distinct()
-
-    return render(request, 'profile/partials/posts.html', {
-        'posts': posts,
-    })
+    return render(request, 'profile/partials/posts.html', {'posts': posts})
 
 @login_required
 def dislikes(request, username):
     profile = get_object_or_404(Profile, user__username=username)
-
     posts = Post.objects.filter(feedback_posts__user=profile.user, feedback_posts__feedback=False).distinct()
-
-    return render(request, 'profile/partials/posts.html', {
-        'posts': posts,
-    })
+    return render(request, 'profile/partials/posts.html', {'posts': posts})
 
 @login_required
 def posts(request, username):
     profile = get_object_or_404(Profile, user__username=username)
-
     posts = Post.objects.filter(author=profile.user).distinct()
-
-    return render(request, 'profile/partials/posts.html', {
-        'posts': posts,
-    })
+    return render(request, 'profile/partials/posts.html', {'posts': posts})
 
 @login_required
 def comments(request, username):
     profile = get_object_or_404(Profile, user__username=username)
-
     comments = Comment.objects.filter(author=profile.user).distinct()
+    return render(request, 'profile/partials/comments.html', {'comments': comments, 'hide_comment_buttons': True})
 
-    return render(request, 'profile/partials/comments.html', {
-        'comments': comments, 'hide_comment_buttons': True
-    })
-
+# A lista de todos os perfis é uma view administrativa.
+# Apenas usuários com a permissão 'view_profile' poderão acessá-la.
 @login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def list(request):
     profiles = Profile.objects.all()
-    
     return render(request, 'profile/list.html', {'profiles':profiles})
-

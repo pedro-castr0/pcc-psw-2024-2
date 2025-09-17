@@ -3,7 +3,8 @@ from communities.models import Community, CommunityRule
 from posts.models import Post
 from tags.models import Tag
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+# Importação atualizada para incluir o permission_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 
 from .forms import CommunityRuleForm
@@ -11,6 +12,8 @@ from .forms import CommunityRuleForm
 # === Comunidades ===
 
 @login_required
+# Apenas usuários com permissão para 'adicionar comunidade' podem criar uma.
+@permission_required('communities.add_community', raise_exception=True)
 def create(request):
     if request.method == 'GET':
         return render(request, 'community/form.html')
@@ -36,8 +39,15 @@ def create(request):
         return redirect(reverse('view', kwargs={'name': community.name}))
 
 @login_required
+# Apenas usuários com permissão para 'modificar comunidade' podem editar.
+@permission_required('communities.change_community', raise_exception=True)
 def edit(request, name):
     community = get_object_or_404(Community, name=name)
+
+    # Verificação extra: apenas o criador pode editar.
+    if request.user != community.creator:
+        # Poderia ser um HttpResponseForbidden("Acesso negado") também.
+        return redirect(reverse('view', kwargs={'name': community.name}))
 
     if request.method == 'POST':
         community.name = request.POST.get('name')
@@ -57,6 +67,8 @@ def edit(request, name):
     return render(request, 'community/form.html', {'community': community})
 
 @login_required
+# Apenas usuários com permissão para 'deletar comunidade' podem deletar.
+@permission_required('communities.delete_community', raise_exception=True)
 def delete(request, name):
     community = get_object_or_404(Community, name=name)
 
@@ -65,9 +77,10 @@ def delete(request, name):
 
     community.delete()
 
-    # redirecionar para listagem de comunidades
     return redirect(reverse('list'))
 
+# Views de leitura geralmente não precisam de permissão específica,
+# a menos que você queira que apenas certos usuários possam vê-las.
 @login_required
 def view(request, name):
     community = get_object_or_404(Community, name=name)
@@ -105,6 +118,8 @@ def list(request):
 # === Regras da Comunidade ===
 
 @login_required
+# Apenas usuários com permissão para 'adicionar regra de comunidade' podem adicionar.
+@permission_required('communities.add_communityrule', raise_exception=True)
 def add_rule(request, name):
     community = get_object_or_404(Community, name=name)
 
@@ -124,34 +139,7 @@ def add_rule(request, name):
     return render(request, "community/add_rule.html", {"form": form, "community": community})
 
 @login_required
+# Apenas usuários com permissão para 'modificar regra de comunidade' podem editar.
+@permission_required('communities.change_communityrule', raise_exception=True)
 def edit_rule(request, name, rule_id):
-    community = get_object_or_404(Community, name=name)
-    rule = get_object_or_404(CommunityRule, id=rule_id, community=community)
-
-    if request.user != community.creator:
-        return redirect(reverse('view', kwargs={'name': community.name}))
-
-    if request.method == "POST":
-        form = CommunityRuleForm(request.POST, instance=rule)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('view', kwargs={'name': community.name}))
-    else:
-        form = CommunityRuleForm(instance=rule)
-
-    return render(request, "community/edit_rule.html", {
-        "form": form, "community": community, "rule": rule
-    })
-
-@login_required
-def delete_rule(request, name, rule_id):
-    community = get_object_or_404(Community, name=name)
-    rule = get_object_or_404(CommunityRule, id=rule_id, community=community)
-
-    if request.user != community.creator:
-        return redirect(reverse('view', kwargs={'name': community.name}))
-
-    if request.method == "POST":
-        rule.delete()
-
-    return redirect(reverse('view', kwargs={'name': community.name}))
+    community = get_

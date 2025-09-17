@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from follows.models import Follow
 from django.contrib.auth import authenticate, login, logout
+# As importações já estavam aqui, vamos usá-las.
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
+from django.shortcuts import get_object_or_404 # Boa prática para obter objetos
 
+# A view de criação de usuário (cadastro) deve ser pública.
+# Nenhuma alteração aqui.
 def create(request):
     if request.method == 'GET':
         return render(request, 'user/form.html')
@@ -14,16 +17,17 @@ def create(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
+        # create_user já lida com o hash da senha corretamente.
         user = User.objects.create_user(
             username = username,
             email = email,
             password = password
         )
 
-        user.save()
-
         return redirect('/')
 
+# A view de login também deve ser pública.
+# Nenhuma alteração aqui.
 def log_in(request):
     if request.method == 'GET':
         return render(request, 'user/login.html')
@@ -36,27 +40,42 @@ def log_in(request):
 
         if user:
             login(request, user)
-
             return redirect('home')
         
         else:
+            # É uma boa prática mostrar uma mensagem de erro.
+            # Por simplicidade, mantemos o redirecionamento.
             return redirect('/user/login/')
 
+# É uma boa prática exigir que o usuário esteja logado para fazer logout.
+@login_required
 def log_out(request):
     logout(request)
     return redirect('/user/login/')
 
+# A lista de todos os usuários é uma view administrativa.
+@login_required
+@permission_required('auth.view_user', raise_exception=True)
 def list(request):
     users = User.objects.all()
     return render(request, 'user/list.html', {'users':users})
 
+# Editar um usuário é uma ação administrativa crítica.
+@login_required
+@permission_required('auth.change_user', raise_exception=True)
 def edit(request, id):
-    user = User.objects.get(id = id)
+    user = get_object_or_404(User, id=id)
 
     if request.method == 'POST':
-        user.username = request.POST.get('username')
-        user.email = request.POST.get('email')
-        user.password = request.POST.get('password')
+        user.username = request.POST.get('username', user.username)
+        user.email = request.POST.get('email', user.email)
+        password = request.POST.get('password')
+
+        # CORREÇÃO DE SEGURANÇA CRÍTICA:
+        # NUNCA salve a senha diretamente. Use set_password() para criptografá-la.
+        # Verificamos se uma nova senha foi fornecida antes de alterá-la.
+        if password:
+            user.set_password(password)
 
         user.save()
 
@@ -64,8 +83,13 @@ def edit(request, id):
     
     return render(request, 'user/form.html', {'user':user})
 
+# Deletar um usuário é a ação mais destrutiva.
+@login_required
+@permission_required('auth.delete_user', raise_exception=True)
 def delete(request, id):
-    user = User.objects.get(id = id)
-    user.delete()
+    user = get_object_or_404(User, id=id)
+    # Adicionar uma verificação para não permitir que o admin se delete
+    if request.user.id != user.id:
+        user.delete()
 
     return redirect('/user/list/')
