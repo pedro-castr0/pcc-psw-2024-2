@@ -38,9 +38,7 @@ def create(request):
 def edit(request, name):
     community = get_object_or_404(Community, name=name)
 
-    # Verificação extra: apenas o criador pode editar.
     if request.user != community.creator:
-        # Poderia ser um HttpResponseForbidden("Acesso negado") também.
         return redirect(reverse('view', kwargs={'name': community.name}))
 
     if request.method == 'POST':

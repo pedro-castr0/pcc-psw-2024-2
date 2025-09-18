@@ -1,5 +1,3 @@
-# seu_projeto/comments/views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment, Post
 from django.contrib.auth.models import User
@@ -9,7 +7,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.db.models import Count, Q
 from .forms import CommentForm, EditCommentForm
-
 
 @login_required
 @permission_required('comments.add_comment', raise_exception=True)
@@ -28,7 +25,6 @@ def comment(request):
 def edit(request, id):
     comment = get_object_or_404(Comment, id=id)
 
-    # só autor ou superuser pode editar
     if not (request.user == comment.author or request.user.is_superuser):
         return HttpResponseForbidden("Você não tem permissão para editar este comentário.")
 
@@ -71,11 +67,10 @@ def view(request, id):
 def delete(request, id):
     comment = get_object_or_404(Comment, id=id)
 
-    # Verificação extra: garante que apenas o autor ou um superusuário pode deletar.
     if not (request.user == comment.author or request.user.is_superuser):
         return HttpResponseForbidden("Você não tem permissão para deletar este comentário.")
 
-    post_id = comment.post.id  # Salva o ID do post antes de deletar o comentário
+    post_id = comment.post.id
     comment.delete()
 
     return redirect(reverse('view_post', kwargs={'id': post_id}))

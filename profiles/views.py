@@ -30,8 +30,9 @@ def edit(request):
     
     return render(request, 'profile/form.html', {'profile': profile})
 
-#@login_required
-#@permission_required('profiles.view_profile', raise_exception=True)
+
+@login_required
+@permission_required('profiles.view_profile', raise_exception=True)
 def view(request, username):
     profile = get_object_or_404(Profile, user__username=username)
 

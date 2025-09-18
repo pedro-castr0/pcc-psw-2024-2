@@ -42,7 +42,7 @@
     {% if comment.author.id == user.id %}
 
         <a href="/comment/{{ comment.id }}/edit/" class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-circle button-small-circle mr-2">
-             <i class="fas fa-fw fa-pen-alt text-tertiary"></i>
+            <i class="fas fa-fw fa-pen-alt text-tertiary"></i>
         </a>
 
         <form action="/comment/{{ comment.id }}/delete/" method="post"> {% csrf_token %}

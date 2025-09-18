@@ -67,7 +67,8 @@ def edit(request, id):
 @permission_required('posts.delete_post', raise_exception=True)
 def delete(request, id):
     post = get_object_or_404(Post, id=id)
-    community_name = post.community.name
+
+    community_name = post.community.name # Salva o nome da comunidade antes de deletar
 
     if post.author == request.user or request.user.has_perm('post.delete_post'):
         post.delete()
