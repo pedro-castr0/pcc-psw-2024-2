@@ -1,0 +1,133 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="card card-dark community-banner">
+        <img 
+            src="{% if community.community_banner %}{{ community.community_banner.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+            class="img-fluid rounded">
+    </div>
+
+    <div class="d-flex align-items-center m-3">
+        <img 
+            class="rounded community-picture" 
+            src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
+            
+        <div class="ml-3">
+            <p class="font-weight-bold my-0 text-white text-master">{% if community.display_name %}{{ community.display_name }}{% else %}{{ community.name }}{% endif %}</p>
+
+            <p class="text-content text-blurred mb-2">
+                <span class="font-weight-bold text-white">@{{ community.name }}</span> · 
+                <a href="" data-toggle="modal" data-target="#membersModal" class="text-decoration-none text-blurred link-lilac"><span id="members-count-{{ community.id }}">{{ community.members.count }}</span> members</a> · {{ community.posts.count }} posts
+            </p>
+            
+            <div class="d-flex align-items-center">
+
+                {% include 'community/actions/options.html' %}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <ul class="nav nav-tabs mb-3" id="communityTabs" role="tablist">
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link active" 
+                        href="/community/{{ community.name }}/home/" 
+                        data-target="#content-area" 
+                        id="selectedButton">
+
+                        <p class="font-weight-bold my-0 text-content">Home</p>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link" 
+                        href="/community/{{ community.name }}/context/" 
+                        data-target="#content-area">
+
+                        <p class="font-weight-bold my-0 text-content">Context</p>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="content-area"></div>
+        </div>
+
+
+        <div class="col-4">
+            <div class="card card-dark p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="mb-3">
+                            <p class="text-subtitle text-white font-weight-bold mb-0">{{ community.display_name }}</p>
+                            <p class="text-tertiary text-blurred">@{{ community.name }}</p>
+                        </div>
+
+                        
+                        <p class="text-tertiary text-blurred mb-0"><i class="fas fa-fw fa-calendar-day mr-1"></i>Created {{ community.created|date:"d M Y" }}</p>
+                        <p class="text-tertiary text-blurred mb-0">by 
+                            <a href="/user/profile/{{ community.creator.username }}" class="link-lilac text-decoration-none font-weight-bold">{{ community.creator.profile.display_name }}</a>
+                        </p>
+                    </div>
+
+                    <img 
+                        class="rounded-circle profile-picture-medium" 
+                        src="{% if community.creator.profile.profile_picture %}{{ community.creator.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
+
+                </div>
+            </div>
+
+            <p class="font-weight-bold text-content text-white mb-2 mt-3">RULES</p>
+
+            <div class="card card-dark p-3">
+
+                {% if community.rules.exists %}
+
+                    {% include 'community/partials/rules.html'%}
+
+                {% else %}
+
+                    <p class="text-content text-blurred mb-0">This community doesn't have any rule yet.</p>
+
+                {% endif %}
+
+                {% if community.creator.id == user.id %}
+
+                    <a href="{% url 'add_rule' community.name %}" class="btn button-magenta d-flex justify-content-center align-items-center button-small-square rounded mt-2">
+                        <span class="font-weight-bold text-tertiary">Add rule</span>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+            {% if community.creator.id != user.id %}
+
+                <p class="font-weight-bold text-content text-white mb-2 mt-3">REPORT</p>
+
+                {% include 'community/actions/report.html' %}
+
+            {% else %}
+
+                <form method="post" action="{% url 'delete_community' community.name %}"> {% csrf_token %}
+                    <button type="submit" class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square mt-2">
+                        <span class="m-0 font-weight-bold text-tertiary">Delete <span class="text-red">{{ community.display_name }}</span></span>
+                    </button>
+                </form>
+
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% include 'user/partials/modal_members.html' %}
+
+{% endblock content %}

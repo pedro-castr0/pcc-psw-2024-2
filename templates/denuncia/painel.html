@@ -1,0 +1,56 @@
+{% extends '_base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="mb-4">Painel de Denúncias</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Autor da Denúncia</th>
+                    <th>Conteúdo Denunciado</th>
+                    <th>Motivo</th>
+                    <th>Status</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for denuncia in denuncias %}
+                <tr>
+                    <td>#{{ denuncia.id }}</td>
+                    <td>{{ denuncia.autor }}</td>
+                    <td>
+                        {{ denuncia.content_type.model }} #{{ denuncia.object_id }}
+                        {% if denuncia.conteudo %}
+                            — {{ denuncia.conteudo }}
+                        {% endif %}
+                    </td>
+                    <td>{{ denuncia.get_motivo_display }}</td>
+                    <td>
+                        {% if denuncia.status == 'pendente' %}
+                            <span class="badge bg-warning text-dark">{{ denuncia.get_status_display }}</span>
+                        {% elif denuncia.status == 'aprovada' %}
+                            <span class="badge bg-success">{{ denuncia.get_status_display }}</span>
+                        {% elif denuncia.status == 'rejeitada' %}
+                            <span class="badge bg-danger">{{ denuncia.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ denuncia.data_criacao|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'denuncia:resolver_denuncia' denuncia.id 'aprovar' %}" class="btn btn-success btn-sm me-1">✅ Aprovar</a>
+                        <a href="{% url 'denuncia:resolver_denuncia' denuncia.id 'rejeitar' %}" class="btn btn-danger btn-sm">❌ Rejeitar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">Nenhuma denúncia pendente.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

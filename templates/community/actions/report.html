@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="dropdown d-flex">
+    <a 
+        href="" 
+        class="btn button-magenta d-flex align-items-center justify-content-center rounded button-medium abrir-denuncia" 
+        data-url="{% url 'denuncia:criar_denuncia' app_label='communities' model_name='community' object_id=community.id %}" 
+        data-object-id="{{ community.id }}">
+
+        <i class="fas fa-flag fa-sm fa-fw text-white text-tertiary"></i>
+        <p class="font-weight-bold text-tertiary mb-0 ml-2">
+            Report <span class="text-red">
+
+                {% if community.display_name %}
+
+                    {{ community.display_name }}
+
+                {% else %}
+
+                    {{ community.name }}
+
+                {% endif %}
+
+            </span>
+        </p>
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-right form-denuncia p-3 animated--grow-in" id="form-denuncia-{{ community.id }}" style="min-width: 300px; display: none;">
+        <div class="text-center text-muted">Loading...</div>
+    </div>
+</div>

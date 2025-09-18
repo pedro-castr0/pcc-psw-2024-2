@@ -1,0 +1,14 @@
+
+<button type="button"
+        class="btn btn-join rounded-pill d-flex align-items-center justify-content-center px-3 button-small-square {% if community.id in community_ids %}button-magenta{% else %}button-white{% endif %}"
+        data-community-id="{{ community.id }}"
+        data-joined="{% if community.id in community_ids %}true{% else %}false{% endif %}"
+        data-join-url="{% url 'join' %}"
+        data-leave-url="{% url 'leave' %}"
+        id="join-btn-{{ community.id }}">
+
+    <span class="font-weight-bold text-tertiary" id="join-text-{{ community.id }}">
+        {% if community.id in community_ids %}Leave{% else %}Join{% endif %}
+    </span>
+</button>
+

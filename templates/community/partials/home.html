@@ -1,0 +1,12 @@
+{% for post in posts %}
+
+    {% include 'post/partials/posts.html' %}
+
+{% empty %}
+    
+    <div class="card card-dark text-center p-5">
+        <i class="fas fa-inbox fa-2x mb-3 text-blurred"></i>
+        <p class="mb-0 text-content text-blurred">No one has posted yet, be the first!</p>
+    </div>
+
+{% endfor %}

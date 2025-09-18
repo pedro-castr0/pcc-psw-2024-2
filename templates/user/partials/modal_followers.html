@@ -1,0 +1,66 @@
+{% load static %}
+
+<div class="modal" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content card-dark">
+            <div class="modal-header d-flex gradient-black-magenta border-bottom-magenta align-items-center">
+                <p class="modal-title text-subtitle font-weight-bold text-white my-0" id="followersModalLabel">Followers list</p>
+
+                <button type="button" class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle button-small-circle" data-dismiss="modal">
+                    <p class="text-subtitle m-0 font-weight-bold" aria-hidden="true">&times;</p>
+                </button>
+            </div>
+
+            <div class="modal-body p-2">
+
+                {% for follow in person.followers.all %}
+
+                    <div class="d-flex align-items-center justify-content-between card-hover-magenta p-3 rounded">
+                        <div class="d-flex align-items-center">
+                            <img 
+                                src="{% if follow.follower.profile.profile_picture %}{{ follow.follower.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                                class="rounded-circle circle-picture">
+
+                            <div class="ml-3">
+                                <div class="d-flex align-items-center">
+                                    <p class="font-weight-bold mb-0 text-subtitle">
+                                        <a href="/user/profile/{{ follow.follower.username }}" class="text-decoration-none link-lilac">
+                                            {{ follow.follower.profile.display_name }}
+                                        </a>
+                                    </p>
+
+                                    {% if follow.follower.is_superuser %}
+
+                                        <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <p class="text-blurred mb-0 text-tertiary">
+                                    <span class="followers-count" data-user-id="{{ follow.follower.id }}">{{ follow.follower.followers.count }}</span> followers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+
+                            {% if user.id != follow.follower.id %}
+
+                                {% include "buttons/follow.html" with person=follow.follower %}
+
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                {% empty %}
+
+                    <p class="m-3 text-content text-blurred">This user doesn't have followers.</p>
+
+                {% endfor %}
+
+            </div>    
+        </div>
+    </div>
+</div>

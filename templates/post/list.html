@@ -1,0 +1,91 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>TITLE</th>
+            <th>CONTENT</th>
+            <th>TAG</th>
+            <th>POSTED</th>
+            <th>EDITED</th>
+            <th>AUTHOR</th>
+            <th>COMMUNITY</th>
+            <th>LIKE</th>
+            <th>DISLIKE</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+            <th>DENUNCIA</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for post in posts %}
+
+        <tr>
+            <td>#{{post.id}}</td>
+            <td>{{post.title}}</td>
+            <td>{{post.content|safe}}</td>
+            <td>{{post.tag}}</td>
+            <td>{{post.posted}}</td>
+            <td>{{post.edited}}</td>
+            <td>{{post.get_author}}</td>
+            <td>{{post.get_community}}</td>
+            <td>
+                <form method="post" action="/post/feedback/"> {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="hidden" name="feedback" value="like">
+                    <button type="submit">Like</button>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/post/feedback/"> {% csrf_token %}
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="hidden" name="feedback" value="dislike">
+                    <button type="submit">Dislike</button>
+                </form>
+            </td>
+            <td>
+                <a href="/post/edit/{{post.id}}">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <a href="/post/delete/{{post.id}}">
+                    Delete
+                </a>
+            </td>
+            <td>
+    <div class="dropdown position-relative">
+        <!-- Botão/ícone -->
+        <a href="#" class="abrir-denuncia nav-link"
+           data-url="{% url 'denuncia:criar_denuncia' app_label='posts' model_name='post' object_id=post.id %}"
+           data-object-id="{{ post.id }}">
+            <i class="fas fa-flag"></i>
+        </a>
+
+        <!-- Dropdown (conteúdo será injetado via AJAX) -->
+        <div class="dropdown-menu dropdown-menu-end shadow-sm form-denuncia p-3"
+             id="form-denuncia-{{ post.id }}"
+             style="min-width: 300px; min-height: auto; display: none;">
+            <div class="text-center text-muted">Carregando...</div>
+        </div>
+    </div>
+</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+<a href="/post/create/">
+    Create
+</a>
+
+{% endblock content %}

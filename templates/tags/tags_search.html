@@ -1,0 +1,61 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+
+            {% for post in posts %}
+
+                {% include 'post/partials/posts.html' %}
+
+            {% endfor %}
+
+        </div>
+
+        <div class="col-4">
+            <div class="mb-3">
+                <p class="font-weight-bold mb-2 text-content">COMMUNITIES TO JOIN:</p>
+
+                {% for community in communities %}
+
+                    {% if community.id not in community_ids %}
+
+                        {% if user.id != community.creator.id %}
+
+                            {% include 'community/partials/info.html' %}
+
+                        {% endif %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            <div class="mb-3">
+                <p class="font-weight-bold mb-2 text-content">USERS TO FOLLOW:</p>
+                
+                {% for person in users %}
+
+                    {% if person.id not in following_ids %}
+
+                        {% if user.id != person.id %}
+
+                            {% include 'user/partials/profiles.html' %}
+
+                        {% endif %}
+                        
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,73 @@
+{% load static %}
+
+<div class="card card-dark p-3">
+    <div class="d-flex">
+        <img 
+            src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+            class="rounded-circle circle-picture-tiny">
+        
+        <div class="d-flex align-items-center">
+            <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none font-weight-bold link-lilac text-tertiary ml-2">
+
+                {{ post.author.profile.display_name }}
+
+            </a>
+
+            {% if post.author.is_superuser %}
+                    
+                <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+            {% endif %}
+
+            <p class="ml-1 mb-0 text-tertiary text-blurred">
+                ∙ {{ post.posted|timesince }} ago
+            </p>
+        </div>
+    </div>
+
+
+    <p class="font-weight-bold my-2 text-white text-subtitle">{{ post.title }}
+        <span class="m-0 font-weight-bold text-tertiary
+                    {% if post.get_karma > 0 %}text-green
+                    {% elif post.get_karma < 0 %}text-red
+                    {% else %}text-blurred
+                    {% endif %}"
+
+                    id="karma-{{ post.id }}">
+
+                {% if post.get_karma > 0 %}+{{ post.get_karma }}{% else %}{{ post.get_karma }}{% endif %}
+        </span>
+    </p>
+    <div class="position-relative my-2 post-card-wrapper">
+        <div class="post-content">
+            <div class="post-image text-justify text-white text-content">
+                {{ post.content|safe }}
+            </div>
+        </div>
+
+        <div class="fade-overlay d-none"></div>
+
+        <div class="see-more-btn position-absolute d-none"></div>
+    </div>
+
+    <div class="d-flex align-items-center flex-wrap">
+
+        {% for tag in post.post_tag.all %}
+
+            {% include 'buttons/tag.html' %}
+
+        {% empty %}
+
+            <span class="text-blurred text-tertiary font-weight-bold">No tags</span>
+
+        {% endfor %}
+        
+    </div>
+</div>
+
+{% if not hide_posted  %}
+
+    {% include 'post/partials/posted.html' %}
+
+{% endif %}
+

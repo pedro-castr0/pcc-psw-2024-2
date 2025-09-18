@@ -1,0 +1,68 @@
+{% load static %}
+
+<div class="card">
+    <img class="card-img-top border-bottom info-banner" src="{% if person.profile.profile_banner %}{{ person.profile.profile_banner.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}">
+    <div class="col p-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img 
+                    src="{% if person.profile.profile_picture %}{{ person.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
+                    class="rounded-circle border circle-picture">
+
+                <div class="ml-2">
+                    <div class="d-flex align-items-center">
+                        <p class="font-weight-bold mb-0 text-subtitle">
+                            <a href="/user/profile/{{ person.username }}" class="text-decoration-none link-lilac">
+                                {{ person.profile.display_name }}
+                            </a>
+                        </p>
+
+                        {% if person.is_superuser %}
+                                
+                            <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                        {% endif %}
+
+                    </div>
+
+                    <p class="text-muted mb-0 text-content" >
+                        @{{ person.username }}
+                    </p>
+                </div>
+            </div>
+
+            {% if person.id != user.id %}
+
+                {% include 'buttons/follow.html' %}
+
+            {% endif %}
+
+        </div>
+
+        <div class="my-3">
+            <p class="text-justify">
+
+                {% if person.profile.bio %}
+
+                    <span class="text-dark">
+
+                        {{ person.profile.bio }}
+
+                    </span>
+
+                {% else %}
+
+                    This user doesn't have bio yet.
+
+                {% endif %}
+
+            </p>
+        </div>
+        
+        <hr class="sidebar-divider">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <p class="text-content mb-0"><i class="fas fa-fw fa-users"></i><span class="followers-count ml-1" data-user-id="{{ person.id }}">{{ person.followers.count }}</span> followers</p>
+        </div>
+    </div>
+</div>

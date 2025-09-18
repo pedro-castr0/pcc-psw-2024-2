@@ -1,0 +1,39 @@
+{% load static %}
+
+{% csrf_token %}
+
+<div class="d-flex card-dark p-2 rounded-pill flex-column align-items-center button-medium-vertical">
+    <button type="button" 
+        class="btn d-flex flex-column align-items-center justify-content-center rounded-circle button-tiny-circle px-0"
+        data-post-id="{{ post.id }}"
+        data-feedback="like"
+        data-positive-feedback="{% if post.id in positive_feedbacks %}true{% else %}false{% endif %}"
+        data-url-feedback="{% url 'feedback' %}"
+        data-url-null="{% url 'null_feedback' %}"
+        id="like-btn-{{ post.id }}">
+        <i class="fas fa-caret-up {% if post.id in positive_feedbacks %}text-green{% else %}text-blurred{% endif %} text-subtitle mx-0"></i>
+    </button>
+
+    <p 
+        class="my-1 font-weight-bold text-tertiary
+        {% if post.get_karma > 0 %}text-green
+        {% elif post.get_karma < 0 %}text-red
+        {% else %}text-blurred
+        {% endif %}"
+
+        id="karma-{{ post.id }}">
+        
+        {% if post.get_karma > 0 %}+{{ post.get_karma }}{% else %}{{ post.get_karma }}{% endif %}
+    </p>
+
+    <button type="button" 
+        class="btn d-flex flex-column align-items-center justify-content-center rounded-circle button-tiny-circle px-0"
+        data-post-id="{{ post.id }}"
+        data-feedback="dislike"
+        data-negative-feedback="{% if post.id in negative_feedbacks %}true{% else %}false{% endif %}"
+        data-url-feedback="{% url 'feedback' %}"
+        data-url-null="{% url 'null_feedback' %}"
+        id="dislike-btn-{{ post.id }}">
+        <i class="fas fa-caret-down {% if post.id in negative_feedbacks %}text-red{% else %}text-blurred{% endif %} text-subtitle"></i>
+    </button>
+</div>

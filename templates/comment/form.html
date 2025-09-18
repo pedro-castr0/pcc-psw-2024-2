@@ -1,0 +1,17 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+
+    <h1>{% if form.instance.id %}Edit comment{% else %}Comment{% endif %}</h1><br>
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        {% if form.instance.id %}Confirm{% else %}Comment{% endif %}
+    </button>
+</form>
+
+{% endblock content %}

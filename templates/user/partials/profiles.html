@@ -1,0 +1,41 @@
+{% load static %}
+
+<div class="card card-dark my-2"> 
+    <div class="col p-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img 
+                    src="{% if person.profile.profile_picture %}{{ person.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                    class="rounded-circle circle-picture">
+
+                <div class="ml-3">
+                    <div class="d-flex align-items-center">
+                        <p class="font-weight-bold mb-0 text-subtitle">
+                            <a href="/user/profile/{{ person.username }}" class="text-decoration-none link-lilac">
+                                {{ person.profile.display_name }}
+                            </a>
+                        </p>
+
+                        {% if person.is_superuser %}
+                                
+                            <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                        {% endif %}
+
+                    </div>
+
+                    <p class="text-blurred mb-0 text-tertiary">
+                        <span class="followers-count" data-user-id="{{ person.id }}">{{ person.followers.count }}</span> followers
+                    </p>
+                </div>
+            </div>
+
+            {% if user.id != person.id %}
+
+                {% include "buttons/follow.html" %}
+
+            {% endif %}
+
+        </div>
+    </div>
+</div>

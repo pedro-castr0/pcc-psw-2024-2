@@ -1,0 +1,85 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8 d-flex">
+            <div class="d-flex flex-column">
+                {% include "buttons/back.html" %}
+            </div>
+
+            <div class="card card-dark p-3 ml-2">
+                <div class="d-flex">
+                    <img 
+                        src="{% if comment.author.profile.profile_picture %}{{ comment.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                        class="rounded-circle circle-picture-tiny">
+                    
+                    <div class="d-flex align-items-center">
+                        <a href="/user/profile/{{ comment.author.username }}" class="text-decoration-none font-weight-bold link-lilac text-tertiary ml-2">
+                            {{ comment.author.profile.display_name }}
+                        </a>
+
+                        {% if comment.author.is_superuser %}
+                            <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+                        {% endif %}
+
+                        <p class="ml-1 mb-0 text-tertiary text-blurred">
+                            ∙ {{ comment.posted|timesince }} ago
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Formulário de edição estilizado -->
+               <form method="post" class="d-flex flex-column mt-2">
+    {% csrf_token %}
+
+    <div class="form-group mb-1 w-100">
+        <textarea 
+            name="content" 
+            class="form-control comment-form rounded text-white"
+            rows="2" 
+            placeholder="Edit your comment, {{ user.profile.display_name }}?"
+            required>{{ form.content.value }}</textarea>
+    </div>
+
+    {% if comment.parent %}
+        <p class="text-blurred text-tertiary mb-1 mt-1">
+            replying <a href="/user/profile/{{ comment.parent.author.username }}" class="link-lilac text-decoration-none font-weight-bold">{{ comment.parent.author.profile.display_name }}</a>
+        </p>
+    {% endif %}
+    
+    <input type="hidden" name="next" value="{{ request.META.HTTP_REFERER }}">
+
+
+    <div class="d-flex justify-content-end m-2">  <!-- mt-3 adiciona espaço acima do botão -->
+        <button type="submit" class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+            <i class="fas fa-fw fa-paper-plane text-tertiary"></i>
+        </button>
+    </div>
+</form>
+
+
+                {% include 'post/partials/cards.html' with post=comment.post %}
+
+                {% if comment.replies.exists %}
+                    <div id="replies-{{ comment.id }}" class="d-none">
+                        <p class="text-white font-weight-bold my-3 text-subtitle">Replies</p>
+                        {% for reply in comment.replies.all %}
+                            {% include "post/partials/comments.html" with comment=reply %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="col-4">
+            {% include 'user/partials/about.html' with person=comment.author %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

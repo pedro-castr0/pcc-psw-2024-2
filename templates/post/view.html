@@ -1,0 +1,144 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8 d-flex" >
+            <div class="d-flex flex-column">
+
+                {% include "buttons/back.html" %}
+                
+                {% include "buttons/feedback.html" %}
+
+            </div>
+
+            <div class="card card-dark p-3 ml-2 flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img 
+                            src="{% if post.author.profile.profile_picture %} {{ post.author.profile.profile_picture.url }} {% else %} {% static 'img/gradient-03.jpg' %} {% endif %}" 
+                            class="rounded-circle circle-picture">
+
+                        <div class="ml-3">
+                            <div class="d-flex align-items-center">
+                                <p class="font-weight-bold mb-0 text-subtitle">
+                                    <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none link-lilac">
+
+                                        {{ post.author.profile.display_name }}
+
+                                    </a>
+                                </p>
+
+                                {% if post.author.is_superuser %}
+
+                                    <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                                {% endif %}
+
+                            </div>
+
+                            <p class="text-blurred mb-0 text-tertiary">
+                                <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ {{ post.posted|timesince }} ago {% if post.edited != post.posted %}(edited){% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="font-weight-bold my-3 text-white text-title">{{ post.title }}</p>
+
+                    <div class="d-flex align-items-center flex-wrap">
+
+                        {% for tag in post.post_tag.all %}
+
+                            {% include 'buttons/tag.html' %}
+
+                        {% empty %}
+
+                            <span class="text-blurred text-tertiary font-weight-bold">No tags</span>
+
+                        {% endfor %}
+                        
+                    </div>
+
+                    <p class="my-3"><div class="post-image text-justify text-white text-content">{{ post.content|safe }}</div></p>
+                </div>
+
+                {% include 'post/actions/options.html' %}
+
+                <p class="text-white font-weight-bold p-0 my-3 text-subtitle">{{ post.get_comments_count }} comments</p>
+
+                <div class="comment-box d-flex align-items-top">
+                    <img 
+                        src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                        class="rounded-circle circle-picture">
+
+                    <form method="post" action="{% url 'comment' %}" class="d-flex flex-grow-1 ml-3"> {% csrf_token %}
+                        <div class="form-group mb-2 w-100">
+                            <textarea 
+                                name="content" class="form-control comment-form rounded text-white"
+                                rows="1" placeholder="What do you think about that, {{ user.profile.display_name }}?" required></textarea>
+                        </div>
+
+                        <input type="hidden" name="post" value="{{ post.id }}">
+
+                        <div class="comment-actions d-none mb-2">
+                            <button type="button" class="btn button-magenta d-flex button-small-square btn-cancel align-items-center rounded-pill">
+                                <span class="text-tertiary font-weight-bold">Cancel</span>
+                            </button>
+
+                            <button type="submit"
+                                    class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+                                <i class="fas fa-fw fa-paper-plane text-tertiary"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="comments-area-{{ post.id }}">
+
+                    {% for comment in comments %}
+
+                        {% include "post/partials/comments.html" %}
+
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4">
+            <div class="mb-2">
+
+                {% include 'user/partials/about.html' with person=post.author %}
+                
+            </div>
+
+            <div class="mb-3">
+
+                {% include 'community/partials/info.html' with community=post.community %}
+
+            </div>
+
+            <div class="mb-2">
+                <p class="font-weight-bold mb-2 text-content text-blurred">COMMUNITY POSTS</p>
+
+                {% for post in post.community.posts.all %}
+
+                    <div class="mb-2">
+
+                        {% include 'post/partials/cards.html' %}
+
+                    </div>
+
+                {% endfor %}
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

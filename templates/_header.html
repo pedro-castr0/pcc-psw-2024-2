@@ -1,0 +1,81 @@
+{% load static %}
+
+<nav class="navbar navbar-expand topbar px-3 gradient-black-magenta header-bar d-flex w-100" style="border-bottom: solid 1px rgba(255, 255, 255, 0.1);">
+    <div class="d-flex align-items-center">
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 text-light">
+            <i class="fa fa-bars"></i>
+        </button>
+
+        <a href="/" class="btn text-light d-flex align-items-center">
+            <img src="{% static 'img/logo-crow.png' %}" style="max-height: 30px; width: auto;">
+            <img src="{% static 'img/logo-text.png' %}" class="ml-1" style="max-height: 24px; width: auto;">
+        </a>
+    </div>
+
+    <div class="d-flex justify-content-center w-100">
+        <form 
+            action="{% url 'search' %}" method="get"
+            class="navbar-search d-flex align-items-center position-relative"
+            data-autocomplete-url="{% url 'autocomplete' %}"
+            data-tags-url="{% url 'get_tags' %}">
+
+            <div class="input-group">
+                <input 
+                    id="search-input"
+                    name="q"
+                    type="text"
+                    class="form-control border-0  px-3"
+                    placeholder="Search..."
+                    autocomplete="off"
+                    style="background-color: rgba(255,255,255,0.1); color: #fff;">
+
+                <button class="rounded-right btn-light search-button button-medium-circle" type="submit">
+                    <i class="fas fa-search text-content"></i>
+                </button>
+            </div>
+
+            <ul id="search-dropdown"
+                class="dropdown-menu shadow-sm w-100"
+                style="position: absolute; top: 100%; left: 0; z-index: 1050; display: none; max-height: 250px; overflow-y: auto;">
+            </ul>
+            <template id="search-suggestions">
+                <li class="dropdown-item"></li>
+            </template>
+
+            <div class="nav-item dropdown ms-3">
+                <a href="#" class="nav-link p-2" id="filterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-sort-amount-up-alt text-light text-content"></i>
+                </a>
+
+                <ul id="tags-dropdown"
+                    class="dropdown-menu dropdown-menu-end shadow-sm p-2"
+                    style="width: 300px; max-height: 300px; overflow-y: auto;"
+                    aria-labelledby="filterDropdown">
+                    <li class="dropdown-item text-muted">Carregando tags...</li>
+                </ul>
+            </div>
+        </form>
+    </div>
+</nav>
+
+<style>
+
+.header-bar {
+    position: fixed;
+    top: 0;
+    left: 0px;
+    z-index: 1030;
+    width: 100%;
+    
+}
+
+.search-button { /* Green */
+  border: none;
+  text-decoration: none;
+}
+
+.input-group {
+    height: 40px;
+}
+
+</style>

@@ -1,0 +1,92 @@
+{% load static %}
+
+<div class="card card-dark p-3">
+    <div class="d-flex align-items-center justify-content-between">
+        <p class="font-weight-bold m-0 text-subtitle text-white">
+            {{ person.profile.display_name }}'s bio
+        </p>
+    </div>
+
+    <div class="mt-3">
+        <p class="text-justify text-white text-content">
+
+            {% if person.profile.bio %}
+
+                {{ person.profile.bio }}
+
+            {% else %}
+
+                <span class="text-blurred">
+
+                    This user doesn't have bio yet.
+
+                </span>
+
+            {% endif %}
+
+        </p>
+    </div>
+
+    <div class="d-flex align-items-center flex-wrap">
+        <div class="d-flex align-items-center mr-3 mt-2">
+            <p class="text-tertiary text-blurred mb-0 text-justify">
+                <i class="fas fa-fw fa-fire-alt"></i>
+                <span class="{% if get_karma.karma > 0 %}text-green font-weight-bold{% elif get_karma.karma < 0 %}text-red font-weight-bold{% endif %}">
+                    {% if get_karma.karma > 0 %}+{{ get_karma.karma }}{% else %}{{ get_karma.karma }}{% endif %}
+                </span>
+                Karma
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center mr-3 mt-2">
+            <p class="text-tertiary text-blurred mb-0 text-justify">
+                <i class="fas fa-fw fa-calendar-day"></i>
+                Joined {{ person.date_joined|date:"d M Y" }}
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center mr-3 mt-2">
+            <p class="text-tertiary text-blurred mb-0 text-justify">
+                <i class="fas fa-fw fa-envelope"></i>
+                {{ person.email }}
+            </p>
+        </div>
+
+        {% if person.joined_communities.exists %}
+
+            <div class="d-flex align-items-center mr-3 mt-2">
+                <a href="" class="text-tertiary text-blurred mb-0 text-justify text-decoration-none link-lilac" data-toggle="modal" data-target="#joinedModal">
+                    <i class="fas fa-fw fa-users"></i>
+                    Active in {{ person.joined_communities.count }} communities
+                </a>
+            </div>
+
+        {% endif %}
+
+        {% if person.communities.exists %}
+
+            <div class="d-flex align-items-center mr-3 mt-2">
+                <a href="" class="text-tertiary text-blurred mb-0 text-justify text-decoration-none link-lilac" data-toggle="modal" data-target="#ownedModal">
+                    <i class="fas fa-fw fa-hammer"></i>
+                    Own {{ person.communities.count }} communities
+                </a>
+            </div>
+
+        {% endif %}
+
+        {% if person.is_superuser %}
+
+            <div class="d-flex align-items-center mr-3 mt-2">
+                <p class="text-tertiary text-blurred mb-0 text-justify text-decoration-none">
+                    <i class="fas fa-fw fa-crown"></i>
+                    Site admin
+                </p>
+            </div>
+
+        {% endif %}
+    </div>
+</div>
+
+{% include 'user/partials/modal_joined.html' %}
+
+{% include 'user/partials/modal_owned.html' %}

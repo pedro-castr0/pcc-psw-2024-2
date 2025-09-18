@@ -1,0 +1,338 @@
+{% load static %}
+
+<nav class="sidebar">
+  <div class="sidebar-content p-3">
+    <a href="/" class="d-flex align-items-center social-link link-lilac mb-2 text-content text-decoration-none p-3">
+      <i class="fas fa-fw fa-home mr-2"></i>
+      Home
+    </a>
+
+    {% if user.is_superuser %}
+
+      <hr class="divider">
+
+      <ul class="sidebar-menu">
+        <li>
+          <p class="mb-2 font-weight-bold text-tertiary text-blurred">ADMIN PANEL</p>
+
+          <a href="/admin/" class="social-link link-lilac mb-2">
+            <i class="fas fa-fw fa-cogs"></i>
+            Django Admin
+          </a>
+
+          <a data-bs-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase" class="social-link link-lilac mb-2">
+            <i class="fas fa-fw fa-database"></i>
+            Database
+          </a>
+
+          <div class="collapse" id="collapseDatabase">
+            <ul class="collapse-inner-custom">
+              <li><a class="collapse-item-custom link-lilac" href="/user/list/"><i class="fas fa-user mr-1"></i>Users</a></li>
+              <li><a class="collapse-item-custom link-lilac" href="/community/list/"><i class="fas fa-users mr-1"></i>Communities</a></li>
+              <li><a class="collapse-item-custom link-lilac" href="/post/list/"><i class="fas fa-pen-alt mr-1"></i>Posts</a></li>
+              <li><a class="collapse-item-custom link-lilac" href="/actions/list/"><i class="fas fa-user-plus mr-1"></i>Follows</a></li>
+              <li><a class="collapse-item-custom link-lilac" href="{% url 'denuncia:painel_denuncias' %}"><i class="fas fa-flag mr-1"></i>Report panel</a></li>
+            </ul>
+          </div>
+        </li>
+
+        <li>
+          <a data-bs-toggle="collapse" href="#collapseRegister" role="button" aria-expanded="false" aria-controls="collapseRegister" class="social-link link-lilac">
+            <i class="fas fa-fw fa-plus-square"></i>
+            Register
+          </a>
+          <div class="collapse" id="collapseRegister">
+            <ul class="collapse-inner-custom">
+              <li><a class="collapse-item-custom link-lilac" href="/user/create/"><i class="fas fa-user-plus mr-1"></i>User</a></li>
+              <li><a class="collapse-item-custom link-lilac" href="/community/create/"><i class="fas fa-users mr-1"></i>Community</a></li>
+              <li><a class="collapse-item-custom link-lilac" href="/post/create/"><i class="fas fa-pen-alt mr-1"></i>Post</a></li>
+              <li><a class="collapse-item-custom link-lilac" href="/comment/comment/"><i class="fas fa-comment-dots mr-1"></i>Comment</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+
+    {% endif %}
+
+    <hr class="divider">
+
+    <p class="mb-2 font-weight-bold text-tertiary text-blurred">FOLLOWING</p>
+
+    {% for follow in user.following.all %}
+
+      <a href="/user/profile/{{ follow.followed.username }}" class="d-flex align-items-center mb-2 collapse-item-custom link-lilac p-2 text-decoration-none">
+        <img 
+            src="{% if follow.followed.profile.profile_picture %}{{ follow.followed.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
+            class="rounded-circle circle-picture-small">
+
+        <div class="ml-2">
+            <p class="font-weight-bold mb-0 text-content text-overflow">
+
+              {% if follow.followed.profile.display_name %}
+
+                  {{ follow.followed.profile.display_name }}
+
+              {% else %}
+
+                  {{ follow.followed.username }}
+
+              {% endif %}
+
+            </p>
+
+            <p class="text-blurred mb-0 text-tertiary font-weight-normal text-overflow">
+                @{{ follow.followed.username }}
+            </p>
+        </div>
+      </a>
+
+    {% empty %}
+
+      <div class="d-flex align-items-center mb-2">
+        <p class="text-blurred mb-0 text-content text-justify">
+            You're not following anyone yet.
+        </p>
+      </div>
+      
+    {% endfor %}
+
+    <hr class="divider">
+
+    <p class="mb-2 font-weight-bold text-tertiary text-blurred">JOINED COMMUNITIES</p>
+
+    {% for joined in user.joined_communities.all %}
+
+      <a href="/community/{{ joined.community.name }}" class="d-flex align-items-center mb-2 collapse-item-custom link-lilac p-2 text-decoration-none">
+        <img 
+            src="{% if joined.community.community_picture %}{{ joined.community.community_picture.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
+            class="rounded-circle circle-picture-small">
+
+        <div class="ml-2">
+            <p class="font-weight-bold mb-0 text-content text-overflow">
+
+              {% if joined.community.display_name %}
+
+                  {{ joined.community.display_name }}
+
+              {% else %}
+
+                  {{ joined.community.name }}
+
+              {% endif %}
+
+            </p>
+
+            <p class="text-blurred mb-0 text-tertiary font-weight-normal text-overflow">
+                @{{ joined.community.name }}
+            </p>
+        </div>
+      </a>
+
+    {% empty %}
+
+      <div class="d-flex align-items-center mb-2">
+        <p class="text-blurred mb-0 text-content text-justify">
+            You're not joined in any community yet.
+        </p>
+      </div>
+      
+    {% endfor %}
+
+    <hr class="divider">
+
+    <p class="mb-2 font-weight-bold text-tertiary text-blurred">MANAGE COMMUNITIES</p>
+
+    {% for community in user.communities.all %}
+
+      <a href="/community/{{ community.name }}" class="d-flex align-items-center mt-2 collapse-item-custom link-lilac p-2 text-decoration-none">
+        <img 
+            src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}{% static 'img/gradient-01.jpg' %}{% endif %}" 
+            class="rounded-circle circle-picture-small">
+
+        <div class="ml-2">
+            <p class="font-weight-bold mb-0 text-content text-overflow">
+
+              {% if community.display_name %}
+
+                  {{ community.display_name }}
+
+              {% else %}
+
+                  {{ community.name }}
+
+              {% endif %}
+
+            </p>
+
+            <p class="text-blurred mb-0 text-tertiary font-weight-normal text-overflow">
+                @{{ community.name }}
+            </p>
+        </div>
+      </a>
+
+    {% empty %}
+
+      <div class="d-flex align-items-center mb-2">
+        <p class="text-blurred mb-0 text-content text-justify">
+            You don't have any community.
+        </p>
+      </div>
+      
+    {% endfor %}
+
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center sidebar-bottom">
+    <div class="d-flex align-items-center">
+      <img 
+          src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'img/gradient-02.jpg' %}{% endif %}" 
+          class="rounded-circle circle-picture">
+
+      <div class="ml-2">
+          <p class="font-weight-bold mb-0 text-subtitle">
+              <a href="/user/profile/{{ user.username }}" class="text-decoration-none link-lilac">
+                  {% if user.profile.display_name %}
+                      {{ user.profile.display_name }}
+                  {% else %}
+                      {{ user.username }}
+                  {% endif %}
+              </a>
+          </p>
+          <p class="text-blurred mb-0 text-content">
+              @{{ user.username }}
+          </p>
+      </div>
+    </div>
+
+    <form action="/user/logout/" method="post"> {% csrf_token %}
+      <button type="submit" class="d-flex btn link-lilac align-items-center button-small-circle rounded-circle justify-content-center">
+          <i class="fas fa-fw text-content fa-sign-out-alt"></i>
+      </button>
+    </form>
+  </div>
+</nav>
+
+<style>
+:root {
+  --txt: #f7e8ff;
+  --accent: #f7e8ff;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 260px;
+  background: linear-gradient(120deg, #0a0a0a 0%, #1e0f25 100%);
+  display: flex;
+  flex-direction: column;
+  z-index: 1030;
+  border-right: solid 1px rgba(255, 255, 255, 0.1);
+
+  padding-top: 70px; /* espaço para o header/perfil */
+  box-sizing: border-box;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) rgba(255,255,255,0);
+}
+
+.sidebar-bottom {
+  border-top: solid 1px rgba(255, 255, 255, 0.1);
+  padding: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track { 
+  background: rgba(255,255,255,0.1); 
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  width: 100%;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.75rem 1rem;
+  color: #ddd;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.sidebar-menu a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.menu-heading {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.collapse-inner-custom {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 10px;
+  margin: 6px 12px 12px 12px;
+  backdrop-filter: blur(2px);
+  list-style: none;
+}
+
+.collapse-item-custom {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.collapse-item-custom:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  transition: 0.2s;
+}
+
+.social-link {
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.social-link:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.2s ease;
+}
+
+.divider {
+  border-top: solid 1px rgba(255, 255, 255, 0.1);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+
+}
+
+
+</style>

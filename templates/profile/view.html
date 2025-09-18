@@ -1,0 +1,114 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="d-flex align-items-center m-3">
+        <img 
+            class="rounded-circle profile-picture" 
+            src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
+            
+        <div class="ml-3">
+            <p class="font-weight-bold my-0 text-white text-master">{{ profile.display_name }}</p>
+
+            <p class="text-content text-blurred mb-2">
+                <span class="font-weight-bold text-white">@{{ profile.user.username }}</span> · 
+                <a href="" class="text-decoration-none text-blurred link-lilac" data-toggle="modal" data-target="#followersModal">
+                    <span class="followers-count" data-user-id="{{ profile.user.id }}">{{ profile.user.followers.count }}</span>
+                     followers
+                </a> · 
+                <a href="" class="text-decoration-none text-blurred link-lilac" data-toggle="modal" data-target="#followingModal">
+                    {{ profile.user.following.count }} following
+                </a> · {{ profile.user.posts.count }} posts
+            </p>
+                
+            <div class="d-flex align-items-center">
+
+                {% if profile.user.id != user.id %}
+
+                    {% include 'buttons/follow.html' with person=profile.user %}
+
+                {% else %}
+
+                    <a href="/user/profile/edit/" class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3">
+                        <p class="mb-0 text-tertiary text-white font-weight-bold">Edit profile</p>
+                    </a>
+
+                    <a class="btn button-magenta d-flex align-items-center justify-content-center rounded button-small-square rounded-pill px-3 ml-2">
+                        <p class="mb-0 text-tertiary text-white font-weight-bold">Account settings</p>
+                    </a>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <ul class="nav nav-tabs mb-3" id="profileTabs" role="tablist">
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2 " 
+                        data-toggle="tab" href="/user/profile/{{ profile.user.username }}/posts/" 
+                        data-target="#content-area" 
+                        id="selectedButton">
+
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Posts</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2" 
+                        data-toggle="tab" 
+                        href="/user/profile/{{ profile.user.username }}/comments/" 
+                        data-target="#content-area">
+
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Comments</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2" 
+                        data-toggle="tab" 
+                        href="/user/profile/{{ profile.user.username }}/likes/" 
+                        data-target="#content-area">
+
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Likes</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a 
+                        class="load-content nav-link border-bottom mr-2" 
+                        data-toggle="tab" 
+                        href="/user/profile/{{ profile.user.username }}/dislikes/" 
+                        data-target="#content-area">
+
+                        <p class="font-weight-bold text-decoration-none my-0 text-content">Dislikes</p>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="content-area">
+
+            </div>
+        </div>
+
+        <div class="col-4">
+
+            {% include 'user/partials/about.html' with person=profile.user %}
+
+        </div>
+    </div>
+</div>
+
+{% include 'user/partials/modal_followers.html' with person=profile.user %}
+
+{% include 'user/partials/modal_following.html' with person=profile.user %}
+
+{% endblock content %}

@@ -1,0 +1,119 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="d-flex align-items-center justify-content-between">
+                <p class="font-weight-bold mb-0 text-content text-white">FOLLOWING ({{ user.following.count }})</p>
+
+                <div class="d-flex">
+                    <a class="btn d-flex button-magenta align-items-center button-square-small rounded-pill">
+                        <p class="text-tertiary font-weight-bold mb-0" data-toggle="modal" data-target="#followingModal">See all</p>
+                    </a>
+
+                    <a class="btn d-flex button-white align-items-center button-square-small rounded-pill ml-2">
+                        <p class="text-tertiary font-weight-bold mb-0">Explore!</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="d-flex flex-grow-1 align-items-center flex-wrap">
+
+                {% for follow in user.following.all|slice:":8" %}
+
+                    <div class="d-flex flex-column align-items-center text-center mr-2 mt-3">
+                        <img 
+                            class="rounded-circle profile-picture-medium mb-2" 
+                            src="{% if follow.followed.profile.profile_picture %}{{ follow.followed.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}">
+
+
+                        <a href="/user/profile/{{ follow.followed.username }}" class="link-lilac text-subtitle font-weight-bold mb-0 text-overflow-small text-decoration-none">
+                            {{ follow.followed.profile.display_name }}
+                        </a>
+
+                        <span class="text-blurred text-tertiary font-weight-normal text-overflow-small">
+                            @{{ follow.followed.username }}
+                        </span>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <p class="font-weight-bold my-3 text-content text-white">FOR YOU</p>
+            
+            {% if posts %}
+
+                {% for post in posts %}
+
+                    {% if post.author.id in following_ids or post.community.id in community_ids or post.community.id in owned_communities_ids %}
+
+                        {% include "post/partials/posts.html" %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="text-muted">Nenhum post encontrado.</p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="col-4">
+            <p class="font-weight-bold mb-2 text-content text-white">
+                CURRENT TAGS ({{ tags.count }})
+            </p>
+
+            <div class="d-flex flex-wrap overflow-auto p-2">
+
+                {% for tag in tags %}
+                
+                    <a href="/search/?q=&tags={{ tag.id }}" class="btn button-tag-dark-lilac d-flex align-items-center justify-content-center rounded px-2 mb-2 mr-2">
+                        <span class="font-weight-bold text-tertiary">{{ tag.name }}</span>
+                        <span class="ml-1 mb-0 text-tertiary text-blurred font-weight-normal">{{ tag.posts.count }}</span>
+                    </a>
+
+                {% endfor %}
+
+                {% if user.is_superuser %}
+
+                    <a href="/admin/tags/tag/add/" 
+                    class="btn button-magenta button-tiny-circle d-flex align-items-center justify-content-center rounded-circle p-0">
+                        <i class="fas fa-fw fa-plus text-tiny font-weight-bold"></i>
+                    </a>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div 
+            style="position: fixed; bottom: 20px; right: 20px; width: 28%;">
+            <div class="my-2 d-flex flex-wrap overflow-auto">
+                <a href="#" class="text-tertiary text-blurred link-lilac mb-2 mr-2 text-decoration-none">Privacy Policy</a>
+                <a href="#" class="text-tertiary text-blurred link-lilac mb-2 mr-2 text-decoration-none">User Agreement</a>
+                <a href="#" class="text-tertiary text-blurred link-lilac mb-2 mr-2 text-decoration-none">Accessibility</a>
+            </div>
+
+            <span class="text-tertiary text-blurred">
+                
+                <a href="https://github.com/pedro-castr0/pcc-psw-2024-2" target="_blank" class="text-blurred link-lilac text-decoration-none">
+                    <i class="fab fa-github text-tertiary mr-1"></i>
+                    pedro-castr0's team
+                </a>
+                    © 2025. All rights reserved.
+            </span>
+        </div>
+    </div>
+</div>
+
+{% include 'user/partials/modal_following.html' with person=user %}
+
+{% endblock content %}

@@ -1,0 +1,479 @@
+.ql-editor img {
+    width: 50%;
+    margin-left: 25%;
+    height: auto;
+    border-radius: 0.3rem;
+    border: 1px solid #31293E;
+    margin: 1.5rem;
+}
+
+.ql-container.ql-snow {
+    border-top: none !important;
+    border: 1px solid #31293E !important;
+    border-radius: 0 0 4px 4px !important;
+    background: #1A1424 !important;
+}
+
+.ql-editor {
+    min-height: 100px;
+    font-size: 14px !important;
+    color: #FFFFFF !important;
+    padding: 10px;
+}
+
+.ql-editor.ql-blank::before {
+    font-size: 14px !important;
+    color: #FFFFFF50 !important;
+    font-style: normal !important;
+}
+
+.ql-toolbar.ql-snow {
+    border: 1px solid #31293E !important;
+    background: #1A1424 !important;
+    border-bottom: none !important;
+    border-radius: 4px 4px 0 0 !important;
+    padding: 4px;
+}
+
+.ql-toolbar .ql-picker {
+    color: #FFFFFF !important;
+}
+
+.ql-toolbar .ql-picker-options {
+    background: #1A1424 !important;
+    border: 1px solid #31293E !important;
+}
+
+.comment-box {
+    position: relative;
+}
+
+.comment-actions {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    gap: 5px;
+}
+
+.post-image img {
+    width: 50%;
+    height: auto;
+    border-radius: 0.3rem;
+    border: 1px solid #31293E !important;
+    object-fit: cover;
+    margin-left: 25%;
+}
+
+.comment-form {
+    min-height: 60px;
+    max-height: 200px;
+    border: 1px solid #31293E !important;
+    background: #1A1424 !important;
+}
+
+.comment-form::placeholder {
+    font-size: 14px !important;
+    color: #FFFFFF50 !important;
+}
+
+.input-text {
+    height: 40px;
+    font-size: 14px !important;
+    border: 1px solid #31293E !important;
+    background: #1A1424 !important;
+}
+
+.input-text::placeholder {
+    font-size: 14px !important;
+    color: #FFFFFF50 !important;
+}
+
+.info-banner {
+    height: 80px;
+    border-bottom: 1px solid #31293E;
+    object-fit: cover;
+}
+
+.circle-picture {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #31293E;
+    object-fit: cover;
+}
+
+.circle-picture-small {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #31293E;
+    object-fit: cover;
+}
+
+.circle-picture-tiny {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #31293E;
+    object-fit: cover;
+}
+
+.profile-picture {
+    height: 120px;
+    width: 120px;
+    border: 1px solid #31293E;
+    object-fit: cover;
+}
+
+.profile-picture-medium {
+    height: 80px;
+    width: 80px;
+    border: 1px solid #31293E;
+    object-fit: cover;
+}
+
+.community-banner {
+    height: 200px;
+    width: 100%;
+    border: 1px solid #31293E;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.community-picture {
+    height: 120px;
+    width: 120px;
+    border: 1px solid #31293E;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.button-medium {
+    height: 40px;
+}
+
+.button-medium-circle {
+    height: 40px;
+    width: 40px;
+}
+
+.button-medium-vertical {
+    width: 40px;
+}
+
+.text-master {
+    font-size: 26px;
+}
+
+.text-title {
+    font-size: 24px;
+}
+
+.text-subtitle {
+    font-size: 16px;
+}
+
+.text-content {
+    font-size: 14px;
+}
+
+.text-tertiary {
+    font-size: 12px;
+}
+
+.text-tiny {
+    font-size: 6px;
+}
+
+.button-small-square {
+    height: 30px;
+}
+
+.button-small-circle {
+    height: 30px; 
+    width: 30px;
+}
+
+.button-tiny-circle {
+    height: 20px !important; 
+    width: 20px !important;
+}
+
+.post-content-wrapper {
+    max-height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+.post-card-wrapper {
+    max-height: 60px;
+    overflow: hidden;
+    position: relative;
+}
+
+.fade-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(17,13,23,0) 0%, #110D17 100%);
+    pointer-events: none;
+}
+
+.see-more-btn {
+    bottom: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.clickable:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    transform: translateY(-2px);
+}
+
+input[type="file"].file-input {
+    height: auto;
+    border-radius: 0.375rem;
+    font-size: 12px;
+}
+
+input[type="file"].file-input::-webkit-file-upload-button {
+    border: 1px solid #31293E !important;
+    padding: 0rem 0.75rem;
+    border-radius: 15px;
+    background: #110D17 !important;
+    cursor: pointer;
+    height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #FFFFFF
+}
+
+input[type="file"].file-input::-webkit-file-upload-button:hover {
+    background: #31293E !important;
+    transition: all ease 0.2s;
+}
+
+input.tag-btn {
+    display: none;
+}
+
+input.tag-btn + label {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid #4C3272;
+    border-radius: 0.375rem;
+    background-color: #2B1D3B;
+    color: #CBB6E9;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 30px;
+}
+
+input.tag-btn + label:hover {
+    background-color: #4C3272;
+}
+
+input.tag-btn:checked + label {
+    background-color: #4C3272;
+}
+
+.main-content {
+  margin-left: 260px;
+  margin-top: 100px;
+}
+
+.header-content {
+    margin-left: 260px;
+}
+
+.gradient-black-magenta {
+    background: linear-gradient(120deg, #0a0a0a 0%, #2f193d 100%);
+}
+
+.gradient-background {
+    background: linear-gradient(120deg, #040109 0%, #16121F 100%);
+}
+
+.card-dark {
+    background: #110D17 !important;
+    border: 1px solid #31293E !important;
+}
+
+.link-lilac {
+    color: #CBB6E9;
+}
+
+.link-lilac:hover {
+  color: #eee3ff !important;
+  transition: all 0.2s ease;
+}
+
+.text-blurred {
+  color: rgba(255,255,255,0.5);
+}
+
+.button-tiny-circle {
+    height: 26px;
+    width: 26px;
+}
+
+.text-green {
+    color: #67C85C;
+}
+
+.text-green:hover {
+  color: #7ac772;
+  transition: all 0.2s ease;
+}
+
+.text-red {
+    color: #D43F42;
+}
+
+.text-red:hover {
+  color: #d15254;
+  transition: all 0.2s ease;
+}
+
+.button-tag-dark-lilac {
+    background-color: #2B1D3B !important;
+    border: 1px solid #4C3272 !important;
+    color: #CBB6E9 !important;
+    height: 20px;
+}
+
+.button-tag-dark-lilac:hover {
+    background-color: #4C3272 !important;
+    transition: all 0.2s ease;
+}
+
+.button-magenta {
+    background: #110D17 !important;
+    border: 1px solid #31293E !important;
+    color: #FFFFFF !important;
+}
+
+.button-magenta:hover {
+    background: #31293E !important;
+    transition: all 0.2s ease;
+}
+
+.button-magenta-simple {
+    color: #FFFFFF !important;
+}
+
+.button-magenta-simple:hover {
+    background: #31293E !important;
+    transition: all 0.2s ease;
+}
+
+.button-red {
+    background: #D43F42 !important;
+    border: 1px solid #d86668 !important;
+}
+
+.button-red:hover {
+    background: #d86668 !important;
+    transition: all 0.2s ease;
+}
+
+.button-blue {
+    background: #5069E7 !important;
+    border: 1px solid #697ddf !important;
+}
+
+.button-blue:hover {
+    background: #697ddf !important;
+    transition: all 0.2s ease;
+}
+
+.button-white {
+    background: #ffffff !important;
+    color: #110D17 !important;
+}
+
+.button-white:hover {
+    background: #d3d3d3ff !important;
+    transition: all 0.2s ease;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #31293E !important;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-tabs .nav-link {
+    background: transparent !important;
+    border: none !important;
+    color: #FFFFFF50 !important;
+    height: 40px;
+    position: relative;
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #FFFFFF !important;
+}
+
+.nav-tabs .nav-link.active {
+    color: #FFFFFF !important;
+}
+
+.nav-tabs .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    width: 100%;
+    height: 2px;
+    background-color: #ffffff;
+    border-radius: 2px 2px 0 0;
+}
+
+.border-bottom-magenta {
+    border-bottom: 1px solid #31293E !important;
+}
+
+.border-magenta {
+    border: 1px solid #31293E !important;
+}
+
+.modal-body {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #f7e8ff rgba(255,255,255,0);
+}
+
+.modal-content {
+    margin-top: 40%;
+}
+
+.modal-header {
+    height: 60px !important;
+}
+
+.card-hover-magenta:hover {
+    background: #282133 !important;
+}
+
+.text-overflow {
+  width: 140px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.text-overflow-small {
+  width: 70px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

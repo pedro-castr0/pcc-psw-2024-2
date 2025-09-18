@@ -1,0 +1,99 @@
+{% load static %}
+
+<div class="d-flex mt-3">
+    
+    {% if not hide_comment_buttons %}
+
+        <button class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-pill button-small-square mr-2"
+                onclick="toggleReplyForm('{{ comment.id }}')">
+
+            <p class="mb-0 text-tertiary font-weight-bold">Reply</p>
+        </button>
+
+        {% if comment.replies.exists %}
+
+            <button id="btn-{{ comment.id }}" 
+                    class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-pill button-small-square  mr-2"
+                    onclick="toggleReplies('{{ comment.id }}')">
+
+                <span id="btn-text-{{ comment.id }}" class="mb-0 text-tertiary font-weight-bold">
+                    Show replies
+                </span>
+            </button>
+
+        {% endif %}
+
+    {% endif %}
+
+    <button class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-pill button-small-square mr-2"
+            onclick="copyUrl('{{ comment.id }}')">
+
+        <p class="mb-0 text-tertiary font-weight-bold">Share</p>
+    </button>
+
+    {% if not hide_view_button %}
+
+        <a href="/comment/{{ comment.id }}" class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-pill button-small-square mr-2">
+            <p class="mb-0 text-tertiary font-weight-bold">View</p>
+        </a>
+
+    {% endif %}
+
+    {% if comment.author.id == user.id %}
+
+        <a href="/comment/{{ comment.id }}/edit/" class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-circle button-small-circle mr-2">
+             <i class="fas fa-fw fa-pen-alt text-tertiary"></i>
+        </a>
+
+        <form action="/comment/{{ comment.id }}/delete/" method="post"> {% csrf_token %}
+            <button type="submit" class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-circle button-small-circle">
+                <i class="fas fa-fw fa-trash-alt text-red text-tertiary"></i>
+            </button>
+        </form>
+
+    {% else %}
+
+        {% if not hide_comment_buttons %}
+
+            <a class="btn button-magenta-simple d-flex align-items-center justify-content-center rounded-pill button-small-square">
+                <p class="mb-0 text-tertiary font-weight-bold">Report</p>
+            </a>
+
+        {% endif %}
+        
+    {% endif %}
+
+</div>
+
+{% if not hide_comment_buttons %}
+
+    <div id="reply-form-{{ comment.id }}" class="mt-2 d-none">
+        <form method="post" action="{% url 'comment' %}" class="w-100 reply-form"> {% csrf_token %}
+            <div class="comment-box">
+                <textarea 
+                    class="form-control rounded comment-form text-white text-justify"
+                    name="content" 
+                    rows="2" 
+                    placeholder="Write your reply..."
+                    required></textarea>
+
+                <input type="hidden" name="post" value="{{ comment.post.id }}">
+                <input type="hidden" name="parent" value="{{ comment.id }}">
+
+                <div class="comment-actions">
+                    <button type="button" 
+                            class="btn button-magenta d-flex align-items-center justify-content-center rounded-pill button-small-square" 
+                            onclick="toggleReplyForm('{{ comment.id }}')">
+                        <span class="text-tertiary font-weight-bold">Cancel</span>
+                    </button>
+
+                    <button type="submit"
+                            class="btn button-magenta d-flex align-items-center justify-content-center rounded-circle p-0 button-small-circle">
+                        <i class="fas fa-fw fa-paper-plane text-tertiary"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endif %}

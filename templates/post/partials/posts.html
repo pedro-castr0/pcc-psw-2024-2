@@ -1,0 +1,87 @@
+{% load static %}
+
+<div class="d-flex mb-4">
+    <div class="d-flex flex-column">
+
+        {% include "buttons/feedback.html" %}
+        
+    </div>
+
+    <div class="ml-2 flex-grow-1">
+        <div class="card card-dark p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex align-items-center">
+                    <img 
+                        src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'img/gradient-03.jpg' %}{% endif %}" 
+                        class="rounded-circle circle-picture">
+
+                    <div class="ml-3">
+                        <div class="d-flex align-items-center">
+                            <p class="font-weight-bold mb-0 text-subtitle">
+                                <a href="/user/profile/{{ post.author.username }}" class="text-decoration-none link-lilac">
+
+                                    {{ post.author.profile.display_name }}
+
+                                </a>
+                            </p>
+
+                            {% if post.author.is_superuser %}
+
+                                <i class="fas fa-fw fa-crown text-tiny ml-1 link-lilac"></i>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <p class="text-blurred mb-0 text-tertiary">
+                            <span class="font-weight-bold text-white">@{{ post.author.username }}</span> ∙ {{ post.posted|timesince }} ago {% if post.edited != post.posted %}(edited){% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="font-weight-bold my-2 text-white text-title">{{ post.title }}</p>
+
+            <div class="d-flex align-items-center flex-wrap my-2">
+
+                {% for tag in post.post_tag.all %}
+
+                    {% include 'buttons/tag.html' %}
+
+                {% empty %}
+
+                    <span class="text-blurred">No tags</span>
+
+                {% endfor %}
+
+            </div>
+
+            <div class="position-relative my-2 post-content-wrapper">
+                <div class="post-content">
+                    <div class="post-image text-justify text-white text-content">
+                        {{ post.content|safe }}
+                    </div>
+                </div>
+
+                <div class="fade-overlay d-none"></div>
+
+                <div class="see-more-btn position-absolute d-none">
+                    <a role="button" href="/post/{{ post.id }}" class="btn button-magenta d-flex align-items-center justify-content-center button-medium rounded-pill px-3">
+                        <p class="mb-0 text-tertiary text-white font-weight-bold">See post</p>
+                    </a>
+                </div>
+            </div>
+
+            {% include 'post/actions/options.html' %}
+
+        </div>
+
+        {% if not hide_posted %}
+                        
+            {% include 'post/partials/posted.html' %}
+
+        {% endif %}
+
+    </div>
+</div>

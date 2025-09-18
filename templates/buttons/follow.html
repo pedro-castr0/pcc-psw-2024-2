@@ -1,0 +1,11 @@
+<button type="button" 
+        class="btn btn-follow d-flex align-items-center justify-content-center rounded-pill px-3 button-small-square {% if person.id in following_ids %}button-magenta{% else %}button-white{% endif %}"
+        data-user-id="{{ person.id }}"
+        data-following="{% if person.id in following_ids %}true{% else %}false{% endif %}">
+
+    <span class="follow-text font-weight-bold text-tertiary" id="follow-text-{{ person.id }}">
+
+        {% if person.id in following_ids %}Unfollow{% else %}Follow{% endif %}
+
+    </span>
+</button>

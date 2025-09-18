@@ -1,0 +1,34 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>FOLLOWED</th>
+            <th>FOLLOWER</th>
+            <th>UNFOLLOW</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for follow in follows %}
+
+            <tr>
+                <td>#{{follow.id}}</td>
+                <td>{{follow.get_followed}}</td>
+                <td>{{follow.get_follower}}</td>
+                <td>
+                    <a href="/actions/unfollow/{{follow.id}}">
+                        Unfollow
+                    </a>
+                </td>
+            </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock content %}
